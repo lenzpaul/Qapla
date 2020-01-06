@@ -1,1 +1,25 @@
-GIT repository for csci330/project
+
+README: CSCI 330 Project 2020
+
+Currently the repository contains this README,
+   a makefile to build fooChecker and fooCheckerd,
+   a sample/starter fooChecker.lex and fooChecker.yacc,
+   a sample input file valid/t0 that passes the initial fooChecker,
+   a sample input file invalid/e0 that fails on the initial fooChecker
+
+To build fooChecker simply run the command 'make',
+   to use it to check the validity of sample foo files use
+      ./fooChecker < filename
+   e.g.  ./fooChecker < valid/t0
+         ./fooChecker < invalid/e0
+
+Details on the project requirements and language specification
+   can be found at:
+
+   csci.viu.ca/~wesselsd/courses/csci330/project/index.html
+
+---
+A careful description of what you did/did not get working for
+your fooChecker should be inserted here.
+---
+
