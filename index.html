@@ -7,13 +7,18 @@
 <p><table border="1"><tr><td><b>Note:</b> there are likely to be gaps/ambiguities/conflicts
 in the initial language specification given below.  If you find such an issue, or need
 clarification on the language specifications, please contact the instructor as soon as
-possible.</td></tr></table><p>
+possible.
+<hr>
+<b>Clarifications/corrections will be posted here as the term progresses.</b>
+<br><ol>
+<li> Functions can only be declared in the global scope.
+</ol></td></tr></table><p>
 <p>
 The course project this semester is to create, using lex and yacc, a syntax
 checker for a small programming language, <em>fooish</em>. Details
 are given below.
 <p>
-The project is worth a total of 15% of your grade, and is due at 5p.m. on Friday April 10th.
+The project is worth a total of 15% of your grade, and is due at 5p.m. on Thursday April 9th.
 <p>
 <p>
 <em><b>Submissions up to 24 hours late will be penalized 10%, submissions 24-48 hours late will
@@ -46,6 +51,15 @@ and error messages, is well laid out, uses sensible identifiers,
 has reasonable commenting for complex steps, etc.  Marks will be deducted for poor
 quality code even if the functional behaviour is correct.
 </td></tr></table>
+<p>
+<b>Supporting reference material:</b>
+<ul>
+   <p><li> Intro to <a href="http://dinosaur.compilertools.net/lex/">lex</a>
+                and <a href="http://dinosaur.compilertools.net/yacc/">yacc</a>
+   <li> Some <a href="../code/yacc/index.html"> lex and yacc examples </a>
+   <li> C grammars for <a href="https://www.lysator.liu.se/c/ANSI-C-grammar-l.html"> lex </a>
+                   and <a href="https://www.lysator.liu.se/c/ANSI-C-grammar-y.html"> yacc </a>
+</ul>
 <p>
 <h4>Project requirements and marking scheme</h4>
 The objective is to create, using lex and yacc, an executable named <code>fooChecker</code>
@@ -84,12 +98,13 @@ The marking will be handled as follows:
         structural syntax checking working, i.e. does it follow the basic CFG
         structure required.
         <p>The remaining 25% is based on the augmented grammar checking,
-        e.g. do types match, have variables been declared before being used,
+        e.g. do types match (can only be checked to a limited degree since
+        variables are dynamically typed), have variables been declared before being used,
         correct handling of scope, etc.
         <p>Note that you have quite a bit of flexibility in terms
         of which features you choose to implement, and whether you aim for full checking
         or just the CFG checking for each.
-        </td></tr></table>
+
    <p> The marks breakdown by feature is as follows:
         <br> <b>16 marks: function handling</b>
         <br> &nbsp; - including syntax, function definitions and calls, local variables/scope,
@@ -99,22 +114,26 @@ The marking will be handled as follows:
                       the boolean test expressions, local block scope, etc
         <br> <b>10 marks: boolean expressions</b>
         <br> &nbsp; - including syntax, literals T and F, the comparison
-             operators, compound operators (AND OR NOT), typechecking, etc
+             operators, compound operators (AND OR NOT), typechecking (within
+             the limits of dynamic typing), etc
         <br> <b>10 marks: arithmetic expressions</b>
         <br> &nbsp; - including syntax, literals for reals and integers,
               comparison operators, the unary negation operator, the listed math operators
-              (+ - * / ^ MOD), correct precedence and associativity, typechecking, etc
+              (+ - * / ^ MOD), correct precedence and associativity, typechecking
+              (within the limits of dynamic typing), etc
         <br> <b>10 marks: string expressions</b>
         <br> &nbsp; - including syntax, literals, escape sequences for " and \,
                 comparison operators,
-                concatenation and substring operators, typechecking, etc
+                concatenation and substring operators, typechecking
+              (within the limits of dynamic typing), etc
         <br> <b>8 marks: I/O</b>
-        <br> &nbsp; - including syntax, calls (typechecked) to reads, readi, readr, print
+        <br> &nbsp; - including syntax, calls (typechecked, within the limits of dynamic
+             typing) to reads, readi, readr, print
         <br> <b>8 marks: variables</b>
         <br> &nbsp; - including syntax, declaration of variables, checking variables
                are declared before use, etc
         <br> <b>8 marks: assignment statements</b>
-        <br> &nbsp; - including syntax, type checking, etc
+        <br> &nbsp; - including syntax, type checking (within the limits of dynamic typing), etc
         <br> <b>8 marks: comments</b>
         <br> &nbsp; - including syntax, proper "stripping" of comments, etc
    <p><li> The assessment of your fooChecker functionality will be based partly on
@@ -278,7 +297,7 @@ FUNC product ( x y ) {
 
 <p><li> <b>String operations</b>
    <br> The supported string operations are as follows:
-        <br> &nbsp; - assignment, e.g. <code> str1 := str2 ; </code>
+        <br> &nbsp; - assignment, e.g. <code> str1 = str2 ; </code>
         <br> &nbsp; - equals, e.g. <code> if ( str1 == str2 ) {</code> 
         <br> &nbsp; - not-equals, e.g. <code> if ( str1 &lt;> str2 ) {</code>
         <br> &nbsp; - less than, (ascii-based, char-by-char) e.g. <code>if ( str1 < str2 ) { </code>
@@ -298,7 +317,7 @@ FUNC product ( x y ) {
         and <code> MOD </code> used for modulo (case-sensitive).
 
 <p><li> <b>Boolean operations</b>
-   <br> The basic supported operators are assignment <code>:=</code>,
+   <br> The basic supported operators are assignment <code>=</code>,
         equals <code>==</code>, not-equals <code> &lt;></code>,
         along with the compound operators <code>AND</code>, <code>OR</code> and
         <code>NOT</code> (also case-sensitive).
@@ -307,7 +326,7 @@ FUNC product ( x y ) {
 
 <p><li> <b>Assignment statements</b>
    <br> The assignment syntax is
-   <br><code> var := expr ; </code>
+   <br><code> var = expr ; </code>
    <br> where <code>var</code> is a variable that has previously been declared
         and is accessible in the current scope, and <code>expr</code> is a valid expression
         (of any data type).
