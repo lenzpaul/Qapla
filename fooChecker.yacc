@@ -29,19 +29,21 @@ int yyerror(char* s);
 
 
  /* identify what kind of values can be associated with the language components */
-%union { char * str; int integer; float real; char boolean; }
+%union { char * str; int integer; float real; char boolean; char * alpha;}
 
 
  /* identify the token types */
 %token VAR IDENTIFIER REAL INTEGER BOOLEAN
-%token PRINT
+%token PRINT DbQuote STRING
 
 
  /* for the token types that have an associated value, identify its type */
-%type<str> IDENTIFIER
+%type<str> STRING
 %type<real> REAL
 %type<integer> INTEGER
 %type<boolean> BOOLEAN
+
+%type<alpha> IDENTIFIER
 
 
 %%
@@ -68,10 +70,10 @@ vardecl: VAR IDENTIFIER ';'
 
  /* print --> IDENTIFIER 
   */
-printout: PRINT IDENTIFIER 
+printout: PRINT '(' STRING ')'
    {
-      /* print text associated with IDENTIFIER (field $2) */
-	   printf("%s \n", $2);
+      /* print text associated with IDENTIFIER (field $3) */
+	   printf("%s \n", $3);
    };
 
 

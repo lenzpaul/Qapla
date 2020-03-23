@@ -7,9 +7,13 @@
  /* Define alphabetic chars */
 Alpha [a-zA-Z]
 Num \d
+
+String \"(\\\\|\\\"|[^"\\])*\"
+
+
 Bool [TF]
-DoubleQuote "
-Neg -
+DbQuote ["]
+Neg [-]
 EmbdQuote \\" 
 EmbdBkSlash \\\\ 
 SemiColon ;
@@ -37,8 +41,20 @@ const int MaxLen = 128;
 "print"    { return(PRINT); } 
 
 
- /* Matches string 
- * alphabetic identifiers are one or more Alphas,
+ /* Matches string (ie: begins & ends with ", may include escaped \ or "
+  * 
+
+*/
+({String}) { 
+   yylval.str = calloc(strlen(yytext)-1, sizeof(char));
+
+	strncpy(yylval.str, &yytext[1], strlen(yytext)-2);
+	yylval.str[strlen(yytext)-2] = '\0'; 
+	return(STRING); 
+   
+   }
+
+ /* alphabetic identifiers are one or more Alphas,
   *    store the actual text for the identifier
   *    and return IDENTIFIER as the type */
 ({Alpha})+ { yylval.alpha = strdup(yytext); return(IDENTIFIER); }
@@ -56,7 +72,15 @@ const int MaxLen = 128;
  ^({Neg})?({Num})+$ { yylval.integer = atoi(yytext); return(INTEGER); }
 
  /* Match exactly 1 Boolean */
- ^({Bool})$ { yylval.boolean = yytext[0]; return(BOOLEAN); }
+ ^({Bool})$ { yylval.boolean = *yytext; return(BOOLEAN); }
+
+ ^({DbQuote})$    { return(DbQuote); }
+
+
+ ")"         { return *yytext; }
+
+ "("         { return *yytext; }
+
 
  /* the semi-colon */
 ";"        { return(';'); }
