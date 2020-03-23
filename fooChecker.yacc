@@ -29,15 +29,19 @@ int yyerror(char* s);
 
 
  /* identify what kind of values can be associated with the language components */
-%union { char * str; }
+%union { char * str; int integer; float real; char boolean; }
 
 
  /* identify the token types */
-%token VAR IDENTIFIER
+%token VAR IDENTIFIER REAL INTEGER BOOLEAN
+%token PRINT
 
 
  /* for the token types that have an associated value, identify its type */
 %type<str> IDENTIFIER
+%type<real> REAL
+%type<integer> INTEGER
+%type<boolean> BOOLEAN
 
 
 %%
@@ -49,6 +53,8 @@ int yyerror(char* s);
  /* script --> vardecl */
 script:
 	vardecl
+   | printout
+   |
 	;
 
 
@@ -59,6 +65,14 @@ vardecl: VAR IDENTIFIER ';'
 	   /* display the text associated with IDENTIFIER (field $2) */
 	   printf("...declared variable %s...\n", $2);
 	};
+
+ /* print --> IDENTIFIER 
+  */
+printout: PRINT IDENTIFIER 
+   {
+      /* print text associated with IDENTIFIER (field $2) */
+	   printf("%s \n", $2);
+   };
 
 
 %%

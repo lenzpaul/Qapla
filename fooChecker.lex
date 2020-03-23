@@ -6,6 +6,13 @@
 
  /* Define alphabetic chars */
 Alpha [a-zA-Z]
+Num \d
+Bool [TF]
+DoubleQuote "
+Neg -
+EmbdQuote \\" 
+EmbdBkSlash \\\\ 
+SemiColon ;
 
  /****** setup the C/lex infrastructure ******/
 %{
@@ -27,10 +34,29 @@ const int MaxLen = 128;
  /* for the keyword "VAR" return VAR as the type */
 "VAR"      { return(VAR); }
 
- /* alphabetic identifiers are one or more Alphas,
+"print"    { return(PRINT); } 
+
+
+ /* Matches string 
+ * alphabetic identifiers are one or more Alphas,
   *    store the actual text for the identifier
   *    and return IDENTIFIER as the type */
 ({Alpha})+ { yylval.str = strdup(yytext); return(IDENTIFIER); }
+
+ /*Match a Real Number
+  *    store the converted value, string to float,
+  *    for the identifier
+  *    and return REAL as the type */
+ ^({Neg})?({Num})+\.({Num})+$ { yylval.real = atof(yytext); return(REAL); }
+
+ /* Match an Integer
+  *    store the converted value, string to integer 
+  *    for the identifier
+  *    and return INTEGER as the type */
+ ^({Neg})?({Num})+$ { yylval.integer = atoi(yytext); return(INTEGER); }
+
+ /* Match exactly 1 Boolean */
+ ^({Bool})$ { yylval.boolean = yytext[0]; return(BOOLEAN); }
 
  /* the semi-colon */
 ";"        { return(';'); }
