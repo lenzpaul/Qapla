@@ -41,7 +41,7 @@ const int MaxLen = 128;
  * alphabetic identifiers are one or more Alphas,
   *    store the actual text for the identifier
   *    and return IDENTIFIER as the type */
-({Alpha})+ { yylval.str = strdup(yytext); return(IDENTIFIER); }
+({Alpha})+ { yylval.alpha = strdup(yytext); return(IDENTIFIER); }
 
  /*Match a Real Number
   *    store the converted value, string to float,
