@@ -21,6 +21,7 @@ SemiColon ;
  /****** setup the C/lex infrastructure ******/
 %{
 #include <stdio.h>
+#include <stdbool.h>
 #include "y.tab.h"
 extern YYSTYPE yylval;
 int yywrap();
@@ -52,10 +53,9 @@ const int MaxLen = 128;
 		memmove(yytext, &yytext[1], strlen(yytext)-2);
 		yytext[slen] = '\0';
 
-
       //creating space for storing yytext (input)
-		yylval.str = calloc(strlen(yytext)-1, sizeof(char));
-
+		yylval.str = calloc(strlen(yytext), sizeof(char));
+     
 
       /*remove backslashes in strings 
        *  and keep escaped chars (ie: \" or \\) 
@@ -67,18 +67,25 @@ const int MaxLen = 128;
       //yylvalPos++
       int yylvalPos = 0;
       int yytextPos = 0;
+      bool escaped = false;
 
       while(yytextPos < strlen(yytext)) //TODO pointer or string? yytext or *yytext
       {
          yylval.str[yylvalPos] = yytext[yytextPos];
-         if(yylval.str[yylvalPos] != '\\') yylvalPos++;
+         if((yylval.str[yylvalPos] == '\\')  && (!escaped))
+         {
+            escaped=true;
+         }else{   
+            escaped=false;
+            yylvalPos++;
+         }
          yytextPos++;
       }
       //insert Null terminator to end yylval string
-      yylval.str[yytextPos] = '\0'; 
+      yylval.str[yylvalPos] = '\0'; 
 
 
-/*
+      /*
 		while(*yytext != '\0')
 		{
 			*yylval.str = *yytext;
@@ -89,7 +96,7 @@ const int MaxLen = 128;
 		yylval.str = &yylval.str[0];
 	   //printf("%c", yylval.str[strlen(yylval.str)-1]);
 
-*/
+      */
 
 
 		return(STRING); 
