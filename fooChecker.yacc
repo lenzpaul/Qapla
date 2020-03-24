@@ -55,7 +55,7 @@ int yyerror(char* s);
  /* script --> vardecl */
 script:
 	vardecl
-   | printout
+   | script printout
    |
 	;
 
@@ -79,7 +79,6 @@ printout: PRINT '(' STRING ')'
 
 %%
 
-
  /****** supporting C to carry out parsing ******/
 
 
@@ -90,4 +89,5 @@ int main()
    printf("\nSyntax checking complete\n\n");
    return result;
 }
+
 
