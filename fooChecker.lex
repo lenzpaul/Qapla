@@ -46,12 +46,20 @@ const int MaxLen = 128;
 
 */
 ({String}) { 
-   yylval.str = calloc(strlen(yytext)-1, sizeof(char));
-
-	strncpy(yylval.str, &yytext[1], strlen(yytext)-2);
-	yylval.str[strlen(yytext)-2] = '\0'; 
-	return(STRING); 
-   
+		int slen = strlen(yytext)-2;
+		memmove(yytext, &yytext[1], strlen(yytext)-2);
+		yytext[slen] = '\0';
+		yylval.str = calloc(strlen(yytext)-1, sizeof(char));
+		while(*yytext != '\0')
+		{
+			*yylval.str = *yytext;
+			if(*yylval.str != '\\') yylval.str++;  //changes the actual address 
+			yytext++;
+		}
+		*yylval.str = '\0';
+		yylval.str = &yylval.str[0];
+	   //printf("%c", yylval.str[strlen(yylval.str)-1]);
+		return(STRING); 
    }
 
  /* alphabetic identifiers are one or more Alphas,
