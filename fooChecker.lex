@@ -42,10 +42,8 @@ const int MaxLen = 128;
 "print"    { return(PRINT); } 
 
 
- /* Matches string (ie: begins & ends with ", may include escaped \ or "
-  * 
 
-*/
+ /* Matches string (ie: begins & ends with ", may include escaped \ or " */
 ({String}) { 
 
       //remove outer quotes from string
@@ -57,19 +55,26 @@ const int MaxLen = 128;
 		yylval.str = calloc(strlen(yytext), sizeof(char));
      
 
-      /*remove backslashes in strings 
+      /*REMOVE BACKSLASHES IN STRING 
        *  and keep escaped chars (ie: \" or \\) 
-       */ 
+      */ 
 
-      //iterate over each char in yytext
-      //copy into yylval
-      //if copied char in yylval != '\\'
-      //yylvalPos++
+      /*Here we remove any escaping \ before getting the string content
+       * Im using a bool to keep track of whether or not the next char
+       * should be taking literally 
+         
+       *- Loop through the every char in the string 
+       *  (ie: yytext does not have outer quotes at this point)
+       *  copying every char from yytex to the string type yylval.str
+       
+       *- If we find an escape char \ we insert it 
+       *  We switch escaped to true 
+       *  then we overwrite the in the next loop with the escaped char (\ or ")
+       */  
       int yylvalPos = 0;
       int yytextPos = 0;
       bool escaped = false;
-
-      while(yytextPos < strlen(yytext)) //TODO pointer or string? yytext or *yytext
+      while(yytextPos < strlen(yytext)) 
       {
          yylval.str[yylvalPos] = yytext[yytextPos];
          if((yylval.str[yylvalPos] == '\\')  && (!escaped))
@@ -81,26 +86,14 @@ const int MaxLen = 128;
          }
          yytextPos++;
       }
+
       //insert Null terminator to end yylval string
       yylval.str[yylvalPos] = '\0'; 
-
-
-      /*
-		while(*yytext != '\0')
-		{
-			*yylval.str = *yytext;
-			if(*yylval.str != '\\') yylval.str++;  //changes the actual address 
-			yytext++;
-		}
-		*yylval.str = '\0';
-		yylval.str = &yylval.str[0];
-	   //printf("%c", yylval.str[strlen(yylval.str)-1]);
-
-      */
-
-
 		return(STRING); 
-   }
+   } 
+
+
+
 
  /* alphabetic identifiers are one or more Alphas,
   *    store the actual text for the identifier
