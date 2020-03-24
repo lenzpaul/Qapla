@@ -6,7 +6,7 @@
 
  /* Define alphabetic chars */
 Alpha [a-zA-Z]
-Num \d
+Num [0-9]
 
 String \"(\\\\|\\\"|[^"\\])*\"
 
@@ -59,13 +59,13 @@ const int MaxLen = 128;
   *    and return IDENTIFIER as the type */
 ({Alpha})+ { yylval.alpha = strdup(yytext); return(IDENTIFIER); }
 
- /*Match a Real Number
+ /*Real Number
   *    store the converted value, string to float,
   *    for the identifier
   *    and return REAL as the type */
  ^({Neg})?({Num})+\.({Num})+$ { yylval.real = atof(yytext); return(REAL); }
 
- /* Match an Integer
+ /*Integer
   *    store the converted value, string to integer 
   *    for the identifier
   *    and return INTEGER as the type */
