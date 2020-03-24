@@ -46,10 +46,39 @@ const int MaxLen = 128;
 
 */
 ({String}) { 
+
+      //remove outer quotes from string
 		int slen = strlen(yytext)-2;
 		memmove(yytext, &yytext[1], strlen(yytext)-2);
 		yytext[slen] = '\0';
+
+
+      //creating space for storing yytext (input)
 		yylval.str = calloc(strlen(yytext)-1, sizeof(char));
+
+
+      /*remove backslashes in strings 
+       *  and keep escaped chars (ie: \" or \\) 
+       */ 
+
+      //iterate over each char in yytext
+      //copy into yylval
+      //if copied char in yylval != '\\'
+      //yylvalPos++
+      int yylvalPos = 0;
+      int yytextPos = 0;
+
+      while(yytextPos < strlen(yytext)) //TODO pointer or string? yytext or *yytext
+      {
+         yylval.str[yylvalPos] = yytext[yytextPos];
+         if(yylval.str[yylvalPos] != '\\') yylvalPos++;
+         yytextPos++;
+      }
+      //insert Null terminator to end yylval string
+      yylval.str[yytextPos] = '\0'; 
+
+
+/*
 		while(*yytext != '\0')
 		{
 			*yylval.str = *yytext;
@@ -59,6 +88,10 @@ const int MaxLen = 128;
 		*yylval.str = '\0';
 		yylval.str = &yylval.str[0];
 	   //printf("%c", yylval.str[strlen(yylval.str)-1]);
+
+*/
+
+
 		return(STRING); 
    }
 
