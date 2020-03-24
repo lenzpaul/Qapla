@@ -21,6 +21,7 @@ SemiColon ;
  /****** setup the C/lex infrastructure ******/
 %{
 #include <stdio.h>
+#include <stdbool.h>
 #include "y.tab.h"
 extern YYSTYPE yylval;
 int yywrap();
@@ -41,18 +42,58 @@ const int MaxLen = 128;
 "print"    { return(PRINT); } 
 
 
- /* Matches string (ie: begins & ends with ", may include escaped \ or "
-  * 
 
-*/
+ /* Matches string (ie: begins & ends with ", may include escaped \ or " */
 ({String}) { 
-   yylval.str = calloc(strlen(yytext)-1, sizeof(char));
 
-	strncpy(yylval.str, &yytext[1], strlen(yytext)-2);
-	yylval.str[strlen(yytext)-2] = '\0'; 
-	return(STRING); 
-   
-   }
+      //remove outer quotes from string
+		int slen = strlen(yytext)-2;
+		memmove(yytext, &yytext[1], strlen(yytext)-2);
+		yytext[slen] = '\0';
+
+      //creating space for storing yytext (input)
+		yylval.str = calloc(strlen(yytext), sizeof(char));
+     
+
+      /*REMOVE BACKSLASHES IN STRING 
+       *  and keep escaped chars (ie: \" or \\) 
+      */ 
+
+      /*Here we remove any escaping \ before getting the string content
+       * Im using a bool to keep track of whether or not the next char
+       * should be taking literally 
+         
+       *- Loop through the every char in the string 
+       *  (ie: yytext does not have outer quotes at this point)
+       *  copying every char from yytex to the string type yylval.str
+       
+       *- If we find an escape char \ we insert it 
+       *  We switch escaped to true 
+       *  then we overwrite the in the next loop with the escaped char (\ or ")
+       */  
+      int yylvalPos = 0;
+      int yytextPos = 0;
+      bool escaped = false;
+      while(yytextPos < strlen(yytext)) 
+      {
+         yylval.str[yylvalPos] = yytext[yytextPos];
+         if((yylval.str[yylvalPos] == '\\')  && (!escaped))
+         {
+            escaped=true;
+         }else{   
+            escaped=false;
+            yylvalPos++;
+         }
+         yytextPos++;
+      }
+
+      //insert Null terminator to end yylval string
+      yylval.str[yylvalPos] = '\0'; 
+		return(STRING); 
+   } 
+
+
+
 
  /* alphabetic identifiers are one or more Alphas,
   *    store the actual text for the identifier
