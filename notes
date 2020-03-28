@@ -1,0 +1,23 @@
+Sun Mar 22 23:32:37 PDT 2020
+In fooChecker.lex: Int and Real accept 0 or 0.0 with leading unary operator - 
+In fooChecker.lex: Int and Real accept 000000 or 0000.00000 
+Created all Data Types in yacc/lexx
+
+Print works but doesnt escape characters...
+Mon Mar 23 21:27:18 PDT 2020
+ - string datatype: current regex only captures last appearance of \  ... 
+ see StackOverflow answer: https://stackoverflow.com/questions/17043454/using-regexes-how-to-efficiently-match-strings-between-double-quotes-with-embed/17043605#17043605
+ 
+ apparently its not possible to catch all of them ???!
+
+
+----------------
+Mon Mar 23 21:27:18 PDT 2020
+[bug 1] STRING Datatype: cannot fix escaped char. Will leave the \ in the string for now.....
+-----------------
+
+
+Data types implemented
+Tue Mar 24 01:03:58 PDT 2020
+
+ ... so figured out the strings after all. Just need to rest... 

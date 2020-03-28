@@ -105,18 +105,18 @@ const int MaxLen = 128;
   *    store the converted value, string to float,
   *    for the identifier
   *    and return REAL as the type */
- ^({Neg})?({Num})+\.({Num})+$ { yylval.real = atof(yytext); return(REAL); }
+ ({Neg})?({Num})+\.({Num})+ { yylval.real = atof(yytext); return(REAL); }
 
  /*Integer
   *    store the converted value, string to integer 
   *    for the identifier
   *    and return INTEGER as the type */
- ^({Neg})?({Num})+$ { yylval.integer = atoi(yytext); return(INTEGER); }
+ ({Neg})?({Num})+ { yylval.integer = atoi(yytext); return(INTEGER); }
 
  /* Match exactly 1 Boolean */
- ^({Bool})$ { yylval.boolean = *yytext; return(BOOLEAN); }
+ ({Bool}) { yylval.boolean = *yytext; return(BOOLEAN); }
 
- ^({DbQuote})$    { return(DbQuote); }
+ ({DbQuote})    { return(DbQuote); }
 
 
  ")"         { return *yytext; }

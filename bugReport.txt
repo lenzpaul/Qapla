@@ -1,0 +1,6 @@
+
+Mon Mar 23 21:27:18 PDT 2020
+----------------
+[bug 1] STRING Datatype: cannot fix escaped char. Will leave the \ in the string for now.....
+-----------------
+

@@ -53,12 +53,12 @@ int yyerror(char* s);
 
 
  /* script --> vardecl */
-script:
-	vardecl
-   | assignment
-   | script printout
-   | 
-	;
+
+script: printout 	
+	|vardecl 
+	; 
+
+
 
 
  /* vardecl --> VAR IDENTIFIER ;
@@ -71,11 +71,29 @@ vardecl: VAR IDENTIFIER ';'
 
   /* printout --> PRINT ( STRING )
   */
-printout: PRINT '(' STRING ')'
-   {
-      /* print text associated with IDENTIFIER (field $3) */
-	   printf("%s \n", $3);
-   };
+
+
+printout: PRINT '(' INTEGER ')'
+      {
+         /* print text associated with IDENTIFIER (field $3) */
+         printf("%d \n", $3);
+      }
+ 
+
+	| PRINT '(' REAL ')'
+      {
+         /* print text associated with IDENTIFIER (field $3) */
+         printf("%f \n", $3);
+      }
+	
+   
+   | PRINT '(' STRING ')'
+      {
+         /* print text associated with IDENTIFIER (field $3) */
+         printf("%s \n", $3);
+      }
+   ;
+
 
 
 %%
