@@ -55,8 +55,9 @@ int yyerror(char* s);
  /* script --> vardecl */
 script:
 	vardecl
+   | assignment
    | script printout
-   |
+   | 
 	;
 
 
@@ -68,7 +69,7 @@ vardecl: VAR IDENTIFIER ';'
 	   printf("...declared variable %s...\n", $2);
 	};
 
- /* print --> IDENTIFIER 
+  /* printout --> PRINT ( STRING )
   */
 printout: PRINT '(' STRING ')'
    {

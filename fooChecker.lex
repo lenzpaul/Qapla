@@ -17,6 +17,7 @@ Neg [-]
 EmbdQuote \\" 
 EmbdBkSlash \\\\ 
 SemiColon ;
+eq =
 
  /****** setup the C/lex infrastructure ******/
 %{
@@ -122,6 +123,7 @@ const int MaxLen = 128;
 
  "("         { return *yytext; }
 
+ "="         { return *yytext; }
 
  /* the semi-colon */
 ";"        { return(';'); }
