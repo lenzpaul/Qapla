@@ -94,6 +94,11 @@ const int MaxLen = 128;
    } 
 
 
+ /* Match exactly 1 Boolean */
+ ({Bool}) { 
+      ( *yytext == 'T' ) ? (yylval.boolean = 1 ) : (yylval.boolean = 0 ) ;
+      return(BOOLEAN); 
+    }
 
 
  /* alphabetic identifiers are one or more Alphas,
@@ -113,8 +118,6 @@ const int MaxLen = 128;
   *    and return INTEGER as the type */
  ({Neg})?({Num})+ { yylval.integer = atoi(yytext); return(INTEGER); }
 
- /* Match exactly 1 Boolean */
- ({Bool}) { yylval.boolean = *yytext; return(BOOLEAN); }
 
  ({DbQuote})    { return(DbQuote); }
 
