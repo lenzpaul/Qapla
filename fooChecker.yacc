@@ -18,6 +18,7 @@
 %{
 #include<stdio.h>
 #include<string.h>
+#include <stdbool.h>
 int yylex(void);
 int yywrap();
 int yyerror(char* s);
@@ -47,6 +48,7 @@ int yyerror(char* s);
       long ival, dtype; 
       double fval;
       char str[4096], name[256]; 
+      bool bval;
    } info; 
 }
 

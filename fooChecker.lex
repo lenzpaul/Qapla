@@ -49,7 +49,7 @@ const int MaxLen = 128;
 		yytext[slen] = '\0';
 
       //creating space for storing yytext (input)
-		yylval.str = calloc(strlen(yytext), sizeof(char));
+		yylval.info.str = calloc(strlen(yytext), sizeof(char));
      
 
       /*REMOVE BACKSLASHES IN STRING 
@@ -62,7 +62,7 @@ const int MaxLen = 128;
          
        *- Loop through the every char in the string 
        *  (ie: yytext does not have outer quotes at this point)
-       *  copying every char from yytex to the string type yylval.str
+       *  copying every char from yytex to the string type yylval.info.str
        
        *- If we find an escape char \ we insert it 
        *  We switch escaped to true 
@@ -73,8 +73,8 @@ const int MaxLen = 128;
       bool escaped = false;
       while(yytextPos < strlen(yytext)) 
       {
-         yylval.str[yylvalPos] = yytext[yytextPos];
-         if((yylval.str[yylvalPos] == '\\')  && (!escaped))
+         yylval.info.str[yylvalPos] = yytext[yytextPos];
+         if((yylval.info.str[yylvalPos] == '\\')  && (!escaped))
          {
             escaped=true;
          }else{   
@@ -85,14 +85,28 @@ const int MaxLen = 128;
       }
 
       //insert Null terminator to end yylval string
-      yylval.str[yylvalPos] = '\0'; 
+      yylval.info.str[yylvalPos] = '\0'; 
+
+      yylval.info.ival = atoi(yytext);
+      yylval.info.fval = atof(yytext);
+      yylval.info.bval = false;
+      yylval.info.name[0] = '\0';
+      yylval.info.dtype = 3;
+
 		return(STRING); 
    } 
 
 
  /* Match exactly 1 Boolean */
  ({Bool}) { 
-      ( *yytext == 'T' ) ? (yylval.boolean = 1 ) : (yylval.boolean = 0 ) ;
+      ( *yytext == 'T' ) ? 
+         (yylval.info.bval = true ) : (yylval.info.bval = false);
+
+      yylval.info.str[yylvalPos] = '\0'; 
+      yylval.info.ival = 0;
+      yylval.info.fval = 0;
+      yylval.info.name[0] = '\0';
+      yylval.info.dtype = 4;
       return(BOOLEAN); 
     }
 
@@ -102,7 +116,14 @@ const int MaxLen = 128;
   *    and return IDENTIFIER as the type */
 ({Alpha})+ { 
 
-   yylval.alpha = strdup(yytext); 
+   //yylval.alpha = strdup(yytext); 
+
+   yylval.info.str[0] = '\0';
+   yylval.info.ival = 0;
+   yylval.info.fval = 0;
+   yylval.info.bval = false;
+   strncpy(yylval.info.name, yytext, 255);
+   yylval.info.dtype = 0;
    return(IDENTIFIER); 
    
    }
@@ -111,20 +132,35 @@ const int MaxLen = 128;
   *    store the converted value, string to float,
   *    for the identifier
   *    and return REAL as the type */
- ({Neg})?({Num})+\.({Num})+ { yylval.real = atof(yytext); return(REAL); }
+ ({Neg})?({Num})+\.({Num})+ { 
+   yylval.info.fval = atof(yytext); 
+
+   yylval.info.str[0] = '\0';
+   yylval.info.ival = 0;         //FIXME 
+   yylval.info.bval = false;
+   yylval.info.name[0] = '\0';
+   yylval.info.dtype = 2;
+    
+   return(REAL); 
+    
+   }
 
  /*Integer
   *    store the converted value, string to integer 
   *    for the identifier
   *    and return INTEGER as the type */
- ({Neg})?({Num})+ { yylval.integer = atoi(yytext); return(INTEGER); }
+ ({Neg})?({Num})+ { 
+   yylval.info.ival = atoi(yytext); 
+   yylval.info.fval = atof(yytext);
 
+   yylval.info.str[0] = '\0';
+   yylval.info.bval = false;
+   yylval.info.name[0] = '\0';
+   yylval.info.dtype = 1;
 
- /*Integer
-  *    store the converted value, string to integer 
-  *    for the identifier
-  *    and return INTEGER as the type */
- ({Neg})?({Num})+ { yylval.integer = atoi(yytext); return(INTEGER); }
+   return(INTEGER);
+   
+   }
 
 
  ")"         { return *yytext; }
