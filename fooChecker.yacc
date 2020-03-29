@@ -58,8 +58,10 @@ int yyerror(char* s);
  /* for the token types that have an associated value, identify its type */
 %token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR
 
-%type<struct nodeinfo> script statements statement expr 
-%type<struct nodeinfo> intexpr floatexpr strexpr boolexpr 
+%type<struct nodeinfo> script statements statement
+%type<struct nodeinfo> intexpr strexpr floatexpr boolexpr expression
+
+%type<nodetype> printout
 
 
 /* Operator Precedence */ 
@@ -225,11 +227,8 @@ printout: PRINT '(' expression ')'
          }else if($<info.dtype>3 == 4){
             printf($3 ? "true" : "false");
          }
-
       }
       ;
-
-
 
 
 
@@ -242,24 +241,26 @@ statement: IDENTIFIER '=' expression
     {
        $<info.dtype>1 = $<info.dtype>3;
        if ($<info.dtype>3 == 1) {
-          $<info.inum>1 = $<info.inum>3;
-          printf("sets %s = %d;\n", $<info.name>1, $<info.inum>3);
+          $<info.ival>1 = $<info.ival>3;
+          printf("sets %s = %d;\n", $<info.name>1, $<info.ival>3);
        } else if ($<info.dtype>3 == 2) {
-          $<info.inum>1 = $<info.inum>3;
-          printf("sets %s = %lf;\n", $<info.name>1, $<info.inum>3);
+          $<info.ival>1 = $<info.ival>3;
+          printf("sets %s = %lf;\n", $<info.name>1, $<info.ival>3);
        } else if ($<info.dtype>3 == 3) {
           strncpy($<info.str>1, $<info.str>3, 4095);
           printf("sets %s = \"%s\";\n", $<info.name>1, $<info.str>3);
        } else if ($<info.dtype>3 == 4) {
-          strncpy($<info.str>1, $<info.str>3, 4095);
-          printf("sets %s = \"%s\";\n", $<info.name>1, $<info.str>3);
+          $<info.ival>1 = $<info.ival>3;
+          printf;
+          printf("sets %s = \"%s\";\n", $<info.name>1,  
+             ($<info.bval>3 ? "true" : "false");
        }
     }
     ;
 
 expression: strexpr
     {
-       $<info.dtype>$ = 2;
+       $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
     }
     ;
@@ -267,55 +268,55 @@ expression: strexpr
 expression: intexpr
     {
        $<info.dtype>$ = 1;
-       $<info.inum>$ = $<info.inum>1;
+       $<info.ival>$ = $<info.ival>1;
     }
     ;
 
 intexpr: INTEGER
     {
        $<info.dtype>$ = 1;
-       $<info.inum>$ = $<info.inum>1;
+       $<info.ival>$ = $<info.ival>1;
     }
     ;
 
 intexpr: IDENTIFIER
     {
        $<info.dtype>$ = 1;
-       $<info.inum>$ = $<info.inum>1;
+       $<info.ival>$ = $<info.ival>1;
     }
     ;
 
 intexpr: INTEGER '+' intexpr
     {
        $<info.dtype>$ = 1;
-       $<info.inum>$ = $<info.inum>1 + $<info.inum>3;
+       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
     }
     ;
 
 intexpr: IDENTIFIER '+' intexpr
     {
        $<info.dtype>$ = 1;
-       $<info.inum>$ = $<info.inum>1 + $<info.inum>3;
+       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
     }
     ;
 
 strexpr: STRING
     {
-       $<info.dtype>$ = 2;
+       $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
     }
     ;
 
 strexpr: IDENTIFIER
     {
-       $<info.dtype>$ = 2;
+       $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
     }
     ;
 
 strexpr: STRING '+' strexpr
     {
-       $<info.dtype>$ = 2;
+       $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
        strncat($<info.str>$, $<info.str>3, 4095);
     }
@@ -323,7 +324,7 @@ strexpr: STRING '+' strexpr
 
 strexpr: IDENTIFIER '+' strexpr
     {
-       $<info.dtype>$ = 2;
+       $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
        strncat($<info.str>$, $<info.str>3, 4095);
     }
