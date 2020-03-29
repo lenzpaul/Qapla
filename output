@@ -1,0 +1,65 @@
+lex -d fooChecker.lex
+yacc -d fooChecker.yacc
+fooChecker.yacc:112.5: warning: empty rule for typed nonterminal, and no action [-Wother]
+ expr: 
+     ^
+fooChecker.yacc:119.7: warning: empty rule for typed nonterminal, and no action [-Wother]
+ number: 
+       ^
+fooChecker.yacc: warning: 7 shift/reduce conflicts [-Wconflicts-sr]
+fooChecker.yacc: warning: 7 reduce/reduce conflicts [-Wconflicts-rr]
+fooChecker.yacc:112.5: warning: rule useless in parser due to conflicts [-Wother]
+ expr: 
+     ^
+fooChecker.yacc:119.7: warning: rule useless in parser due to conflicts [-Wother]
+ number: 
+       ^
+gcc y.tab.c lex.yy.c -o fooCheckerd
+fooChecker.yacc:33:9: error: unknown type name ‘bool’
+         bool bval;
+         ^~~~
+y.tab.c:122:5: error: redeclaration of enumerator ‘STRING’
+     STRING = 258,
+     ^~~~~~
+fooChecker.yacc:27:27: note: previous definition of ‘STRING’ was here
+     enum { INTEGER, REAL, STRING, BOOLEAN } type;
+                           ^~~~~~
+y.tab.c:125:5: error: redeclaration of enumerator ‘REAL’
+     REAL = 261,
+     ^~~~
+fooChecker.yacc:27:21: note: previous definition of ‘REAL’ was here
+     enum { INTEGER, REAL, STRING, BOOLEAN } type;
+                     ^~~~
+y.tab.c:126:5: error: redeclaration of enumerator ‘INTEGER’
+     INTEGER = 262,
+     ^~~~~~~
+fooChecker.yacc:27:12: note: previous definition of ‘INTEGER’ was here
+     enum { INTEGER, REAL, STRING, BOOLEAN } type;
+            ^~~~~~~
+y.tab.c:127:5: error: redeclaration of enumerator ‘BOOLEAN’
+     BOOLEAN = 263,
+     ^~~~~~~
+fooChecker.yacc:27:35: note: previous definition of ‘BOOLEAN’ was here
+     enum { INTEGER, REAL, STRING, BOOLEAN } type;
+                                   ^~~~~~~
+fooChecker.yacc:46:2: error: unknown type name ‘Expression’
+ %union { Expression Expr; char * str; int integer; float real; char boolean; char * alpha;}
+  ^~~~~~~~~~
+fooChecker.yacc: In function ‘yyparse’:
+fooChecker.yacc:113:38: error: expected ‘;’ before ‘}’ token
+    |  STRING   { $$ = $1 } /* STRING */
+                                      ^
+fooChecker.yacc:114:38: error: expected ‘;’ before ‘}’ token
+    |  BOOLEAN  { $$ = $1 } /* BOOLEAN */
+                                      ^
+In file included from fooChecker.lex:26:0:
+fooChecker.yacc:46:2: error: unknown type name ‘Expression’
+ %union { Expression Expr; char * str; int integer; float real; char boolean; char * alpha;}
+  ^~~~~~~~~~
+fooChecker.lex: In function ‘yylex’:
+fooChecker.lex:122:10: error: ‘DbQuote’ undeclared (first use in this function)
+  ({DbQuote})    { return(DbQuote); }
+          ^~~~~~~
+fooChecker.lex:122:10: note: each undeclared identifier is reported only once for each function it appears in
+makefile:9: recipe for target 'fooCheckerd' failed
+make: *** [fooCheckerd] Error 1

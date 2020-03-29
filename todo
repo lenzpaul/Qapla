@@ -1,0 +1,3 @@
+todo
+tokenize UMINUS
+tokenize index => num > 0 && < str.length

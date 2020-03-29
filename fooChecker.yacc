@@ -54,10 +54,10 @@ int yyerror(char* s);
  /* identify what kind of values can be associated with the language components */
 
  /* for the token types that have an associated value, identify its type */
-%token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN
+%token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR
 
-%type<struct nodeinfo> script statements statement expr
-%type<struct nodeinfo> intexpr floatexpr strexpr boolexpr
+%type<struct nodeinfo> script statements statement expr 
+%type<struct nodeinfo> intexpr floatexpr strexpr boolexpr 
 
 
 /* Operator Precedence */ 
@@ -72,6 +72,8 @@ int yyerror(char* s);
 
 
  /****** grammar rules ******/
+
+/****************
 
       script --> statements
       statements --> statement
@@ -182,40 +184,21 @@ int yyerror(char* s);
       boolexpr --> IDENTIFIER OR boolexpr
 
 
-  */
+******/
+
+script: statements
+      | script printout 	
+statements:
+        statement
+      | statement statements
+      | IDENTIFIER '=' expression
+expression: 
+        strexpr
+      | intexpr
+      | floatexpr
+      | boolexpr
 
 
-script: 
-   | script printout 	
-	| script vardecl
-   | script expr
-	; 
-
-/*
-expr:
-      '(' expr ')    { $$ = $2 } 
-   |  expr '+' expr  { $$ = $1 + $3; } 
-   |  expr '-' expr  { $$ = $1 - $3; } 
-   |  expr '*' expr  { $$ = $1 * $3; } 
-   |  expr '/' expr  { $$ = $1 / $3; } 
-   |  '-' expr %prec UMINUS 
-   |  number
-   ;
-*/
-
-/* expr is a valid expression (of any data type)  */ 
-expr: 
-   |  STRING   { $$ = $1 } /* STRING */
-   |  BOOLEAN  { $$ = $1 } /* BOOLEAN */
-   |  number
-   ;
-
-
-number: 
-      INTEGER  { $$ = 1; }
-   |  REAL     { $$ = 1; }
-   ;
-         
 
 
  /* vardecl --> VAR IDENTIFIER ;
@@ -226,30 +209,131 @@ vardecl: VAR IDENTIFIER ';'
 	   printf("...declared variable %s...\n", $2);
 	};
 
-  /* printout --> PRINT ( STRING )
-  */
 
-
-printout: PRINT '(' INTEGER ')'
+/* printout --> PRINT ( STRING ) */
+printout: PRINT '(' expression ')'
       {
          /* print text associated with IDENTIFIER (field $3) */
-         printf("%d \n", $3);
-      }
- 
+         if($<info.dtype>3 == 1){
+            printf("%d \n", $3);
+         }else if($<info.dtype>3 == 2){
+            printf("%lf \n", $3);
+         }else if($<info.dtype>3 == 3){
+            printf("%s \n", $3);
+         }else if($<info.dtype>3 == 4){
+            printf($3 ? "true" : "false");
+         }
 
-	| PRINT '(' REAL ')'
-      {
-         /* print text associated with IDENTIFIER (field $3) */
-         printf("%f \n", $3);
       }
-	
-   
-   | PRINT '(' STRING ')'
-      {
-         /* print text associated with IDENTIFIER (field $3) */
-         printf("%s \n", $3);
-      }
+      ;
+
+
+
+
+
+statements:
+   statement
+   | statement statements
    ;
+
+statement: IDENTIFIER '=' expression
+    {
+       $<info.dtype>1 = $<info.dtype>3;
+       if ($<info.dtype>3 == 1) {
+          $<info.inum>1 = $<info.inum>3;
+          printf("sets %s = %d;\n", $<info.name>1, $<info.inum>3);
+       } else if ($<info.dtype>3 == 2) {
+          $<info.inum>1 = $<info.inum>3;
+          printf("sets %s = %lf;\n", $<info.name>1, $<info.inum>3);
+       } else if ($<info.dtype>3 == 3) {
+          strncpy($<info.str>1, $<info.str>3, 4095);
+          printf("sets %s = \"%s\";\n", $<info.name>1, $<info.str>3);
+       } else if ($<info.dtype>3 == 4) {
+          strncpy($<info.str>1, $<info.str>3, 4095);
+          printf("sets %s = \"%s\";\n", $<info.name>1, $<info.str>3);
+       }
+    }
+    ;
+
+expression: strexpr
+    {
+       $<info.dtype>$ = 2;
+       strncpy($<info.str>$, $<info.str>1, 4095);
+    }
+    ;
+
+expression: intexpr
+    {
+       $<info.dtype>$ = 1;
+       $<info.inum>$ = $<info.inum>1;
+    }
+    ;
+
+intexpr: INTEGER
+    {
+       $<info.dtype>$ = 1;
+       $<info.inum>$ = $<info.inum>1;
+    }
+    ;
+
+intexpr: IDENTIFIER
+    {
+       $<info.dtype>$ = 1;
+       $<info.inum>$ = $<info.inum>1;
+    }
+    ;
+
+intexpr: INTEGER '+' intexpr
+    {
+       $<info.dtype>$ = 1;
+       $<info.inum>$ = $<info.inum>1 + $<info.inum>3;
+    }
+    ;
+
+intexpr: IDENTIFIER '+' intexpr
+    {
+       $<info.dtype>$ = 1;
+       $<info.inum>$ = $<info.inum>1 + $<info.inum>3;
+    }
+    ;
+
+strexpr: STRING
+    {
+       $<info.dtype>$ = 2;
+       strncpy($<info.str>$, $<info.str>1, 4095);
+    }
+    ;
+
+strexpr: IDENTIFIER
+    {
+       $<info.dtype>$ = 2;
+       strncpy($<info.str>$, $<info.str>1, 4095);
+    }
+    ;
+
+strexpr: STRING '+' strexpr
+    {
+       $<info.dtype>$ = 2;
+       strncpy($<info.str>$, $<info.str>1, 4095);
+       strncat($<info.str>$, $<info.str>3, 4095);
+    }
+    ;
+
+strexpr: IDENTIFIER '+' strexpr
+    {
+       $<info.dtype>$ = 2;
+       strncpy($<info.str>$, $<info.str>1, 4095);
+       strncat($<info.str>$, $<info.str>3, 4095);
+    }
+    ;
+
+
+
+
+
+
+
+
 
 
 

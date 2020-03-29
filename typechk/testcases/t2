@@ -1,0 +1,4 @@
+; this is a comment
+x = 1; and another comment
+foo = "blah blah blah"
+   ; this is also a comment
