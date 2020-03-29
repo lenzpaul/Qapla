@@ -87,13 +87,28 @@ int yyerror(char* s);
       intexpr --> IDENTIFIER           *dtype must be 1 to succeed
       intexpr --> IDENTIFIER + intexpr *dtype must be 1 to succeed
       
+      /* string expressions. dtype must == 3  */ 
       strexpr --> STRING
-      strexpr --> STRING + strexpr
-      strexpr --> IDENTIFIER              *dtype must be 3 to succeed
-      strexpr --> IDENTIFIER + strexpr    *dtype must be 3 to succeed
-      strexpr --> IDENTIFIER = STRING     *assignment
-      strexpr --> IDENTIFIER == STRING    *evaluation, returns bool
-      strexpr --> STRING == IDENTIFIER    *evaluation, returns bool
+      strexpr --> IDENTIFIER                    *dtype must be 3 to succeed
+
+      strexpr --> STRING = strexpr              *assignment
+      strexpr --> IDENTIFIER = strexpr          *assignment: dtype must be 3
+
+      strexpr --> STRING == IDENTIFIER          *equals: evaluation, returns bool
+      strexpr --> IDENTIFIER == strexpr         *equals: evaluation, returns bool
+
+      strexpr --> STRING <>  strexpr            *not-equals, return bool
+      strexpr --> IDENTIFIER <> strexpr         *not-equals, return bool
+
+      strexpr --> STRING <  strexpr             *less than, return bool
+      strexpr --> IDENTIFIER <  strexpr         *less than, return bool
+
+      strexpr --> STRING + strexpr              *concatenation, dtype must be 3 
+      strexpr --> IDENTIFIER + strexpr          *concatenation, dtype must be 3 
+
+      strexpr --> STRING [ index : index ]      *substring, 0-based, inclusive) 
+      strexpr --> IDENTIFIER [ index : index ]  *substring
+
 
       floatexpr --> REAL 
       floatexpr --> REAL + floatexpr

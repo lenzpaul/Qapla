@@ -10,12 +10,8 @@ Num [0-9]
 
 String \"(\\\\|\\\"|[^"\\])*\"
 
-
 Bool [TF]
-DbQuote ["]
 Neg [-]
-EmbdQuote \\" 
-EmbdBkSlash \\\\ 
 SemiColon ;
 eq =
 
@@ -116,6 +112,13 @@ const int MaxLen = 128;
   *    for the identifier
   *    and return REAL as the type */
  ({Neg})?({Num})+\.({Num})+ { yylval.real = atof(yytext); return(REAL); }
+
+ /*Integer
+  *    store the converted value, string to integer 
+  *    for the identifier
+  *    and return INTEGER as the type */
+ ({Neg})?({Num})+ { yylval.integer = atoi(yytext); return(INTEGER); }
+
 
  /*Integer
   *    store the converted value, string to integer 
