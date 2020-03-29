@@ -54,8 +54,9 @@ int yyerror(char* s);
 
  /* script --> vardecl */
 
-script: printout 	
-	|vardecl 
+script: script printout 	
+	| script vardecl
+   |
 	; 
 
 
