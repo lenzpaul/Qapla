@@ -134,8 +134,9 @@ int yyerror(char* s);
       intexpr --> IDENTIFIER <> INTEGER         *dtype must be 1 to succeed
 
 
-
-      /* If IDENTIFIER is INTEGER (dtype 1), return a floatexpr */
+      ***
+      * If IDENTIFIER is INTEGER (dtype 1), return a floatexpr *
+      ***
       floatexpr --> REAL
       floatexpr --> - REAL                        *unary negation
       floatexpr --> IDENTIFIER                    *dtype must be 2 
@@ -156,6 +157,24 @@ int yyerror(char* s);
       floatexpr --> IDENTIFIER < REAL               *dtype must be 2
       floatexpr --> IDENTIFIER == REAL              *dtype must be 2
       floatexpr --> IDENTIFIER <> REAL              *dtype must be 2
+
+      ***
+      Boolean
+      ***
+      boolexpr --> BOOLEAN
+      boolexpr --> IDENTIFIER                      *dtype 4
+      
+      boolexpr --> IDENTIFIER = boolexpr            *assignement: dtype 4
+      boolexpr --> BOOLEAN == boolexpr
+      boolexpr --> IDENTIFIER == boolexpr
+      boolexpr --> BOOLEAN <> boolexpr
+      boolexpr --> IDENTIFIER <> boolexpr
+      boolexpr --> BOOLEAN AND boolexpr
+      boolexpr --> IDENTIFIER AND boolexpr
+      boolexpr --> NOT BOOLEAN
+      boolexpr --> NOT IDENTIFIER
+      boolexpr --> BOOLEAN OR boolexpr
+      boolexpr --> IDENTIFIER OR boolexpr
 
 
 
