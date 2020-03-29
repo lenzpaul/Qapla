@@ -21,6 +21,7 @@
 int yylex(void);
 int yywrap();
 int yyerror(char* s);
+%}
 
 
 
@@ -35,7 +36,8 @@ int yyerror(char* s);
   *       str  - a char*, used for string and strexpr
   *       name - a char*, used for the name of identifiers
   *       dtype - an int, used to indicate the current datatype,
-  *               0 for unknown, 1 for integer, 2 for string, 3 for float
+  *               0 for unknown, 1 for integer, 2 for float. 3 for string,
+  *               4 for boolean    
   */
 
 
@@ -49,39 +51,20 @@ int yyerror(char* s);
 }
 
 
-
-
-%}
-
-
-
-
-
-
  /* identify what kind of values can be associated with the language components */
-%union { char * str; int integer; float real; char boolean; char * alpha;}
-
-
-/* identify the token types */
-%token VAR IDENTIFIER REAL INTEGER BOOLEAN
-%token PRINT DbQuote STRING
-
 
  /* for the token types that have an associated value, identify its type */
-%type<str> STRING
-%type<real> REAL
-%type<integer> INTEGER
-%type<boolean> BOOLEAN
+%token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN
 
-%type<alpha> IDENTIFIER
+%type<struct nodeinfo> script statements statement expr
+%type<struct nodeinfo> intexpr floatexpr strexpr boolexpr
 
-%type  <nodetype> expr number
 
 /* Operator Precedence */ 
 %right '='
 %left  '+'  '-'
 %left  '*'  '/'
-%left UMINUS /* UNARY Minus */ 
+%left UMINUS   /* UNARY Minus */ 
 /* Parantheses??? */ 
 
 
@@ -90,10 +73,51 @@ int yyerror(char* s);
 
  /****** grammar rules ******/
 
+      script --> statements
+      statements --> statement
+      statements --> statement statements
+      statement --> IDENTIFIER = expression
+      expression --> strexpr
+      expression --> intexpr
+      expression --> floatexpr
+      expression --> boolexpr
+      
+      intexpr --> INTEGER
+      intexpr --> INTEGER + intexpr
+      intexpr --> IDENTIFIER           *dtype must be 1 to succeed
+      intexpr --> IDENTIFIER + intexpr *dtype must be 1 to succeed
+      
+      strexpr --> STRING
+      strexpr --> STRING + strexpr
+      strexpr --> IDENTIFIER              *dtype must be 3 to succeed
+      strexpr --> IDENTIFIER + strexpr    *dtype must be 3 to succeed
+      strexpr --> IDENTIFIER = STRING     *assignment
+      strexpr --> IDENTIFIER == STRING    *evaluation, returns bool
+      strexpr --> STRING == IDENTIFIER    *evaluation, returns bool
+
+      floatexpr --> REAL 
+      floatexpr --> REAL + floatexpr
+      floatexpr --> IDENTIFIER                *dtype must be 2 to succeed
+      floatexpr --> IDENTIFIER + floatexpr    *dtype must be 2 to succeed
+      boolexpr --> BOOLEAN
+      boolexpr --> IDENTIFIER                 *dtype must be 2 to succeed
+  */
+
+
+
+
+
+
+
+
+
+
+
+
 
  /* script --> vardecl */
 
-script: /* blank */  
+script: 
    | script printout 	
 	| script vardecl
    | script expr
