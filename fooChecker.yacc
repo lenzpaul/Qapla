@@ -21,18 +21,6 @@
 int yylex(void);
 int yywrap();
 int yyerror(char* s);
-
-struct Number
-{
-    enum { INTEGER, FLOAT } type;
-    union
-    {
-        float fval;
-        int   ival;
-    };
-};
-
-
 %}
 
 
@@ -41,26 +29,23 @@ struct Number
 
 
  /* identify what kind of values can be associated with the language components */
-%union { Number nval; char * str; int integer; float real; char boolean; char * alpha;}
-%union expr {}
+%union { char * str; int integer; float real; char boolean; char * alpha;}
 
 
 /* identify the token types */
-%token VAR 
-%token IDENTIFIER 
-%token <nval> REAL 
-%token <nval> INTEGER 
-%token BOOLEAN
-%token PRINT STRING
+%token VAR IDENTIFIER REAL INTEGER BOOLEAN
+%token PRINT DbQuote STRING
 
 
  /* for the token types that have an associated value, identify its type */
 %type<str> STRING
-/* %type<real> REAL */ 
-/* %type<integer> INTEGER */
+%type<real> REAL
+%type<integer> INTEGER
 %type<boolean> BOOLEAN
 
 %type<alpha> IDENTIFIER
+
+%type  <nodetype> expr number
 
 /* Operator Precedence */ 
 %right '='
@@ -105,7 +90,7 @@ expr:
 
 
 number: 
-   |  INTEGER  { $$ = 1; }
+      INTEGER  { $$ = 1; }
    |  REAL     { $$ = 1; }
    ;
          

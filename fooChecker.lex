@@ -119,9 +119,6 @@ const int MaxLen = 128;
  ({Neg})?({Num})+ { yylval.integer = atoi(yytext); return(INTEGER); }
 
 
- ({DbQuote})    { return(DbQuote); }
-
-
  ")"         { return *yytext; }
 
  "("         { return *yytext; }
