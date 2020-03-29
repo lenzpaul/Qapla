@@ -83,11 +83,11 @@ int yyerror(char* s);
       expression --> boolexpr
       
       
-      /* string expressions. dtype must == 3  */ 
+      ****
+      * string expressions. dtype must == 3 
+      ***
       strexpr --> STRING
       strexpr --> IDENTIFIER                    *dtype must be 3 to succeed
-
-      strexpr --> IDENTIFIER = strexpr          *assignment: dtype must be 3
 
       strexpr --> STRING == IDENTIFIER          *equals: evaluation, returns bool
       strexpr --> IDENTIFIER == strexpr         *equals: evaluation, returns bool
@@ -129,9 +129,12 @@ int yyerror(char* s);
       intexpr --> IDENTIFIER ^ intexpr          *dtype must be 1 to succeed
       intexpr --> INTEGER MOD intexpr
       intexpr --> IDENTIFIER MOD intexpr        *dtype must be 1 to succeed
-      intexpr --> IDENTIFIER < INTEGER          *dtype must be 1 to succeed
-      intexpr --> IDENTIFIER == INTEGER         *dtype must be 1 to succeed
-      intexpr --> IDENTIFIER <> INTEGER         *dtype must be 1 to succeed
+      intexpr --> INTEGER < intexpr          *dtype must be 1 to succeed
+      intexpr --> IDENTIFIER < intexpr          *dtype must be 1 to succeed
+      intexpr --> INTEGER == intexpr         *dtype must be 1 to succeed
+      intexpr --> IDENTIFIER == intexpr         *dtype must be 1 to succeed
+      intexpr --> INTEGER <> intexpr         *dtype must be 1 to succeed
+      intexpr --> IDENTIFIER <> intexpr         *dtype must be 1 to succeed
 
 
       ***
@@ -154,9 +157,12 @@ int yyerror(char* s);
       floatexpr --> IDENTIFIER ^ floatexpr          *dtype must be 1 or 2 
       floatexpr --> REAL MOD floatexpr
       floatexpr --> IDENTIFIER MOD floatexpr        *dtype must be 1 or 2 
-      floatexpr --> IDENTIFIER < REAL               *dtype must be 2
-      floatexpr --> IDENTIFIER == REAL              *dtype must be 2
-      floatexpr --> IDENTIFIER <> REAL              *dtype must be 2
+      floatexpr --> REALN < floatexpr               *dtype must be 2
+      floatexpr --> IDENTIFIER < floatexpr               *dtype must be 2
+      floatexpr --> REAL == floatexpr              *dtype must be 2
+      floatexpr --> IDENTIFIER == floatexpr              *dtype must be 2
+      floatexpr --> IDENTIFIER <> floatexpr              *dtype must be 2
+      floatexpr --> IDENTIFIER <> floatexpr              *dtype must be 2
 
       ***
       Boolean
@@ -164,7 +170,6 @@ int yyerror(char* s);
       boolexpr --> BOOLEAN
       boolexpr --> IDENTIFIER                      *dtype 4
       
-      boolexpr --> IDENTIFIER = boolexpr            *assignement: dtype 4
       boolexpr --> BOOLEAN == boolexpr
       boolexpr --> IDENTIFIER == boolexpr
       boolexpr --> BOOLEAN <> boolexpr
@@ -177,41 +182,8 @@ int yyerror(char* s);
       boolexpr --> IDENTIFIER OR boolexpr
 
 
-
-
-
-
-
-
-
-
-
-      floatexpr --> REAL 
-      floatexpr --> IDENTIFIER                  *dtype must be 2
-      
-      floatexpr --> REAL + floatexpr
-      floatexpr --> IDENTIFIER                *dtype must be 2 to succeed
-      floatexpr --> IDENTIFIER + floatexpr    *dtype must be 2 to succeed
-
-
-
-      boolexpr --> BOOLEAN
-      boolexpr --> IDENTIFIER                 *dtype must be 2 to succeed
   */
 
-
-
-
-
-
-
-
-
-
-
-
-
- /* script --> vardecl */
 
 script: 
    | script printout 	
