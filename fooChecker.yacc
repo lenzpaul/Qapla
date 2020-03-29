@@ -21,11 +21,41 @@
 int yylex(void);
 int yywrap();
 int yyerror(char* s);
-%}
+
 
 
  /* identify the top level language component */
 %start script
+
+
+ /* every component of the program has the same data type:
+  *    info is a struct with five fields
+  *       ival - a long, used for integer and intexpr
+  *       fval - a double, used for float and floatexpr
+  *       str  - a char*, used for string and strexpr
+  *       name - a char*, used for the name of identifiers
+  *       dtype - an int, used to indicate the current datatype,
+  *               0 for unknown, 1 for integer, 2 for string, 3 for float
+  */
+
+
+%union { 
+   struct nodeinfo 
+   { 
+      long ival, dtype; 
+      double fval;
+      char str[4096], name[256]; 
+   } info; 
+}
+
+
+
+
+%}
+
+
+
+
 
 
  /* identify what kind of values can be associated with the language components */
