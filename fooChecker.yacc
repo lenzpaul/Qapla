@@ -82,16 +82,11 @@ int yyerror(char* s);
       expression --> floatexpr
       expression --> boolexpr
       
-      intexpr --> INTEGER
-      intexpr --> INTEGER + intexpr
-      intexpr --> IDENTIFIER           *dtype must be 1 to succeed
-      intexpr --> IDENTIFIER + intexpr *dtype must be 1 to succeed
       
       /* string expressions. dtype must == 3  */ 
       strexpr --> STRING
       strexpr --> IDENTIFIER                    *dtype must be 3 to succeed
 
-      strexpr --> STRING = strexpr              *assignment
       strexpr --> IDENTIFIER = strexpr          *assignment: dtype must be 3
 
       strexpr --> STRING == IDENTIFIER          *equals: evaluation, returns bool
@@ -109,11 +104,78 @@ int yyerror(char* s);
       strexpr --> STRING [ index : index ]      *substring, 0-based, inclusive) 
       strexpr --> IDENTIFIER [ index : index ]  *substring
 
+      
+
+
+      *** 
+      For binary operations, if both operands are integer then the result is
+        integer, if one or both operands are real then the result is real.
+      ***
+
+      intexpr --> INTEGER
+      intexpr --> - INTEGER                     *unary negation
+      intexpr --> IDENTIFIER                    *dtype must be 1 
+      intexpr --> - IDENTIFIER                  *unary negation
+      
+      intexpr --> INTEGER + intexpr
+      intexpr --> IDENTIFIER + intexpr          *dtype must be 1 to succeed
+      intexpr --> INTEGER - intexpr
+      intexpr --> IDENTIFIER - intexpr          *dtype must be 1 to succeed
+      intexpr --> INTEGER * intexpr
+      intexpr --> IDENTIFIER * intexpr          *dtype must be 1 to succeed
+      intexpr --> INTEGER / intexpr
+      intexpr --> IDENTIFIER / intexpr          *dtype must be 1 to succeed
+      intexpr --> INTEGER ^ intexpr
+      intexpr --> IDENTIFIER ^ intexpr          *dtype must be 1 to succeed
+      intexpr --> INTEGER MOD intexpr
+      intexpr --> IDENTIFIER MOD intexpr        *dtype must be 1 to succeed
+      intexpr --> IDENTIFIER < INTEGER          *dtype must be 1 to succeed
+      intexpr --> IDENTIFIER == INTEGER         *dtype must be 1 to succeed
+      intexpr --> IDENTIFIER <> INTEGER         *dtype must be 1 to succeed
+
+
+
+      /* If IDENTIFIER is INTEGER (dtype 1), return a floatexpr */
+      floatexpr --> REAL
+      floatexpr --> - REAL                        *unary negation
+      floatexpr --> IDENTIFIER                    *dtype must be 2 
+      floatexpr --> - IDENTIFIER                  *unary negation, dtype 2
+      
+      floatexpr --> REAL + floatexpr
+      floatexpr --> IDENTIFIER + floatexpr          *dtype must be 1 or 2 
+      floatexpr --> REAL - floatexpr
+      floatexpr --> IDENTIFIER - floatexpr          *dtype must be 1 or 2 
+      floatexpr --> REAL * floatexpr
+      floatexpr --> IDENTIFIER * floatexpr          *dtype must be 1 or 2 
+      floatexpr --> REAL / floatexpr
+      floatexpr --> IDENTIFIER / floatexpr          *dtype must be 1 or 2 
+      floatexpr --> REAL ^ floatexpr
+      floatexpr --> IDENTIFIER ^ floatexpr          *dtype must be 1 or 2 
+      floatexpr --> REAL MOD floatexpr
+      floatexpr --> IDENTIFIER MOD floatexpr        *dtype must be 1 or 2 
+      floatexpr --> IDENTIFIER < REAL               *dtype must be 2
+      floatexpr --> IDENTIFIER == REAL              *dtype must be 2
+      floatexpr --> IDENTIFIER <> REAL              *dtype must be 2
+
+
+
+
+
+
+
+
+
+
 
       floatexpr --> REAL 
+      floatexpr --> IDENTIFIER                  *dtype must be 2
+      
       floatexpr --> REAL + floatexpr
       floatexpr --> IDENTIFIER                *dtype must be 2 to succeed
       floatexpr --> IDENTIFIER + floatexpr    *dtype must be 2 to succeed
+
+
+
       boolexpr --> BOOLEAN
       boolexpr --> IDENTIFIER                 *dtype must be 2 to succeed
   */
