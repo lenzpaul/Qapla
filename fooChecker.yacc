@@ -21,6 +21,18 @@
 int yylex(void);
 int yywrap();
 int yyerror(char* s);
+
+struct Number
+{
+    enum { INTEGER, FLOAT } type;
+    union
+    {
+        float fval;
+        int   ival;
+    };
+};
+
+
 %}
 
 
@@ -29,21 +41,33 @@ int yyerror(char* s);
 
 
  /* identify what kind of values can be associated with the language components */
-%union { char * str; int integer; float real; char boolean; char * alpha;}
+%union { Number nval; char * str; int integer; float real; char boolean; char * alpha;}
+%union expr {}
 
 
- /* identify the token types */
-%token VAR IDENTIFIER REAL INTEGER BOOLEAN
-%token PRINT DbQuote STRING
+/* identify the token types */
+%token VAR 
+%token IDENTIFIER 
+%token <nval> REAL 
+%token <nval> INTEGER 
+%token BOOLEAN
+%token PRINT STRING
 
 
  /* for the token types that have an associated value, identify its type */
 %type<str> STRING
-%type<real> REAL
-%type<integer> INTEGER
+/* %type<real> REAL */ 
+/* %type<integer> INTEGER */
 %type<boolean> BOOLEAN
 
 %type<alpha> IDENTIFIER
+
+/* Operator Precedence */ 
+%right '='
+%left  '+'  '-'
+%left  '*'  '/'
+%left UMINUS /* UNARY Minus */ 
+/* Parantheses??? */ 
 
 
 %%
@@ -54,12 +78,37 @@ int yyerror(char* s);
 
  /* script --> vardecl */
 
-script: script printout 	
+script: /* blank */  
+   | script printout 	
 	| script vardecl
-   |
+   | script expr
 	; 
 
+/*
+expr:
+      '(' expr ')    { $$ = $2 } 
+   |  expr '+' expr  { $$ = $1 + $3; } 
+   |  expr '-' expr  { $$ = $1 - $3; } 
+   |  expr '*' expr  { $$ = $1 * $3; } 
+   |  expr '/' expr  { $$ = $1 / $3; } 
+   |  '-' expr %prec UMINUS 
+   |  number
+   ;
+*/
 
+/* expr is a valid expression (of any data type)  */ 
+expr: 
+   |  STRING   { $$ = $1 } /* STRING */
+   |  BOOLEAN  { $$ = $1 } /* BOOLEAN */
+   |  number
+   ;
+
+
+number: 
+   |  INTEGER  { $$ = 1; }
+   |  REAL     { $$ = 1; }
+   ;
+         
 
 
  /* vardecl --> VAR IDENTIFIER ;
