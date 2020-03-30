@@ -188,18 +188,18 @@ int yyerror(char* s);
 
 ******/
 
-script: script statements { printf("r1.1\n");} /* consider having only statements here,  making vardecl a stmt*/
-      | script vardecl { printf("r1.2\n");} 
-      | { printf("r1.3\n");}
+script: script statements  { printf("1\n");} /* consider having only statements here,  making vardecl a stmt*/
+      | script vardecl { printf("2\n");} 
+      | { printf("3\n");}
       ;
 
-statements:
-      | statements statement
-      | statements expression
+statements:        { printf("1\n");}
+      | statements statement     { printf("4\n");}
+      | statements expression    { printf("5\n");}
       ;
 
 
-statement: PRINT '(' expression ')'
+statement: PRINT '(' expression ')'    { printf("6\n");}
       {
          /* print text associated with IDENTIFIER (field $3) */
          if($<info.dtype>3 == 1){
@@ -218,7 +218,7 @@ statement: PRINT '(' expression ')'
 
  /* vardecl --> VAR IDENTIFIER ;
   *    where there is some character string associated with IDENTIFIER */
-vardecl: VAR IDENTIFIER ';'
+vardecl: VAR IDENTIFIER ';'    { printf("7\n");}
 	{
 	   /* display the text associated with IDENTIFIER (field $2) */
 	   printf("...declared variable %s...\n", $<info.name>2);
@@ -226,7 +226,7 @@ vardecl: VAR IDENTIFIER ';'
 
 
 
-statement: IDENTIFIER '=' expression
+statement: IDENTIFIER '=' expression    { printf("8\n");}
     {
        $<info.dtype>1 = $<info.dtype>3;
        if ($<info.dtype>3 == 1) {
@@ -248,16 +248,16 @@ statement: IDENTIFIER '=' expression
     ;
 
 
-expression: 
-        strexpr
-      | intexpr
-      | floatexpr
-      | boolexpr
+expression:     { printf("9\n");}
+        strexpr    { printf("10\n");}
+      | intexpr    { printf("11\n");}
+      | floatexpr    { printf("12\n");}
+      | boolexpr    { printf("13\n");}
       ;
 
 
 
-strexpr: STRING
+strexpr: STRING    { printf("14\n");}
     {
        $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
@@ -266,13 +266,13 @@ strexpr: STRING
     }
     ;
 
-strexpr: IDENTIFIER
+strexpr: IDENTIFIER    { printf("15\n");}
     {
        if( $<info.dtype>$ = 3) strncpy($<info.str>$, $<info.str>1, 4095);
     }
     ;
 
-strexpr: STRING '+' strexpr
+strexpr: STRING '+' strexpr    { printf("16\n");}
     {
        $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
@@ -280,7 +280,7 @@ strexpr: STRING '+' strexpr
     }
     ;
 
-strexpr: IDENTIFIER '+' strexpr
+strexpr: IDENTIFIER '+' strexpr    { printf("17\n");}
     {
        $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
@@ -289,7 +289,7 @@ strexpr: IDENTIFIER '+' strexpr
     ;
 
 
-intexpr: INTEGER '+' intexpr 
+intexpr: INTEGER '+' intexpr     { printf("18\n");}
     {
        $<info.dtype>$ = 1;
        $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
@@ -302,7 +302,7 @@ intexpr: INTEGER '+' intexpr
 
 
 
-intexpr: intexpr '+' intexpr 
+intexpr: intexpr '+' intexpr     { printf("19\n");}
     {
        $<info.dtype>$ = 1;
        $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
@@ -312,7 +312,7 @@ intexpr: intexpr '+' intexpr
     ;
 
 
-intexpr: INTEGER
+intexpr: INTEGER    { printf("20\n");}
     {
        $<info.dtype>$ = 1;
        $<info.ival>$ = $<info.ival>1;
@@ -322,14 +322,14 @@ intexpr: INTEGER
     ;
 
 
-intexpr: IDENTIFIER
+intexpr: IDENTIFIER    { printf("21\n");}
     {
        if( $<info.dtype>$ = 1 ) $<info.ival>$ = $<info.ival>1;
     }
     ;
 
 
-intexpr: intexpr MOD intexpr 
+intexpr: intexpr MOD intexpr     { printf("22\n");}
     {
 
        $<info.dtype>$ = 1;
@@ -344,7 +344,7 @@ intexpr: intexpr MOD intexpr
 
 
 
-floatexpr: REAL
+floatexpr: REAL    { printf("23\n");}
     {
        $<info.dtype>$ = 2;
        $<info.fval>$ = $<info.fval>1;
@@ -353,14 +353,14 @@ floatexpr: REAL
     }
     ;
 
-floatexpr: IDENTIFIER
+floatexpr: IDENTIFIER    { printf("24\n");}
     {
        if( $<info.dtype>$ = 2 )  $<info.fval>$ = $<info.fval>1; 
     }
     ;
 
 
-floatexpr: floatexpr '+' floatexpr
+floatexpr: floatexpr '+' floatexpr    { printf("25\n");}
     {
        $<info.dtype>$ = 2;
        $<info.fval>$ = $<info.fval>1 + $<info.fval>3 ;
@@ -374,7 +374,7 @@ floatexpr: floatexpr '+' floatexpr
 
 
 
-boolexpr: BOOLEAN 
+boolexpr: BOOLEAN     { printf("26\n");}
     {
        $<info.dtype>$ = 4;
        $<info.bval>$ = $<info.bval>1;
