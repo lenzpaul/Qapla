@@ -188,9 +188,9 @@ int yyerror(char* s);
 
 ******/
 
-script: script statements /* consider having only statements here,  making vardecl a stmt*/
-      | script vardecl
-      |
+script: script statements { printf("r1.1\n");} /* consider having only statements here,  making vardecl a stmt*/
+      | script vardecl { printf("r1.2\n");} 
+      | { printf("r1.3\n");}
       ;
 
 statements:
@@ -289,23 +289,17 @@ strexpr: IDENTIFIER '+' strexpr
     ;
 
 
-
-
-intexpr: INTEGER
+intexpr: INTEGER '+' intexpr 
     {
        $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1;
+       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
 
-		 printf("%d is an integer \n",$<info.ival>1);
+		 printf("%d + %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
     }
     ;
 
 
-intexpr: IDENTIFIER
-    {
-       if( $<info.dtype>$ = 1 ) $<info.ival>$ = $<info.ival>1;
-    }
-    ;
+
 
 
 intexpr: intexpr '+' intexpr 
@@ -314,6 +308,23 @@ intexpr: intexpr '+' intexpr
        $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
 
 		 printf("%d + %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
+    }
+    ;
+
+
+intexpr: INTEGER
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1;
+
+		 printf("%d is an integer alone \n",$<info.ival>1);
+    }
+    ;
+
+
+intexpr: IDENTIFIER
+    {
+       if( $<info.dtype>$ = 1 ) $<info.ival>$ = $<info.ival>1;
     }
     ;
 
