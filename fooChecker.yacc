@@ -58,8 +58,7 @@ int yyerror(char* s);
  /* for the token types that have an associated value, identify its type */
 %token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR
 
-%type<struct nodeinfo> script statements statement
-%type<struct nodeinfo> intexpr strexpr expression
+/* %type<struct nodeinfo>  */
 
 
 
@@ -254,21 +253,6 @@ expression:
       ;
 
 
-expression: strexpr
-    {
-       $<info.dtype>$ = 3;
-       strncpy($<info.str>$, $<info.str>1, 4095);
-    }
-    ;
-
-expression: intexpr
-    {
-       $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1;
-    }
-    ;
-
-
 
 strexpr: STRING
     {
@@ -281,8 +265,7 @@ strexpr: STRING
 
 strexpr: IDENTIFIER
     {
-       $<info.dtype>$ = 3;
-       strncpy($<info.str>$, $<info.str>1, 4095);
+       if( $<info.dtype>$ = 3) strncpy($<info.str>$, $<info.str>1, 4095);
     }
     ;
 
@@ -316,8 +299,7 @@ intexpr: INTEGER
 
 intexpr: IDENTIFIER
     {
-       $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1;
+       if( $<info.dtype>$ = 1 ) $<info.ival>$ = $<info.ival>1;
     }
     ;
 
@@ -348,8 +330,7 @@ floatexpr: REAL
 
 floatexpr: IDENTIFIER
     {
-       $<info.dtype>$ = 2;
-       $<info.fval>$ = $<info.fval>1;
+       if( $<info.dtype>$ = 2 )  $<info.fval>$ = $<info.fval>1; 
     }
     ;
 
