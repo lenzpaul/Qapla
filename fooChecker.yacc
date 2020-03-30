@@ -188,7 +188,10 @@ int yyerror(char* s);
 
 ******/
 
-script: statements ;
+script: script statements /* consider having only statements here,  making vardecl a stmt*/
+      | script vardecl
+      |
+      ;
 
 statements:
       | statements statement
@@ -218,7 +221,7 @@ statement: PRINT '(' expression ')'
 vardecl: VAR IDENTIFIER ';'
 	{
 	   /* display the text associated with IDENTIFIER (field $2) */
-	   printf("...declared variable %s...\n", $2);
+	   printf("...declared variable %s...\n", $<info.name>2);
 	};
 
 
