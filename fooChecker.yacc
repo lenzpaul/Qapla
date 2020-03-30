@@ -214,12 +214,6 @@ statement: PRINT '(' expression ')'
 
 
 
-statements:
-   statement
-   | statement statements
-   ;
-
-
  /* vardecl --> VAR IDENTIFIER ;
   *    where there is some character string associated with IDENTIFIER */
 vardecl: VAR IDENTIFIER ';'
@@ -255,6 +249,7 @@ statement: IDENTIFIER '=' expression
 expression: 
         strexpr
       | intexpr
+      | floatexpr
       | boolexpr
       ;
 
@@ -309,6 +304,15 @@ strexpr: IDENTIFIER '+' strexpr
 
 
 
+intexpr: INTEGER
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1;
+
+		 printf("%d is an integer \n",$<info.ival>1);
+    }
+    ;
+
 
 intexpr: IDENTIFIER
     {
@@ -332,14 +336,39 @@ intexpr: IDENTIFIER '+' intexpr
     ;
 
 
-intexpr: INTEGER
-    {
-       $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1;
 
-		 printf("%d is an integer \n",$<info.ival>1);
+floatexpr: REAL
+    {
+       $<info.dtype>$ = 2;
+       $<info.fval>$ = $<info.fval>1;
+
+		 printf("%lf is an float \n",$<info.fval>1);
     }
     ;
+
+floatexpr: IDENTIFIER
+    {
+       $<info.dtype>$ = 2;
+       $<info.fval>$ = $<info.fval>1;
+    }
+    ;
+
+floatexpr: REAL '+' floatexpr
+    {
+       $<info.dtype>$ = 2;
+       $<info.fval>$ = $<info.fval>1 + $<info.fval>3;
+    }
+    ;
+
+floatexpr: IDENTIFIER '+' intexpr
+    {
+       $<info.dtype>$ = 2;
+       $<info.fval>$ = $<info.fval>1 + $<info.fval>3;
+    }
+    ;
+
+
+
 
 
 boolexpr: BOOLEAN 
