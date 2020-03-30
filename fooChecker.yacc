@@ -59,7 +59,7 @@ int yyerror(char* s);
 %token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR
 
 %type<struct nodeinfo> script statements statement
-%type<struct nodeinfo> intexpr strexpr expression printout
+%type<struct nodeinfo> intexpr strexpr expression
 
 
 
@@ -189,35 +189,16 @@ int yyerror(char* s);
 
 ******/
 
-script: statements
-      | script printout 	
-      ;
+script: statements ;
 
 statements:
         statement
       | statement statements
-      | IDENTIFIER '=' expression
       | expression
       ;
 
-expression: 
-        strexpr
-      | intexpr
-      ;
 
-
-
- /* vardecl --> VAR IDENTIFIER ;
-  *    where there is some character string associated with IDENTIFIER */
-vardecl: VAR IDENTIFIER ';'
-	{
-	   /* display the text associated with IDENTIFIER (field $2) */
-	   printf("...declared variable %s...\n", $2);
-	};
-
-
-/* printout --> PRINT ( STRING ) */
-printout: PRINT '(' expression ')'
+statement: PRINT '(' expression ')'
       {
          /* print text associated with IDENTIFIER (field $3) */
          if($<info.dtype>3 == 1){
@@ -260,6 +241,13 @@ statement: IDENTIFIER '=' expression
     }
     ;
 
+
+expression: 
+        strexpr
+      | intexpr
+      ;
+
+
 expression: strexpr
     {
        $<info.dtype>$ = 3;
@@ -274,12 +262,10 @@ expression: intexpr
     }
     ;
 
-intexpr: INTEGER
-    {
-       $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1;
-    }
-    ;
+
+
+
+
 
 intexpr: IDENTIFIER
     {
@@ -334,7 +320,23 @@ strexpr: IDENTIFIER '+' strexpr
 
 
 
+ /* vardecl --> VAR IDENTIFIER ;
+  *    where there is some character string associated with IDENTIFIER */
+vardecl: VAR IDENTIFIER ';'
+	{
+	   /* display the text associated with IDENTIFIER (field $2) */
+	   printf("...declared variable %s...\n", $2);
+	};
 
+
+intexpr: INTEGER
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1;
+
+		 printf("%d is an integer \n",$<info.ival>1);
+    }
+    ;
 
 
 
