@@ -49,7 +49,7 @@ const int MaxLen = 128;
 		yytext[slen] = '\0';
 
       //creating space for storing yytext (input)
-		yylval.info.str = calloc(strlen(yytext), sizeof(char));
+		   //yylval.info.str = calloc(strlen(yytext), sizeof(char)); //size defined in struct in yacc file
      
 
       /*REMOVE BACKSLASHES IN STRING 
@@ -102,7 +102,7 @@ const int MaxLen = 128;
       ( *yytext == 'T' ) ? 
          (yylval.info.bval = true ) : (yylval.info.bval = false);
 
-      yylval.info.str[yylvalPos] = '\0'; 
+      yylval.info.str[0] = '\0'; 
       yylval.info.ival = 0;
       yylval.info.fval = 0;
       yylval.info.name[0] = '\0';

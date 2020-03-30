@@ -59,9 +59,8 @@ int yyerror(char* s);
 %token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR
 
 %type<struct nodeinfo> script statements statement
-%type<struct nodeinfo> intexpr strexpr floatexpr boolexpr expression
+%type<struct nodeinfo> intexpr strexpr expression printout
 
-%type<nodetype> printout
 
 
 /* Operator Precedence */ 
@@ -192,16 +191,19 @@ int yyerror(char* s);
 
 script: statements
       | script printout 	
+      ;
+
 statements:
         statement
       | statement statements
       | IDENTIFIER '=' expression
+      | expression
+      ;
+
 expression: 
         strexpr
       | intexpr
-      | floatexpr
-      | boolexpr
-
+      ;
 
 
 
@@ -219,13 +221,13 @@ printout: PRINT '(' expression ')'
       {
          /* print text associated with IDENTIFIER (field $3) */
          if($<info.dtype>3 == 1){
-            printf("%d \n", $3);
+            printf("%d \n", $<info.ival>3);
          }else if($<info.dtype>3 == 2){
-            printf("%lf \n", $3);
+            printf("%lf \n", $<info.fval>3);
          }else if($<info.dtype>3 == 3){
-            printf("%s \n", $3);
+            printf("%s \n", $<info.str>3);
          }else if($<info.dtype>3 == 4){
-            printf($3 ? "true" : "false");
+            printf($<info.bval>3 ? "true" : "false");
          }
       }
       ;
@@ -253,7 +255,7 @@ statement: IDENTIFIER '=' expression
           $<info.ival>1 = $<info.ival>3;
           printf;
           printf("sets %s = \"%s\";\n", $<info.name>1,  
-             ($<info.bval>3 ? "true" : "false");
+             ($<info.bval>3 ? "true" : "false"));
        }
     }
     ;
