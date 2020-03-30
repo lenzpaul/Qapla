@@ -192,8 +192,7 @@ int yyerror(char* s);
 script: statements ;
 
 statements:
-        statement
-      | statement statements
+      | statements statement
       | expression
       ;
 
@@ -220,6 +219,17 @@ statements:
    | statement statements
    ;
 
+
+ /* vardecl --> VAR IDENTIFIER ;
+  *    where there is some character string associated with IDENTIFIER */
+vardecl: VAR IDENTIFIER ';'
+	{
+	   /* display the text associated with IDENTIFIER (field $2) */
+	   printf("...declared variable %s...\n", $2);
+	};
+
+
+
 statement: IDENTIFIER '=' expression
     {
        $<info.dtype>1 = $<info.dtype>3;
@@ -234,7 +244,7 @@ statement: IDENTIFIER '=' expression
           printf("sets %s = \"%s\";\n", $<info.name>1, $<info.str>3);
        } else if ($<info.dtype>3 == 4) {
           $<info.ival>1 = $<info.ival>3;
-          printf;
+
           printf("sets %s = \"%s\";\n", $<info.name>1,  
              ($<info.bval>3 ? "true" : "false"));
        }
@@ -245,6 +255,7 @@ statement: IDENTIFIER '=' expression
 expression: 
         strexpr
       | intexpr
+      | boolexpr
       ;
 
 
@@ -264,34 +275,12 @@ expression: intexpr
 
 
 
-
-
-
-intexpr: IDENTIFIER
-    {
-       $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1;
-    }
-    ;
-
-intexpr: INTEGER '+' intexpr
-    {
-       $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
-    }
-    ;
-
-intexpr: IDENTIFIER '+' intexpr
-    {
-       $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
-    }
-    ;
-
 strexpr: STRING
     {
        $<info.dtype>$ = 3;
        strncpy($<info.str>$, $<info.str>1, 4095);
+
+		 printf("%s is an string \n",$<info.str>1);
     }
     ;
 
@@ -320,13 +309,27 @@ strexpr: IDENTIFIER '+' strexpr
 
 
 
- /* vardecl --> VAR IDENTIFIER ;
-  *    where there is some character string associated with IDENTIFIER */
-vardecl: VAR IDENTIFIER ';'
-	{
-	   /* display the text associated with IDENTIFIER (field $2) */
-	   printf("...declared variable %s...\n", $2);
-	};
+
+intexpr: IDENTIFIER
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1;
+    }
+    ;
+
+intexpr: INTEGER '+' intexpr
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
+    }
+    ;
+
+intexpr: IDENTIFIER '+' intexpr
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
+    }
+    ;
 
 
 intexpr: INTEGER
@@ -339,6 +342,13 @@ intexpr: INTEGER
     ;
 
 
+boolexpr: BOOLEAN 
+    {
+       $<info.dtype>$ = 4;
+       $<info.bval>$ = $<info.bval>1;
+
+    }
+    ;
 
 
 
