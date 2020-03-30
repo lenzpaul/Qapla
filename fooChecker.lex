@@ -167,6 +167,8 @@ const int MaxLen = 128;
 
  "("         { return *yytext; }
 
+ "+"         { return *yytext; }
+
  "="         { return *yytext; }
 
  /* the semi-colon */
