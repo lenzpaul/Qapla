@@ -33,6 +33,8 @@ const int MaxLen = 128;
 
  /****** Rules for tokens ******/
 
+"MOD"      { return (MOD); } 
+
  /* for the keyword "VAR" return VAR as the type */
 "VAR"      { return(VAR); }
 
@@ -170,6 +172,8 @@ const int MaxLen = 128;
  "+"         { return *yytext; }
 
  "="         { return *yytext; }
+
+
 
  /* the semi-colon */
 ";"        { return(';'); }

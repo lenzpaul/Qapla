@@ -56,7 +56,7 @@ int yyerror(char* s);
  /* identify what kind of values can be associated with the language components */
 
  /* for the token types that have an associated value, identify its type */
-%token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR
+%token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD
 
 /* %type<struct nodeinfo>  */
 
@@ -65,7 +65,7 @@ int yyerror(char* s);
 /* Operator Precedence */ 
 %right '='
 %left  '+'  '-'
-%left  '*'  '/'
+%left  '*'  '/' MOD
 %left UMINUS   /* UNARY Minus */ 
 /* Parantheses??? */ 
 
@@ -195,7 +195,7 @@ script: script statements /* consider having only statements here,  making varde
 
 statements:
       | statements statement
-      | expression
+      | statements expression
       ;
 
 
@@ -290,6 +290,7 @@ strexpr: IDENTIFIER '+' strexpr
 
 
 
+
 intexpr: INTEGER
     {
        $<info.dtype>$ = 1;
@@ -306,19 +307,29 @@ intexpr: IDENTIFIER
     }
     ;
 
-intexpr: INTEGER '+' intexpr
+
+intexpr: intexpr '+' intexpr 
     {
        $<info.dtype>$ = 1;
        $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
+
+		 printf("%d + %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
     }
     ;
 
-intexpr: IDENTIFIER '+' intexpr
+
+intexpr: intexpr MOD intexpr 
     {
+
        $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
+		 printf("MODDEDDDD ! \n");
     }
     ;
+
+
+
+
+
 
 
 
@@ -337,19 +348,16 @@ floatexpr: IDENTIFIER
     }
     ;
 
-floatexpr: REAL '+' floatexpr
+
+floatexpr: floatexpr '+' floatexpr
     {
        $<info.dtype>$ = 2;
-       $<info.fval>$ = $<info.fval>1 + $<info.fval>3;
+       $<info.fval>$ = $<info.fval>1 + $<info.fval>3 ;
+
+		 printf("%lf is an float \n",$<info.fval>1);
     }
     ;
 
-floatexpr: IDENTIFIER '+' intexpr
-    {
-       $<info.dtype>$ = 2;
-       $<info.fval>$ = $<info.fval>1 + $<info.fval>3;
-    }
-    ;
 
 
 
