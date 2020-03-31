@@ -19,6 +19,7 @@ eq =
 %{
 #include <stdio.h>
 #include <stdbool.h>
+#include <math.h>
 #include "y.tab.h"
 extern YYSTYPE yylval;
 int yywrap();
@@ -171,12 +172,19 @@ const int MaxLen = 128;
 
  "+"         { return *yytext; }
 
+ "-"         { return *yytext; }
+
  "="         { return *yytext; }
 
+ "*"         { return *yytext; }
+
+ "/"         { return *yytext; }
+
+ "^"         { return *yytext; }
 
 
  /* the semi-colon */
-";"        { return(';'); }
+";"        { return *yytext; }
 
  /* skip whitespace (spaces, tabs, form feeds etc */
 [ \t\f\v]  { }

@@ -1,0 +1,44 @@
+lex -d fooChecker.lex
+yacc -d fooChecker.yacc
+fooChecker.yacc:194.11: warning: empty rule for typed nonterminal, and no action [-Wother]
+ statements:
+           ^
+fooChecker.yacc:252.9-17: warning: type clash on default action: <struct nodeinfo> != <> [-Wother]
+       | floatexpr
+         ^^^^^^^^^
+fooChecker.yacc:253.9-16: warning: type clash on default action: <struct nodeinfo> != <> [-Wother]
+       | boolexpr
+         ^^^^^^^^
+fooChecker.yacc: warning: 1 nonterminal useless in grammar [-Wother]
+fooChecker.yacc: warning: 1 rule useless in grammar [-Wother]
+fooChecker.yacc:219.1-7: warning: nonterminal useless in grammar: vardecl [-Wother]
+ vardecl: VAR IDENTIFIER ';'
+ ^^^^^^^
+fooChecker.yacc:219.10-223.9: warning: rule useless in grammar [-Wother]
+ vardecl: VAR IDENTIFIER ';'
+          ^^^^^^^^^^^^^^^^^^
+fooChecker.yacc: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+fooChecker.yacc: warning: 12 reduce/reduce conflicts [-Wconflicts-rr]
+gcc y.tab.c lex.yy.c -o fooCheckerd
+lex fooChecker.lex
+yacc fooChecker.yacc
+fooChecker.yacc:194.11: warning: empty rule for typed nonterminal, and no action [-Wother]
+ statements:
+           ^
+fooChecker.yacc:252.9-17: warning: type clash on default action: <struct nodeinfo> != <> [-Wother]
+       | floatexpr
+         ^^^^^^^^^
+fooChecker.yacc:253.9-16: warning: type clash on default action: <struct nodeinfo> != <> [-Wother]
+       | boolexpr
+         ^^^^^^^^
+fooChecker.yacc: warning: 1 nonterminal useless in grammar [-Wother]
+fooChecker.yacc: warning: 1 rule useless in grammar [-Wother]
+fooChecker.yacc:219.1-7: warning: nonterminal useless in grammar: vardecl [-Wother]
+ vardecl: VAR IDENTIFIER ';'
+ ^^^^^^^
+fooChecker.yacc:219.10-223.9: warning: rule useless in grammar [-Wother]
+ vardecl: VAR IDENTIFIER ';'
+          ^^^^^^^^^^^^^^^^^^
+fooChecker.yacc: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+fooChecker.yacc: warning: 12 reduce/reduce conflicts [-Wconflicts-rr]
+gcc y.tab.c lex.yy.c -o fooChecker
