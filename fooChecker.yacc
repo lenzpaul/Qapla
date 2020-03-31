@@ -123,7 +123,7 @@ intexpr: INTEGER
             $<info.dtype>$ = 1;
             $<info.ival>$ = $<info.ival>1;
             #if DEBUGTAG
-               printf("%d is an integer alone \n",$<info.ival>1);
+               printf("%d is an integer \n",$<info.ival>1);
             #endif
          }
       | '-' intexpr    %prec '*' /*unary negation, same prec a multip */
@@ -155,7 +155,7 @@ intexpr: INTEGER
             #endif
             $<info.dtype>$ = 1;
             $<info.ival>$ = $<info.ival>1 * $<info.ival>3;
-            #if DEBUG
+            #if DEBUGTAG
                printf("%d * %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
             #endif
          }
