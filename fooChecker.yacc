@@ -18,6 +18,7 @@
 %{
 #include<stdio.h>
 #include<string.h>
+#include <math.h>
 #include <stdbool.h>
 int yylex(void);
 int yywrap();
@@ -66,6 +67,7 @@ int yyerror(char* s);
 %right '='
 %left  '+'  '-'
 %left  '*'  '/' MOD
+%left  '^'  
 %left UMINUS   /* UNARY Minus */ 
 /* Parantheses??? */ 
 
@@ -188,19 +190,24 @@ int yyerror(char* s);
 
 ******/
 
-script: script statements  { printf("1\n");} /* consider having only statements here,  making vardecl a stmt*/
+script: statements script  { printf("1\n");} /* consider having only statements here,  making vardecl a stmt*/
       | script vardecl { printf("2\n");} 
       | { printf("3\n");}
       ;
 
-statements:        { printf("1\n");}
-      | statements statement     { printf("4\n");}
-      | statements expression    { printf("5\n");}
+statements:        { printf("4\n");}
+      | statements statement     { printf("5\n");}
+      | statements expression ';'   { printf("6\n");}
+         {printf("expression is equal to %d",$<info.ival>2);}
       ;
 
 
-statement: PRINT '(' expression ')'    { printf("6\n");}
+statement: 
+      PRINT '(' expression ')' ';'
       {
+          printf("7\n"); //rule nb
+
+
          /* print text associated with IDENTIFIER (field $3) */
          if($<info.dtype>3 == 1){
             printf("%d \n", $<info.ival>3);
@@ -218,7 +225,7 @@ statement: PRINT '(' expression ')'    { printf("6\n");}
 
  /* vardecl --> VAR IDENTIFIER ;
   *    where there is some character string associated with IDENTIFIER */
-vardecl: VAR IDENTIFIER ';'    { printf("7\n");}
+vardecl: VAR IDENTIFIER ';'    { printf("8\n");}
 	{
 	   /* display the text associated with IDENTIFIER (field $2) */
 	   printf("...declared variable %s...\n", $<info.name>2);
@@ -226,7 +233,7 @@ vardecl: VAR IDENTIFIER ';'    { printf("7\n");}
 
 
 
-statement: IDENTIFIER '=' expression    { printf("8\n");}
+statement: IDENTIFIER '=' expression    { printf("9\n");}
     {
        $<info.dtype>1 = $<info.dtype>3;
        if ($<info.dtype>3 == 1) {
@@ -248,7 +255,7 @@ statement: IDENTIFIER '=' expression    { printf("8\n");}
     ;
 
 
-expression:     { printf("9\n");}
+expression:     
         strexpr    { printf("10\n");}
       | intexpr    { printf("11\n");}
       | floatexpr    { printf("12\n");}
@@ -272,6 +279,7 @@ strexpr: IDENTIFIER    { printf("15\n");}
     }
     ;
 
+
 strexpr: STRING '+' strexpr    { printf("16\n");}
     {
        $<info.dtype>$ = 3;
@@ -288,8 +296,11 @@ strexpr: IDENTIFIER '+' strexpr    { printf("17\n");}
     }
     ;
 
+/********************
+integer expressions *
+*********************/
 
-intexpr: INTEGER '+' intexpr     { printf("18\n");}
+intexpr: intexpr '+' intexpr     { printf("19\n");}
     {
        $<info.dtype>$ = 1;
        $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
@@ -298,16 +309,53 @@ intexpr: INTEGER '+' intexpr     { printf("18\n");}
     }
     ;
 
-
-
-
-
-intexpr: intexpr '+' intexpr     { printf("19\n");}
+intexpr: intexpr '-' intexpr     { printf("19\n");}
     {
        $<info.dtype>$ = 1;
-       $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
+       $<info.ival>$ = $<info.ival>1 - $<info.ival>3;
 
-		 printf("%d + %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
+		 printf("%d - %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
+    }
+    ;
+
+
+
+intexpr: intexpr '*' intexpr     { printf("19\n");}  /* DEBUG */
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1 * $<info.ival>3;
+
+		 printf("%d * %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
+    }
+    ;
+
+
+intexpr: intexpr '/' intexpr     { printf("19\n");}  /* DEBUG */
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1 / $<info.ival>3;
+
+		 printf("%d / %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
+    }
+    ;
+
+
+intexpr: intexpr '^' intexpr     { printf("19\n");} /* DEBUG */
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = pow($<info.ival>1, $<info.ival>3);
+
+		 printf("%d ^ %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
+    }
+    ;
+
+
+intexpr: intexpr MOD intexpr     { printf("22\n");}
+    {
+       $<info.dtype>$ = 1;
+       $<info.ival>$ = $<info.ival>1 % $<info.ival>3;
+
+		 printf("%d MOD %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
     }
     ;
 
@@ -328,14 +376,6 @@ intexpr: IDENTIFIER    { printf("21\n");}
     }
     ;
 
-
-intexpr: intexpr MOD intexpr     { printf("22\n");}
-    {
-
-       $<info.dtype>$ = 1;
-		 printf("MODDEDDDD ! \n");
-    }
-    ;
 
 
 
