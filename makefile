@@ -21,6 +21,6 @@ debug: fooChecker
 
 .PHONY: clean
 clean: ;
-	rm -f y.tab.c y.tab.h y.output lex.yy.c fooCheckerd fooChecker 
-	rm fooChecker_debug
+	rm -f y.tab.c y.tab.h y.output lex.yy.c fooCheckerd fooChecker \
+		fooChecker_debug fooChecker_debug.yacc
 

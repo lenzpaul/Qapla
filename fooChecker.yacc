@@ -81,7 +81,7 @@ THIS IS A SAVE POINT RIGHT HERE
 */
  /****** grammar rules ******/
 
-script: statement
+script: statements
          { 
             #if DEBUGTAG
                printf(" ~RULE~: script--> statement \n"); 
@@ -89,18 +89,18 @@ script: statement
          }
       ;
 
+statements:
+        statement 
+      | statements statement
+      ;
+
 statement:
-        statement expression
-            { 
-               #if DEBUGTAG
-                  printf(" ~RULE:statement--> statement expression \n");
-               #endif
-            }
-      | expression
+       expression
          { 
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression \n"); 
             #endif
+            $<info>$ = $<info>1;
          }
       ;
 
