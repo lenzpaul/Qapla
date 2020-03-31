@@ -84,38 +84,38 @@ script: statement
       ;
 
 statement:
-      ';'   { printf("statement--> ';' \n"); }    /*DEBUG*/ 
+      ';'   { printf("  RULE:statement--> ';' \n"); }    /*DEBUG*/ 
       | statement intexpr ';'
-            { printf("statement--> statement intexpr ';' \n");  }  /*DEBUG*/
+            { printf("  RULE:statement--> statement intexpr ';' \n");  }  /*DEBUG*/
       | intexpr ';' 
          { 
+            printf(" RULE:statement--> intexpr ';' \n");    //DEBUG
             $<info.dtype>$ = $<info.dtype>1;
             $<info.ival>$ = $<info.ival>1;
-            printf("statement--> intexpr ';' \n");    //DEBUG
          }
       ;
 intexpr: INTEGER
          {
+            printf(" RULE:intexpr--> INTEGER \n");    //DEBUG
             $<info.dtype>$ = 1;
             $<info.ival>$ = $<info.ival>1;
             printf("%d is an integer alone \n",$<info.ival>1);
-            printf("intexpr--> INTEGER \n");    //DEBUG
          }
 
       | intexpr '+' intexpr
          {
+            printf(" RULE:intexpr--> intexpr + intexpr \n");    //DEBUG
             $<info.dtype>$ = 1;
             $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
             printf("%d + %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
-            printf("intexpr--> intexpr + intexpr \n");    //DEBUG
          }
 
       | intexpr '*' intexpr
          {
+            printf(" RULE: intexpr--> intexpr * intexpr \n");    //DEBUG
             $<info.dtype>$ = 1;
             $<info.ival>$ = $<info.ival>1 * $<info.ival>3;
             printf("%d * %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
-            printf("intexpr--> intexpr * intexpr \n");    //DEBUG
          }
       ;
 
