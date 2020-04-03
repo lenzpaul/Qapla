@@ -17,10 +17,14 @@
 
 %{
 #define DEBUGTAG 0
+//#define YYSTYPE dataNode
 #include<stdio.h>
 #include<string.h>
 #include <math.h>
 #include <stdbool.h>
+
+//#include "dataStructures/functions.h"
+#include "dataStructures/functions.c"
 int yylex(void);
 int yywrap();
 int yyerror(char* s);
@@ -56,7 +60,7 @@ int yyerror(char* s);
 */
 
 %union {
-   struct DataNode {
+   struct {
       struct DataNode *parent;
       struct DataNode **children ;
       size_t size;
@@ -68,6 +72,10 @@ int yyerror(char* s);
       bool bval;
    } node;
 }
+
+
+
+
  /* identify what kind of values can be associated with the language components */
 
  /* for the token types that have an associated value, identify its type */
@@ -155,8 +163,23 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> intexpr + intexpr \n");    //DEBUG
             #endif
-            $<node.dtype>$ = 1;
-            $<node.ival>$ = $<node.ival>1 + $<node.ival>3;
+           
+           
+           
+           struct DataNode *op = constructNode(2);
+           op->dtype = 5;
+
+           op->children[0] = constructNode(0);
+           op->children[0]->dtype = 1;
+           op->children[0]->ival = $<node.ival>1;
+           
+           op->children[1] = constructNode(0);
+           op->children[1]->dtype = 1;
+           op->children[1]->ival = $<node.ival>3; 
+
+           setOperator("+",op); 
+           // $<node.dtype>$ = 1;
+           // $<node.ival>$ = $<node.ival>1 + $<node.ival>3;
             #if DEBUGTAG
                printf("%d + %d is %d \n",$<node.ival>1, $<node.ival>3, $<node.ival>$);
             #endif

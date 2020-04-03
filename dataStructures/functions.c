@@ -4,7 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "growingTree.c"
+#include "functions.h"
+//#include "growingTree.c"
 
 void declareVar(struct DataNode var)
 {
@@ -39,14 +40,14 @@ void setConstant(struct DataNode* con)
 }
 
 
-void setOperator(char *operator, struct DataNode *op,
-   struct DataNode *leftOperand, struct DataNode *rightOperand)
+void setOperator(char *operator, struct DataNode *op)
+   //struct DataNode *leftOperand, struct DataNode *rightOperand)
 {
    //create an OpNode and insert in parent 
    op->dtype = 5;
    strcpy(op->name, operator);
-   op->children[0] = leftOperand;
-   op->children[1] = rightOperand;
+   //op->children[0] = leftOperand;
+   //op->children[1] = rightOperand;
 }
 
 

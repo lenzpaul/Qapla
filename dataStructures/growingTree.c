@@ -18,17 +18,17 @@ struct DataNode {
    double fval;
    char str[4096], name[256]; 
    bool bval;
-} ;
+};
 
 //expects a capacity, returns the new node
 struct DataNode* constructNode(size_t capacity){
    struct DataNode* node;
    //allocate memory for new node
    node = malloc(sizeof(struct DataNode));
-   
+
    if(capacity > 0)
       node->children = malloc(capacity * sizeof(struct DataNode));
-   
+
    node->size = 0;
    node->capacity = capacity;
 
@@ -63,28 +63,30 @@ void freeNode(struct DataNode *node) {
    node = NULL;
 }
 
+/*
+int main()
+{
 
-   int main()
-   {
 
+   //construct root with 1 child capacity
+   struct DataNode *root = constructNode(1);
+   struct DataNode *node1 = constructNode(1);
+   struct DataNode *node2 = constructNode(1);
+   struct DataNode *node3 = constructNode(1);
 
-//construct root with 1 child capacity
-struct DataNode *root = constructNode(1);
-struct DataNode *node1 = constructNode(1);
-struct DataNode *node2 = constructNode(1);
-struct DataNode *node3 = constructNode(1);
+   //create nodes and insert as child to root
+   insertChild(root, node1);
+   insertChild(root, node2);
+   insertChild(root, node3);
+   insertChild(root, constructNode(1));
+   insertChild(root, constructNode(1));
 
-//create nodes and insert as child to root
-insertChild(root, node1);
-insertChild(root, node2);
-insertChild(root, node3);
-insertChild(root, constructNode(1));
-insertChild(root, constructNode(1));
-
-root->children[3]->size = 4;
-root->children[3]->size = 4;
-//print new size and capacity
-printf("%d\n", root->size);
-printf("%d\n", root->capacity);
-freeNode(root);
+   root->children[3]->size = 4;
+   root->children[3]->size = 4;
+   //print new size and capacity
+   printf("%d\n", root->size);
+   printf("%d\n", root->capacity);
+   freeNode(root);
 }
+
+*/
