@@ -33,7 +33,7 @@ int yyerror(char* s);
 
 
  /* every component of the program has the same data type:
-  *    info is a struct with five fields
+  *    node is a struct with five fields
   *       ival - a long, used for integer and intexpr
   *       fval - a double, used for float and floatexpr
   *       str  - a char*, used for string and strexpr
@@ -43,24 +43,37 @@ int yyerror(char* s);
   *               4 for boolean    
   */
 
-
+/*
 %union { 
-   struct nodeinfo 
+   struct DataNode 
    { 
       long ival, dtype; 
       double fval;
       char str[4096], name[256]; 
       bool bval;
-   } info; 
+   } node; 
 }
+*/
 
+%union {
+   struct DataNode {
+      struct DataNode *parent;
+      struct DataNode **children ;
+      size_t size;
+      size_t capacity;
 
+      long ival, dtype; 
+      double fval;
+      char str[4096], name[256]; 
+      bool bval;
+   } node;
+}
  /* identify what kind of values can be associated with the language components */
 
  /* for the token types that have an associated value, identify its type */
-%token<struct nodeinfo> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD
+%token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD
 
-/* %type<struct nodeinfo>  */
+/* %type<struct DataNode>  */
 
 
 
@@ -100,7 +113,7 @@ statement:
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression \n"); 
             #endif
-            $<info>$ = $<info>1;
+            $<node>$ = $<node>1;
          }
       ;
 
@@ -110,8 +123,8 @@ expression:
             #if DEBUGTAG
                printf(" ~RULE:expression--> intexpr ';' \n");    //DEBUG
             #endif
-            $<info.dtype>$ = $<info.dtype>1;
-            $<info.ival>$ = $<info.ival>1;
+            $<node.dtype>$ = $<node.dtype>1;
+            $<node.ival>$ = $<node.ival>1;
          }
       ;
 
@@ -120,10 +133,10 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> INTEGER \n");    //DEBUG
             #endif
-            $<info.dtype>$ = 1;
-            $<info.ival>$ = $<info.ival>1;
+            $<node.dtype>$ = 1;
+            $<node.ival>$ = $<node.ival>1;
             #if DEBUGTAG
-               printf("%d is an integer \n",$<info.ival>1);
+               printf("%d is an integer \n",$<node.ival>1);
             #endif
          }
       | '-' intexpr    %prec '*' /*unary negation, same prec a multip */
@@ -131,10 +144,10 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> '-' intexpr  prec '*' \n");    //DEBUG
             #endif
-            $<info.dtype>$ = 2;
-            $<info.ival>$ = - $<info.ival>2;
+            $<node.dtype>$ = 2;
+            $<node.ival>$ = - $<node.ival>2;
             #if DEBUGTAG
-               printf("negative %d, using unary negation \n",$<info.ival>2);
+               printf("negative %d, using unary negation \n",$<node.ival>2);
             #endif
          }
       | intexpr '+' intexpr
@@ -142,10 +155,10 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> intexpr + intexpr \n");    //DEBUG
             #endif
-            $<info.dtype>$ = 1;
-            $<info.ival>$ = $<info.ival>1 + $<info.ival>3;
+            $<node.dtype>$ = 1;
+            $<node.ival>$ = $<node.ival>1 + $<node.ival>3;
             #if DEBUGTAG
-               printf("%d + %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
+               printf("%d + %d is %d \n",$<node.ival>1, $<node.ival>3, $<node.ival>$);
             #endif
          }
       | intexpr '*' intexpr
@@ -153,10 +166,10 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE: intexpr--> intexpr * intexpr \n");    //DEBUG
             #endif
-            $<info.dtype>$ = 1;
-            $<info.ival>$ = $<info.ival>1 * $<info.ival>3;
+            $<node.dtype>$ = 1;
+            $<node.ival>$ = $<node.ival>1 * $<node.ival>3;
             #if DEBUGTAG
-               printf("%d * %d is %d \n",$<info.ival>1, $<info.ival>3, $<info.ival>$);
+               printf("%d * %d is %d \n",$<node.ival>1, $<node.ival>3, $<node.ival>$);
             #endif
          }
       ;

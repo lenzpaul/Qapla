@@ -52,7 +52,7 @@ const int MaxLen = 128;
 		yytext[slen] = '\0';
 
       //creating space for storing yytext (input)
-		   //yylval.info.str = calloc(strlen(yytext), sizeof(char)); //size defined in struct in yacc file
+		   //yylval.node.str = calloc(strlen(yytext), sizeof(char)); //size defined in struct in yacc file
      
 
       /*REMOVE BACKSLASHES IN STRING 
@@ -65,7 +65,7 @@ const int MaxLen = 128;
          
        *- Loop through the every char in the string 
        *  (ie: yytext does not have outer quotes at this point)
-       *  copying every char from yytex to the string type yylval.info.str
+       *  copying every char from yytex to the string type yylval.node.str
        
        *- If we find an escape char \ we insert it 
        *  We switch escaped to true 
@@ -76,8 +76,8 @@ const int MaxLen = 128;
       bool escaped = false;
       while(yytextPos < strlen(yytext)) 
       {
-         yylval.info.str[yylvalPos] = yytext[yytextPos];
-         if((yylval.info.str[yylvalPos] == '\\')  && (!escaped))
+         yylval.node.str[yylvalPos] = yytext[yytextPos];
+         if((yylval.node.str[yylvalPos] == '\\')  && (!escaped))
          {
             escaped=true;
          }else{   
@@ -88,13 +88,13 @@ const int MaxLen = 128;
       }
 
       //insert Null terminator to end yylval string
-      yylval.info.str[yylvalPos] = '\0'; 
+      yylval.node.str[yylvalPos] = '\0'; 
 
-      yylval.info.ival = atoi(yytext);
-      yylval.info.fval = atof(yytext);
-      yylval.info.bval = false;
-      yylval.info.name[0] = '\0';
-      yylval.info.dtype = 3;
+      yylval.node.ival = atoi(yytext);
+      yylval.node.fval = atof(yytext);
+      yylval.node.bval = false;
+      yylval.node.name[0] = '\0';
+      yylval.node.dtype = 3;
 
 		return(STRING); 
    } 
@@ -103,13 +103,13 @@ const int MaxLen = 128;
  /* Match exactly 1 Boolean */
  ({Bool}) { 
       ( *yytext == 'T' ) ? 
-         (yylval.info.bval = true ) : (yylval.info.bval = false);
+         (yylval.node.bval = true ) : (yylval.node.bval = false);
 
-      yylval.info.str[0] = '\0'; 
-      yylval.info.ival = 0;
-      yylval.info.fval = 0;
-      yylval.info.name[0] = '\0';
-      yylval.info.dtype = 4;
+      yylval.node.str[0] = '\0'; 
+      yylval.node.ival = 0;
+      yylval.node.fval = 0;
+      yylval.node.name[0] = '\0';
+      yylval.node.dtype = 4;
       return(BOOLEAN); 
     }
 
@@ -121,12 +121,12 @@ const int MaxLen = 128;
 
    //yylval.alpha = strdup(yytext); 
 
-   yylval.info.str[0] = '\0';
-   yylval.info.ival = 0;
-   yylval.info.fval = 0;
-   yylval.info.bval = false;
-   strncpy(yylval.info.name, yytext, 255);
-   yylval.info.dtype = 0;
+   yylval.node.str[0] = '\0';
+   yylval.node.ival = 0;
+   yylval.node.fval = 0;
+   yylval.node.bval = false;
+   strncpy(yylval.node.name, yytext, 255);
+   yylval.node.dtype = 0;
    return(IDENTIFIER); 
    
    }
@@ -136,13 +136,13 @@ const int MaxLen = 128;
   *    for the identifier
   *    and return REAL as the type */
  ({Neg})?({Num})+\.({Num})+ { 
-   yylval.info.fval = atof(yytext); 
+   yylval.node.fval = atof(yytext); 
 
-   yylval.info.str[0] = '\0';
-   yylval.info.ival = 0;         //FIXME 
-   yylval.info.bval = false;
-   yylval.info.name[0] = '\0';
-   yylval.info.dtype = 2;
+   yylval.node.str[0] = '\0';
+   yylval.node.ival = 0;         //FIXME 
+   yylval.node.bval = false;
+   yylval.node.name[0] = '\0';
+   yylval.node.dtype = 2;
     
    return(REAL); 
     
@@ -153,13 +153,13 @@ const int MaxLen = 128;
   *    for the identifier
   *    and return INTEGER as the type */
  ({Neg})?({Num})+ { 
-   yylval.info.ival = atoi(yytext); 
-   yylval.info.fval = atof(yytext);
+   yylval.node.ival = atoi(yytext); 
+   yylval.node.fval = atof(yytext);
 
-   yylval.info.str[0] = '\0';
-   yylval.info.bval = false;
-   yylval.info.name[0] = '\0';
-   yylval.info.dtype = 1;
+   yylval.node.str[0] = '\0';
+   yylval.node.bval = false;
+   yylval.node.name[0] = '\0';
+   yylval.node.dtype = 1;
 
    return(INTEGER);
    
