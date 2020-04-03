@@ -22,7 +22,7 @@ void declareVar(struct DataNode var)
 }
 
 //for: string, boolean, integer or real
-void setConstant(struct DataNode con)
+void setConstant(struct DataNode* con)
 {
    //set children to 0
    //set every field to 0 except name
@@ -39,12 +39,14 @@ void setConstant(struct DataNode con)
 }
 
 
-void setOperator(char *operator, struct OpNode *op,
+void setOperator(char *operator, struct DataNode *op,
    struct DataNode *leftOperand, struct DataNode *rightOperand)
 {
    //create an OpNode and insert in parent 
-   op->leftOperand = leftOperand;
-   op->rightOperand = rightOperand;
+   op->dtype = 5;
+   strcpy(op->name, operator);
+   op->children[0] = leftOperand;
+   op->children[1] = rightOperand;
 }
 
 

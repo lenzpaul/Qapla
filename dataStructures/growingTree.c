@@ -3,11 +3,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-struct OpNode {
-   char operator[5] ; //the operator
-   struct DataNode* leftOperand;
-   struct DataNode* rightOperand;
-};
+//dtypes: 0:var, 1:int, 2:float, 3:str, 4:bool, 5:operator
+
 
 //default container for IDENTIFIERs, INTEGERs, REALs, 
 //STRINGs, BOOLs, and FUNCTIONs 
