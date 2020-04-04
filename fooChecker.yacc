@@ -16,6 +16,8 @@
  /****** declarations and C support ******/
 
 %{
+#include "dataStructures/Nodes.h"
+#include "dataStructures/functions.h"
 #define DEBUGTAG 0
 //#define YYSTYPE dataNode
 #include<stdio.h>
@@ -23,8 +25,7 @@
 #include <math.h>
 #include <stdbool.h>
 
-//#include "dataStructures/functions.h"
-#include "dataStructures/functions.c"
+//#include "dataStructures/functions.c"
 int yylex(void);
 int yywrap();
 int yyerror(char* s);
@@ -59,6 +60,7 @@ int yyerror(char* s);
 }
 */
 
+/*
 %union {
    struct {
       struct DataNode *parent;
@@ -73,7 +75,7 @@ int yyerror(char* s);
    } node;
 }
 
-
+*/
 
 
  /* identify what kind of values can be associated with the language components */
@@ -121,7 +123,7 @@ statement:
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression \n"); 
             #endif
-            $<node>$ = $<node>1;
+            $<datanode>$ = $<datanode>1;
          }
       ;
 
@@ -131,8 +133,8 @@ expression:
             #if DEBUGTAG
                printf(" ~RULE:expression--> intexpr ';' \n");    //DEBUG
             #endif
-            $<node.dtype>$ = $<node.dtype>1;
-            $<node.ival>$ = $<node.ival>1;
+            $<datanode.dtype>$ = $<datanode.dtype>1;
+            $<datanode.ival>$ = $<datanode.ival>1;
          }
       ;
 
@@ -141,10 +143,10 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> INTEGER \n");    //DEBUG
             #endif
-            $<node.dtype>$ = 1;
-            $<node.ival>$ = $<node.ival>1;
+            $<datanode.dtype>$ = 1;
+            $<datanode.ival>$ = $<datanode.ival>1;
             #if DEBUGTAG
-               printf("%d is an integer \n",$<node.ival>1);
+               printf("%d is an integer \n",$<datanode.ival>1);
             #endif
          }
       | '-' intexpr    %prec '*' /*unary negation, same prec a multip */
@@ -152,10 +154,10 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> '-' intexpr  prec '*' \n");    //DEBUG
             #endif
-            $<node.dtype>$ = 2;
-            $<node.ival>$ = - $<node.ival>2;
+            $<datanode.dtype>$ = 2;
+            $<datanode.ival>$ = - $<datanode.ival>2;
             #if DEBUGTAG
-               printf("negative %d, using unary negation \n",$<node.ival>2);
+               printf("negative %d, using unary negation \n",$<datanode.ival>2);
             #endif
          }
       | intexpr '+' intexpr
@@ -171,17 +173,17 @@ intexpr: INTEGER
 
            op->children[0] = constructNode(0);
            op->children[0]->dtype = 1;
-           op->children[0]->ival = $<node.ival>1;
+           op->children[0]->ival = $<datanode.ival>1;
            
            op->children[1] = constructNode(0);
            op->children[1]->dtype = 1;
-           op->children[1]->ival = $<node.ival>3; 
+           op->children[1]->ival = $<datanode.ival>3; 
 
            setOperator("+",op); 
-           // $<node.dtype>$ = 1;
-           // $<node.ival>$ = $<node.ival>1 + $<node.ival>3;
+           // $<datanode.dtype>$ = 1;
+           // $<datanode.ival>$ = $<datanode.ival>1 + $<datanode.ival>3;
             #if DEBUGTAG
-               printf("%d + %d is %d \n",$<node.ival>1, $<node.ival>3, $<node.ival>$);
+               printf("%d + %d is %d \n",$<datanode.ival>1, $<datanode.ival>3, $<datanode.ival>$);
             #endif
          }
       | intexpr '*' intexpr
@@ -189,10 +191,10 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE: intexpr--> intexpr * intexpr \n");    //DEBUG
             #endif
-            $<node.dtype>$ = 1;
-            $<node.ival>$ = $<node.ival>1 * $<node.ival>3;
+            $<datanode.dtype>$ = 1;
+            $<datanode.ival>$ = $<datanode.ival>1 * $<datanode.ival>3;
             #if DEBUGTAG
-               printf("%d * %d is %d \n",$<node.ival>1, $<node.ival>3, $<node.ival>$);
+               printf("%d * %d is %d \n",$<datanode.ival>1, $<datanode.ival>3, $<datanode.ival>$);
             #endif
          }
       ;

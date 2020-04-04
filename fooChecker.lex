@@ -17,12 +17,14 @@ eq =
 
  /****** setup the C/lex infrastructure ******/
 %{
+#include "dataStructures/Nodes.h"
+#include "dataStructures/functions.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
 #include "y.tab.h"
+//extern yylval;
 extern YYSTYPE yylval;
-int yywrap();
 int yyerror(char* s);
 int row = 0;
 int column = 0;
@@ -52,7 +54,7 @@ const int MaxLen = 128;
 		yytext[slen] = '\0';
 
       //creating space for storing yytext (input)
-		   //yylval.node.str = calloc(strlen(yytext), sizeof(char)); //size defined in struct in yacc file
+		   //yylval.datanode.str = calloc(strlen(yytext), sizeof(char)); //size defined in struct in yacc file
      
 
       /*REMOVE BACKSLASHES IN STRING 
@@ -65,7 +67,7 @@ const int MaxLen = 128;
          
        *- Loop through the every char in the string 
        *  (ie: yytext does not have outer quotes at this point)
-       *  copying every char from yytex to the string type yylval.node.str
+       *  copying every char from yytex to the string type yylval.datanode.str
        
        *- If we find an escape char \ we insert it 
        *  We switch escaped to true 
@@ -76,8 +78,8 @@ const int MaxLen = 128;
       bool escaped = false;
       while(yytextPos < strlen(yytext)) 
       {
-         yylval.node.str[yylvalPos] = yytext[yytextPos];
-         if((yylval.node.str[yylvalPos] == '\\')  && (!escaped))
+         yylval.datanode.str[yylvalPos] = yytext[yytextPos];
+         if((yylval.datanode.str[yylvalPos] == '\\')  && (!escaped))
          {
             escaped=true;
          }else{   
@@ -88,13 +90,13 @@ const int MaxLen = 128;
       }
 
       //insert Null terminator to end yylval string
-      yylval.node.str[yylvalPos] = '\0'; 
+      yylval.datanode.str[yylvalPos] = '\0'; 
 
-      yylval.node.ival = atoi(yytext);
-      yylval.node.fval = atof(yytext);
-      yylval.node.bval = false;
-      yylval.node.name[0] = '\0';
-      yylval.node.dtype = 3;
+      yylval.datanode.ival = atoi(yytext);
+      yylval.datanode.fval = atof(yytext);
+      yylval.datanode.bval = false;
+      yylval.datanode.name[0] = '\0';
+      yylval.datanode.dtype = 3;
 
 		return(STRING); 
    } 
@@ -103,13 +105,13 @@ const int MaxLen = 128;
  /* Match exactly 1 Boolean */
  ({Bool}) { 
       ( *yytext == 'T' ) ? 
-         (yylval.node.bval = true ) : (yylval.node.bval = false);
+         (yylval.datanode.bval = true ) : (yylval.datanode.bval = false);
 
-      yylval.node.str[0] = '\0'; 
-      yylval.node.ival = 0;
-      yylval.node.fval = 0;
-      yylval.node.name[0] = '\0';
-      yylval.node.dtype = 4;
+      yylval.datanode.str[0] = '\0'; 
+      yylval.datanode.ival = 0;
+      yylval.datanode.fval = 0;
+      yylval.datanode.name[0] = '\0';
+      yylval.datanode.dtype = 4;
       return(BOOLEAN); 
     }
 
@@ -119,14 +121,14 @@ const int MaxLen = 128;
   *    and return IDENTIFIER as the type */
 ({Alpha})+ { 
 
-   //yylval.alpha = strdup(yytext); 
+   //yylval.datanode.alpha = strdup(yytext); 
 
-   yylval.node.str[0] = '\0';
-   yylval.node.ival = 0;
-   yylval.node.fval = 0;
-   yylval.node.bval = false;
-   strncpy(yylval.node.name, yytext, 255);
-   yylval.node.dtype = 0;
+   yylval.datanode.str[0] = '\0';
+   yylval.datanode.ival = 0;
+   yylval.datanode.fval = 0;
+   yylval.datanode.bval = false;
+   strncpy(yylval.datanode.name, yytext, 255);
+   yylval.datanode.dtype = 0;
    return(IDENTIFIER); 
    
    }
@@ -136,13 +138,13 @@ const int MaxLen = 128;
   *    for the identifier
   *    and return REAL as the type */
  ({Neg})?({Num})+\.({Num})+ { 
-   yylval.node.fval = atof(yytext); 
+   yylval.datanode.fval = atof(yytext); 
 
-   yylval.node.str[0] = '\0';
-   yylval.node.ival = 0;         //FIXME 
-   yylval.node.bval = false;
-   yylval.node.name[0] = '\0';
-   yylval.node.dtype = 2;
+   yylval.datanode.str[0] = '\0';
+   yylval.datanode.ival = 0;         //FIXME 
+   yylval.datanode.bval = false;
+   yylval.datanode.name[0] = '\0';
+   yylval.datanode.dtype = 2;
     
    return(REAL); 
     
@@ -153,13 +155,13 @@ const int MaxLen = 128;
   *    for the identifier
   *    and return INTEGER as the type */
  ({Neg})?({Num})+ { 
-   yylval.node.ival = atoi(yytext); 
-   yylval.node.fval = atof(yytext);
+   yylval.datanode.ival = atoi(yytext); 
+   yylval.datanode.fval = atof(yytext);
 
-   yylval.node.str[0] = '\0';
-   yylval.node.bval = false;
-   yylval.node.name[0] = '\0';
-   yylval.node.dtype = 1;
+   yylval.datanode.str[0] = '\0';
+   yylval.datanode.bval = false;
+   yylval.datanode.name[0] = '\0';
+   yylval.datanode.dtype = 1;
 
    return(INTEGER);
    

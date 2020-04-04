@@ -1,14 +1,15 @@
+#include "Nodes.h"
+#include "functions.h"
 
 #include <stdlib.h> 
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 
-#include "functions.h"
-//#include "growingTree.c"
 
 void declareVar(struct DataNode var)
 {
+   return;
    //set children to 0
    //set every field to 0 except name
    //use constructNode(0);

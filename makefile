@@ -3,13 +3,13 @@ all: fooChecker fooCheckerd debug
 fooChecker: fooCheckerd
 	lex fooChecker.lex
 	yacc fooChecker.yacc
-	gcc y.tab.c lex.yy.c -o fooChecker -lm
+	gcc dataStructures/Nodes.c dataStructures/functions.c y.tab.c lex.yy.c -o fooChecker -lm
 
 
 fooCheckerd: fooChecker.lex fooChecker.yacc
 	lex -d fooChecker.lex
 	yacc -dv fooChecker.yacc					#-v to create y.output file
-	gcc y.tab.c lex.yy.c -o fooCheckerd -lm
+	gcc dataStructures/Nodes.c dataStructures/functions.c y.tab.c lex.yy.c -o fooCheckerd -lm
 
 
 debug: fooChecker 
@@ -17,7 +17,7 @@ debug: fooChecker
 	sed -i 's/#define DEBUGTAG 0/#define DEBUGTAG 1/gI' fooChecker_debug.yacc
 	lex fooChecker.lex
 	yacc fooChecker_debug.yacc
-	gcc y.tab.c lex.yy.c -o fooChecker_debug -lm
+	gcc dataStructures/Nodes.c dataStructures/functions.c y.tab.c lex.yy.c -o fooChecker_debug -lm
 
 .PHONY: clean
 clean: ;
