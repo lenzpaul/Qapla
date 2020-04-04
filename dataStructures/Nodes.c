@@ -5,39 +5,6 @@
 
 //dtypes: 0:var, 1:int, 2:float, 3:str, 4:bool, 5:operator
 
-
-//default container for IDENTIFIERs, INTEGERs, REALs, 
-//STRINGs, BOOLs, and FUNCTIONs 
-/*
-struct DataNode {
-   struct DataNode *parent;
-   struct DataNode **children ;
-   size_t size;
-   size_t capacity;
-
-   long ival, dtype; 
-   double fval;
-   char str[4096], name[256]; 
-   bool bval;
-};
-
-
-typedef union { 
-   struct DataNode datanode;
-} YYSTYPE;
-
-*/
-
-/*
-typedef union { 
-   struct DataNode datanode;
-} YYSTYPE;
-*/
-
-//} *datanode;
-
-//typedef node YYSTYPE; //TODO
-
 //expects a capacity, returns the new node
 struct DataNode* constructNode(size_t capacity){
    struct DataNode* node;
@@ -49,9 +16,15 @@ struct DataNode* constructNode(size_t capacity){
 
    node->size = 0;
    node->capacity = capacity;
-
    return node;
 }
+
+//variables container
+struct DataNode *varContainer;
+
+
+
+
 
 void insertChild(struct DataNode *node, struct DataNode *element){
    //grow if necessary
@@ -62,11 +35,9 @@ void insertChild(struct DataNode *node, struct DataNode *element){
    }
    //insert
    node->children[node->size++] = element;
-
 }
 
 void freeNode(struct DataNode *node) {
-/*
    //free each innder node
    for(int i=node->size-1; i>=0; i--){
       free(node->children[i]);
@@ -80,8 +51,12 @@ void freeNode(struct DataNode *node) {
    free(node);
    node->size = node->capacity = 0;
    node = NULL;
-*/
 }
+
+
+
+
+
 
 /*
    int main()

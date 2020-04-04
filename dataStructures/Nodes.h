@@ -27,6 +27,12 @@ typedef union {
    struct DataNode *datanode;
 } YYSTYPE;
 
+
+//variables container
+//struct DataNode varContainer
+
+
+
 //expects a capacity, returns the new node
 struct DataNode* constructNode(size_t capacity);
 

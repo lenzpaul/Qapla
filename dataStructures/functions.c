@@ -7,6 +7,14 @@
 #include <string.h>
 
 
+//evaluates a node and all its children
+struct DataNode evaluate(struct DataNode *node)
+{
+
+}
+
+
+
 void declareVar(struct DataNode var)
 {
    return;
@@ -41,14 +49,14 @@ void setConstant(struct DataNode* con)
 }
 
 
-void setOperator(char *operator, struct DataNode *op)
-   //struct DataNode *leftOperand, struct DataNode *rightOperand)
+void setOperator(char *operator, struct DataNode *op,
+   struct DataNode *leftOperand, struct DataNode *rightOperand)
 {
    //create an OpNode and insert in parent 
    op->dtype = 5;
    strcpy(op->name, operator);
-   //op->children[0] = leftOperand;
-   //op->children[1] = rightOperand;
+   op->children[0] = leftOperand;
+   op->children[1] = rightOperand;
 }
 
 

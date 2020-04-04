@@ -35,6 +35,7 @@ const int MaxLen = 128;
 %%
 
  /****** Rules for tokens ******/
+"exit"     { return 0; }
 
 "MOD"      { return (MOD); } 
 

@@ -10,7 +10,8 @@
 
 
 
-
+//evaluates a node and all its children
+struct DataNode evaluate(struct DataNode *node);
 
 //void declareVar(struct DataNode var);
 
@@ -18,7 +19,8 @@
 //void setConstant(struct DataNode* con);
 
 
-void setOperator(char *operator, struct DataNode *op);
+void setOperator(char *operator, struct DataNode *op,
+   struct DataNode *leftOperand, struct DataNode *rightOperand);
 //   struct DataNode *leftOperand, struct DataNode *rightOperand);
 
 
