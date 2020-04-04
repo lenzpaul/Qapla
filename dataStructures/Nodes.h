@@ -24,7 +24,7 @@ struct DataNode {
 
 //
 typedef union { 
-   struct DataNode datanode;
+   struct DataNode *datanode;
 } YYSTYPE;
 
 //expects a capacity, returns the new node

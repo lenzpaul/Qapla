@@ -122,8 +122,23 @@ statement:
          { 
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression \n"); 
+
+               printf(" \n");
+
             #endif
+
             $<datanode>$ = $<datanode>1;
+
+            printf("This statement Node's address is: %p \n", $<datanode>$);
+            printf("This statement Node's type is: %d \n", $<datanode->dtype>$);
+            printf("This statement Node's name is: %s \n", $<datanode->name>$);
+            printf("This statement Node's children 0'address is: %p \n", $<datanode->children[0]>$);
+            printf("This statement Node's children 0's type is : %d \n", $<datanode->children[0]->dtype>$);
+            printf("This statement Node's children 0's value is : %d \n", $<datanode->children[0]->ival>$);
+            printf("This statement Node's children 1's address is: %p \n", $<datanode->children[1]>$);
+            printf("This statement Node's children 1's type is : %d \n", $<datanode->children[1]->dtype>$);
+            printf("This statement Node's children 1's value is : %d \n", $<datanode->children[1]->ival>$);
+            
          }
       ;
 
@@ -133,8 +148,11 @@ expression:
             #if DEBUGTAG
                printf(" ~RULE:expression--> intexpr ';' \n");    //DEBUG
             #endif
-            $<datanode.dtype>$ = $<datanode.dtype>1;
-            $<datanode.ival>$ = $<datanode.ival>1;
+            //$<datanode->dtype>$ = $<datanode->dtype>1;
+            //$<datanode->ival>$ = $<datanode->ival>1;
+
+            $<datanode>$ = $<datanode>1;
+
          }
       ;
 
@@ -143,23 +161,30 @@ intexpr: INTEGER
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> INTEGER \n");    //DEBUG
             #endif
-            $<datanode.dtype>$ = 1;
-            $<datanode.ival>$ = $<datanode.ival>1;
+            
+            $<datanode>$ = $<datanode>1;
+            //$<datanode>$ = constructNode(0);
+
+            //$<datanode->dtype>$ = 1;
+            //$<datanode->ival>$ = $<datanode->ival>1;
             #if DEBUGTAG
-               printf("%d is an integer \n",$<datanode.ival>1);
+               printf("%d is an integer \n",$<datanode->ival>1);
+               printf("It is also an intexpr with address: %p\n",$<datanode>$);
             #endif
          }
-      | '-' intexpr    %prec '*' /*unary negation, same prec a multip */
+      /*
+      | '-' intexpr    %prec '*' 
          {
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> '-' intexpr  prec '*' \n");    //DEBUG
             #endif
-            $<datanode.dtype>$ = 2;
-            $<datanode.ival>$ = - $<datanode.ival>2;
+            $<datanode->dtype>$ = 2;
+            $<datanode->ival>$ = - $<datanode->ival>2;
             #if DEBUGTAG
-               printf("negative %d, using unary negation \n",$<datanode.ival>2);
+               printf("negative %d, using unary negation \n",$<datanode->ival>2);
             #endif
          }
+      */
       | intexpr '+' intexpr
          {
             #if DEBUGTAG
@@ -169,34 +194,44 @@ intexpr: INTEGER
            
            
            struct DataNode *op = constructNode(2);
-           op->dtype = 5;
-
-           op->children[0] = constructNode(0);
-           op->children[0]->dtype = 1;
-           op->children[0]->ival = $<datanode.ival>1;
+           op->dtype = 5; //operator type
+           strcpy(op->name, "+");
+           op->children[0] = $<datanode>1 ;
+           op->children[1] = $<datanode>3 ;
            
-           op->children[1] = constructNode(0);
-           op->children[1]->dtype = 1;
-           op->children[1]->ival = $<datanode.ival>3; 
+           $<datanode>$ = op ;
 
-           setOperator("+",op); 
-           // $<datanode.dtype>$ = 1;
-           // $<datanode.ival>$ = $<datanode.ival>1 + $<datanode.ival>3;
+           //op->children[0] = constructNode(0);
+           //op->children[0]->dtype = 1;
+           //op->children[0]->ival = $<datanode->ival>1;
+           
+          // op->children[1] = constructNode(0);
+          // op->children[1]->dtype = 1;
+          // op->children[1]->ival = $<datanode->ival>3; 
+
+           //setOperator("+",op); 
+           
+           // $<datanode->dtype>$ = 1;
+           // $<datanode->ival>$ = $<datanode->ival>1 + $<datanode->ival>3;
             #if DEBUGTAG
-               printf("%d + %d is %d \n",$<datanode.ival>1, $<datanode.ival>3, $<datanode.ival>$);
+               //printf("%d + %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
+               printf("The address is %p \n",op);
+               printf("The address is %p \n",$<datanode>$);
             #endif
          }
+      /*
       | intexpr '*' intexpr
          {
             #if DEBUGTAG
                printf(" ~RULE: intexpr--> intexpr * intexpr \n");    //DEBUG
             #endif
-            $<datanode.dtype>$ = 1;
-            $<datanode.ival>$ = $<datanode.ival>1 * $<datanode.ival>3;
+            $<datanode->dtype>$ = 1;
+            $<datanode->ival>$ = $<datanode->ival>1 * $<datanode->ival>3;
             #if DEBUGTAG
-               printf("%d * %d is %d \n",$<datanode.ival>1, $<datanode.ival>3, $<datanode.ival>$);
+               printf("%d * %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
             #endif
          }
+      */
       ;
 
 %%
