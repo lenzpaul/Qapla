@@ -53,7 +53,7 @@ int yyerror(char* s);
  /* identify what kind of values can be associated with the language components */
 
  /* for the token types that have an associated value, identify its type */
-%token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD
+%token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD FUNC
 /* %type<struct DataNode>  */
 
 
@@ -86,17 +86,18 @@ int yyerror(char* s);
    statements -> statement 
    statements -> statements statement
 
+   statement -> expression ; 
+
    declarations -> declaration
    declarations -> declarations declaration
-   declaration -> funcdecl
+   declaration -> fundecl
    declaration -> vardecl
 
-   funcdecl -> FUNC IDENTIFIER { statements }
-   funcall -> IDENTIFIER ( IDENTIFIER ) 
-   funcall -> IDENTIFIER ( statement ) 
+   fundecl -> FUNC IDENTIFIER { statements }
+   funcall -> IDENTIFIER ( IDENTIFIER ) //REVIEW
+   funcall -> IDENTIFIER ( statement )  //REVIEW
 
    vardecl -> VAR IDENTIFIER ; 
-   statement -> expression ; 
    
    expression -> funcall
    expression -> print ( expression ) //  ie: print ( 3 + 4 * 5 ) ;
@@ -116,34 +117,114 @@ int yyerror(char* s);
  */  
 
 
-script: statements
-         { 
-            #if DEBUGTAG
-               printf(" ~RULE~: script--> statement \n"); 
+script: 
+        threads 
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: script --> threads \n "); 
             #endif
             
+         }
+      ;
+
+threads: 
+        thread
+      | threads thread
+      ;
+
+thread: 
+        evaluations
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:threads --> evaluations \n "); 
+            #endif
+            
+         }
+      | declarations 
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:threads --> declarations \n "); 
+            #endif
+            
+         }
+      ;
+
+evaluations: 
+        evaluation
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE~: evaluations --> evaluation \n"); 
+            #endif
+         }
+
+      | evaluations evaluation
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE~: evaluations --> evaluations evaluation \n"); 
+            #endif
+         }
+      ;
+
+evaluation: 
+        statement 
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE~: evaluation --> statement \n"); 
+            #endif
          }
       ;
 
 statements:
         statement 
       | statements statement
+      | 
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE~:statement \n"); 
+            #endif
+         }
       ;
 
 statement:
-       expression
+       expression ';'
          { 
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression \n"); 
-
                printf(" \n");
-
             #endif
 
             $<datanode>$ = $<datanode>1;
-
          }
       ;
+
+declarations: 
+        declaration 
+      | declarations declaration 
+      ;
+      
+declaration: 
+        fundecl
+      | vardecl
+      ;
+
+fundecl: 
+        FUNC IDENTIFIER '{' statements '}'
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:fundecl --> FUNC IDENTIFIER '{' statements '}'\n "); 
+            #endif
+         }
+      ;
+/* REVIEW THIS 
+funcall:
+        IDENTIFIER '(' IDENTIFIER ')'
+      | IDENTIFIER '(' st
+*/
+
+vardecl: VAR IDENTIFIER ;
+
+
+
 
 expression:
         intexpr 

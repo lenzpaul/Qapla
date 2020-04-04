@@ -44,7 +44,7 @@ const int MaxLen = 128;
 
 "print"    { return(PRINT); } 
 
-
+"FUNC"     { return(FUNC); }
 
  /* Matches string (ie: begins & ends with ", may include escaped \ or " */
 ({String}) { 
@@ -123,7 +123,8 @@ const int MaxLen = 128;
 ({Alpha})+ { 
 
    //yylval.datanode->alpha = strdup(yytext); 
-
+   
+   yylval.datanode = constructNode(1);
    yylval.datanode->str[0] = '\0';
    yylval.datanode->ival = 0;
    yylval.datanode->fval = 0;
@@ -185,6 +186,10 @@ const int MaxLen = 128;
  "/"         { return *yytext; }
 
  "^"         { return *yytext; }
+
+ "{"         { return *yytext; }
+
+ "}"         { return *yytext; }
 
 
  /* the semi-colon */
