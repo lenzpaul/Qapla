@@ -42,7 +42,11 @@ const int MaxLen = 128;
  /* for the keyword "VAR" return VAR as the type */
 "VAR"      { return(VAR); }
 
-"print"    { return(PRINT); } 
+"print"    { 
+             
+               return(PRINT); 
+   
+           } 
 
 "FUNC"     { return(FUNC); }
 
@@ -157,6 +161,7 @@ const int MaxLen = 128;
   *    for the identifier
   *    and return INTEGER as the type */
  ({Neg})?({Num})+ { 
+
    yylval.datanode = constructNode(0);
    yylval.datanode->ival = atoi(yytext); 
    yylval.datanode->fval = atof(yytext);

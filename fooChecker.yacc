@@ -140,7 +140,7 @@ thread:
             #endif
             
          }
-      | declarations 
+      | declarations /* Creating space for var/func */ 
          {
             #if DEBUGTAG 
                printf(" ~RULE:threads --> declarations \n "); 
@@ -189,7 +189,10 @@ statement:
        expression ';'
          { 
             #if DEBUGTAG
-               printf(" ~RULE:statement--> expression \n"); 
+               printf(" ~RULE:statement--> expression ; \n"); 
+              
+               //printf("expression children[0]: %d \n", $<datanode->children[0]->    ival>1 ); 
+
                printf(" \n");
             #endif
 
@@ -230,13 +233,41 @@ expression:
         intexpr 
          { 
             #if DEBUGTAG
-               printf(" ~RULE:expression--> intexpr ';' \n");    //DEBUG
+               printf(" ~RULE:expression--> intexpr \n");    //DEBUG
+            #endif
+
+            $<datanode>$ = $<datanode>1;
+
+         }
+      
+               
+      | ioexpr
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> ioexpr \n");    //DEBUG
             #endif
 
             $<datanode>$ = $<datanode>1;
 
          }
       ;
+
+
+ioexpr: 
+        PRINT '(' expression ')' 
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE:ioexpr --> PRINT '(' expression ')' \n");    //DEBUG
+            #endif
+
+            struct DataNode *io = constructNode(1);
+            io->dtype = 7; //operator type
+            strcpy(io->name, "print");
+            io->children[0] = $<datanode>3 ;
+
+            $<datanode>$ = io ;
+
+         }
 
 intexpr: INTEGER
          {
