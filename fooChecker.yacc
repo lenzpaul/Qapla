@@ -376,13 +376,13 @@ vardecl:
 
             //$<datanode>$ = $<datanode>2;  //vardecl will be the IDENTIFIER
             
-            #if DEBUGTAG
+           // #if DEBUGTAG
                //int lastElement = varContainer->size - 1;
                //printf("%d \n", lastElement);
                //printf("varContainer->children[lastElement]->name: %s\n",
                  // varContainer->children[lastElement]->name);   
 
-            #endif
+           // #endif
          }
       ;
 
@@ -520,11 +520,12 @@ ioexpr:
             strcpy(io->name, "print");
 
             
-            //find and insert var
+            //find and insert var in print node
             struct DataNode *var = findVar($<datanode->name>3);
             insertChild(io,var);
             $<datanode>$ = io ;
             
+            /*
             if(io->children[0]->dtype == 1){
                printf("%d\n", io->children[0]->ival);  
             }else if(io->children[0]->dtype == 3){
@@ -538,6 +539,8 @@ ioexpr:
                   printf("io->children[0]->str: %s\n", io->children[0]->str);    //DEBUG
                }
             #endif
+
+            */
          }
 
       ;
