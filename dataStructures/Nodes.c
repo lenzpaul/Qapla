@@ -19,8 +19,6 @@ struct DataNode* constructNode(size_t capacity){
    return node;
 }
 
-//variables container
-struct DataNode *varContainer;
 
 
 

@@ -224,12 +224,12 @@ fundecl:
                printf("FUNC IDENTIFIER '(' parameters ')' '{' statements '}'\n"); 
 
                
-               printf(" paramater node name: %s\n", $<datanode->name>4); 
-               printf(" paramater node type: %d\n", $<datanode->dtype>4); 
+               printf(" parameter node name: %s\n", $<datanode->name>4); 
+               printf(" parameter node type: %d\n", $<datanode->dtype>4); 
                printf(" Parameter 1: %s\n", $<datanode->children[0]->name>4); 
-               printf(" Parameter 2: %s\n", $<datanode->children[1]->name>4); 
-               printf(" Parameter 3: %s\n", $<datanode->children[2]->name>4); 
-               printf(" Parameter 4: %s\n", $<datanode->children[3]->name>4); 
+               //printf(" Parameter 2: %s\n", $<datanode->children[1]->name>4); 
+               // printf(" Parameter 3: %s\n", $<datanode->children[2]->name>4); 
+               // printf(" Parameter 4: %s\n", $<datanode->children[3]->name>4); 
             #endif
          }
       ;
@@ -245,6 +245,8 @@ parameters:
                //printf("$<datanode->name>1 : %p \n ",$<datanode>1 );
                //printf(" $<datanode->children[0]->name>1: %s\n", $<datanode->children[0]->name$); 
             #endif
+            //$$ is an array of IDENTIFIER nodes
+            //Its children are the IDENTIFIER parameters
             $<datanode>$ = constructNode(2);
             $<datanode->dtype>$ = 7; //parameters
             strcpy($<datanode->name>$,"parameters");
@@ -253,16 +255,17 @@ parameters:
          }
       | parameters ':' parameter      
          {   
-
             #if DEBUGTAG 
                printf(" ~RULE: parameters --> parameters : parameter \n ");
                printf(" $<datanode->name>$: %s\n", $<datanode->name>$); 
                //printf(" $<datanode->children[0]->name>$: %s\n", $<datanode->children[0]->name>$); 
             #endif
-
+            
+            //*USING DEFAULT YACC BEHAVIOUR: $$ = $1 *
+            //parameters was already 'constructed' in 'parameter rule'.
+            //inserting new parameter (IDENTIFIER) as a new children
             insertChild($<datanode>$, $<datanode>3);
 
-            //printf(" $<datanode->children[1]->name>$: %s\n", $<datanode->children[1]->name>$); 
 
          }
       ;
@@ -288,7 +291,26 @@ funcall:
       | IDENTIFIER '(' st
 */
 
-vardecl: VAR IDENTIFIER ;
+vardecl: 
+        VAR IDENTIFIER ';'    /*SEMI COLON HERE? */
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:vardecl --> VAR IDENTIFIER \n");    //DEBUG
+            #endif
+
+            insertChild(varContainer,$<datanode>2);        
+
+            $<datanode>$ = $<datanode>2;  //the IDENTIFIER
+            
+            #if DEBUGTAG
+               int lastElement = varContainer->size - 1;
+               printf("%d \n", lastElement);
+               printf("varContainer->children[lastElement]->name: %s\n",varContainer->children[lastElement]->name);    //DEBUG
+
+               //printf("$<datanode->children[lastElement]->name>$: %s\n",$<datanode->children[lastElement]->name>$);    //DEBUG
+            #endif
+         }
+      ;
 
 
 
@@ -406,6 +428,7 @@ intexpr: INTEGER
 
 int main()
 {
+   varContainer = constructNode(2);
    printf("Beginning syntax checking:\n\n");
    int result = yyparse();
    printf("\nSyntax checking complete\n\n");

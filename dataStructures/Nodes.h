@@ -29,8 +29,6 @@ typedef union {
 } YYSTYPE;
 
 
-//variables container
-//struct DataNode varContainer
 
 
 
@@ -41,5 +39,8 @@ void insertChild(struct DataNode *node, struct DataNode *element);
 
 void freeNode(struct DataNode *node) ;
 
+
+//variables container
+struct DataNode *varContainer;
 
 #endif
