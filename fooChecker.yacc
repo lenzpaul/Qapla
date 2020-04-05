@@ -166,7 +166,7 @@ evaluations:
       ;
 
 evaluation: 
-        statement 
+      statement 
          { 
             #if DEBUGTAG
                printf(" ~RULE~: evaluation --> statement \n"); 
@@ -180,7 +180,6 @@ evaluation:
                //ie: create var 
             //insertChild(varContainer,$<datanode>1);        
             ///////
-
          }
       ;
 
@@ -196,7 +195,7 @@ statements:
       ;
 
 statement:
-       assignexpr ';'
+       assignexpr ';' /* operator node : "opEqual" */
          { 
             #if DEBUGTAG
                printf(" ~RULE:expression--> assignexpr \n");    //DEBUG
@@ -305,8 +304,45 @@ parameter:
             //$<datanode>$ = $<datanode>1;
          }
 
-      ;
+      | INTEGER    
+         { 
+            #if DEBUGTAG 
+               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
+            #endif
+         }
+/*
+      | REAL    
+         { 
+            #if DEBUGTAG 
+               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
+            #endif
+         }
 
+
+      | STRING    
+         { 
+            #if DEBUGTAG 
+               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
+            #endif
+         }
+
+
+      | BOOLEAN    
+         { 
+            #if DEBUGTAG 
+               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
+            #endif
+         }
+      ;
+*/
+
+funcall: /* $$ should be the return value */
+        IDENTIFIER '(' ')'
+      | IDENTIFIER '(' parameters ')'
 
 /* REVIEW THIS 
 funcall:
@@ -317,8 +353,9 @@ funcall:
 
 
 expression:
-        vardecl
+        vardecl /* instruction node : "declareVar" */ 
 
+      | funcall
       | intexpr 
          { 
             #if DEBUGTAG
@@ -338,7 +375,7 @@ expression:
             $<datanode>$ = $<datanode>1;
          }
                
-      | ioexpr
+      | ioexpr /* instruction node */
          { 
             #if DEBUGTAG
                printf(" ~RULE:expression--> ioexpr \n");    //DEBUG
