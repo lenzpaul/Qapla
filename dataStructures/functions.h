@@ -8,18 +8,18 @@
 #include <string.h>
 
 
-
+//void declareVar(struct DataNode var);
 
 //evaluates a node and all its children
 struct DataNode evaluate(struct DataNode *node);
 
-//void declareVar(struct DataNode var);
 
 //for: string, boolean, integer or real
 //void setConstant(struct DataNode* con);
 
 
 struct DataNode* findVar(char* varName);
+struct DataNode* findLocalVar(char* varName);
 
 
 void setOperator(char *operator, struct DataNode *op,
