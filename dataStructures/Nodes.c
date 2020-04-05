@@ -36,7 +36,7 @@ void insertChild(struct DataNode *node, struct DataNode *element){
 }
 
 void freeNode(struct DataNode *node) {
-   //free each innder node
+   //free each inner node
    for(int i=node->size-1; i>=0; i--){
       free(node->children[i]);
       node->children[i] = NULL;

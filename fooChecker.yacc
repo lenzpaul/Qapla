@@ -240,9 +240,9 @@ fundecl:
                printf(" parameter node name: %s\n", $<datanode->name>4); 
                printf(" parameter node type: %d\n", $<datanode->dtype>4); 
                printf(" Parameter 1: %s\n", $<datanode->children[0]->name>4); 
-               //printf(" Parameter 2: %s\n", $<datanode->children[1]->name>4); 
-               // printf(" Parameter 3: %s\n", $<datanode->children[2]->name>4); 
-               // printf(" Parameter 4: %s\n", $<datanode->children[3]->name>4); 
+               printf(" Parameter 2: %s\n", $<datanode->children[1]->name>4); 
+               printf(" Parameter 3: %s\n", $<datanode->children[2]->name>4); 
+               printf(" Parameter 4: %s\n", $<datanode->children[3]->name>4); 
             #endif
          }
       ;
@@ -457,6 +457,33 @@ ioexpr:
                printf(" ~RULE:ioexpr --> PRINT '(' expression ')' \n");    //DEBUG
             #endif
 
+
+            struct DataNode *io = constructNode(1);
+            io->dtype = 8; //io type
+            strcpy(io->name, "print");
+
+            
+            //find and insert var
+            struct DataNode *expr = $<datanode>3 ;
+            insertChild(io,expr);
+            $<datanode>$ = io ;
+            
+            //BROKEN
+            if(io->children[0]->dtype == 1){
+               printf("%d\n", io->children[0]->ival);  
+            }else if(io->children[0]->dtype == 3){
+               printf("%s\n", io->children[0]->str);    
+            }
+
+
+
+
+
+
+
+
+            /*
+
             struct DataNode *io = constructNode(1);
             io->dtype = 8; //io type
             strcpy(io->name, "print");
@@ -473,14 +500,9 @@ ioexpr:
                   printf("io->children[0]->str: %s\n", io->children[0]->str);    //DEBUG
                }
 
-            /*
-               if(io->dtype == 1){
-                  printf("io->ival: %d\n", io->ival);    //DEBUG
-               }else if(io->dtype == 3){
-                  printf("io->str: %s\n", io->str);    //DEBUG
-               }
-            */
             #endif
+            */
+
 
          }
 
