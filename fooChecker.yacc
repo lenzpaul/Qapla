@@ -304,7 +304,7 @@ parameter:
             //$<datanode>$ = $<datanode>1;
          }
 
-      | INTEGER    
+      | INTEGER /*FIXME should be intexpr */   
          { 
             #if DEBUGTAG 
                printf(" ~RULE: parameter --> IDENTIFIER \n ");
