@@ -197,15 +197,16 @@ statement:
             $<datanode>$ = $<datanode>1;
          }
       ;
-
+/* NOT NEEDED 
 declarations: 
         declaration 
       | declarations declaration 
       ;
+*/
       
-declaration: 
+declarations: 
         fundecl
-      | vardecl
+      | declarations fundecl
       ;
 
 fundecl: 
@@ -291,32 +292,12 @@ funcall:
       | IDENTIFIER '(' st
 */
 
-vardecl: 
-        VAR IDENTIFIER ';'    /*SEMI COLON HERE? */
-         {
-            #if DEBUGTAG
-               printf(" ~RULE:vardecl --> VAR IDENTIFIER \n");    //DEBUG
-            #endif
-
-            insertChild(varContainer,$<datanode>2);        
-
-            $<datanode>$ = $<datanode>2;  //vardel will be the IDENTIFIER
-            
-            #if DEBUGTAG
-               int lastElement = varContainer->size - 1;
-               //printf("%d \n", lastElement);
-               printf("varContainer->children[lastElement]->name: %s\n",
-                  varContainer->children[lastElement]->name);   
-
-            #endif
-         }
-      ;
-
-
 
 
 expression:
-        intexpr 
+        vardecl
+
+      | intexpr 
          { 
             #if DEBUGTAG
                printf(" ~RULE:expression--> intexpr \n");    //DEBUG
@@ -339,6 +320,30 @@ expression:
 
       | assignexpr
       ;
+
+
+
+vardecl: 
+        VAR IDENTIFIER    /*SEMI COLON HERE? FIXME */
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:vardecl --> VAR IDENTIFIER \n");    //DEBUG
+            #endif
+
+            insertChild(varContainer,$<datanode>2);        
+
+            $<datanode>$ = $<datanode>2;  //vardel will be the IDENTIFIER
+            
+            #if DEBUGTAG
+               int lastElement = varContainer->size - 1;
+               //printf("%d \n", lastElement);
+               printf("varContainer->children[lastElement]->name: %s\n",
+                  varContainer->children[lastElement]->name);   
+
+            #endif
+         }
+      ;
+
 
 
 assignexpr:
