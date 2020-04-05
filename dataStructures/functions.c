@@ -12,22 +12,43 @@ struct DataNode evaluate(struct DataNode *node)
 {
    for(int i=0; i<node->size; i++)
    {
-      struct DataNode *child = node->children[i];
+      //struct DataNode *child = node->children[i];
       
       //vardecl
-      if(child->dtype == 0){
+      if(node->dtype == 0){
            
-      }else if(child->dtype == 1){
+      }else if(node->dtype == 1){
 
-      }else if(child->dtype == 2){
+      }else if(node->dtype == 2){
 
-      }else if(child->dtype == 3){
-      }else if(child->dtype == 4){
-      }else if(child->dtype == 5){
-      }else if(child->dtype == 6){
-      }else if(child->dtype == 7){
-      }else if(child->dtype == 8){
-      }else if(child->dtype == 9){
+      }else if(node->dtype == 3){
+      }else if(node->dtype == 4){
+      }else if(node->dtype == 5){
+      }else if(node->dtype == 6){
+      }else if(node->dtype == 7){
+
+      //instruction
+      }else if(node->dtype == 8){
+         if(strcmp(node->name,"declareVar") == 0){ //var declaration
+
+            //insert IDENTIFIER in varContainer (variable array)
+            //ie: create var 
+            insertChild(varContainer,node->children[0]);
+
+         }else if(strcmp(node->name,"print") == 0){ //print statement
+             //print the child node's value, based on its type
+            if(node->children[0]->dtype == 1){
+               printf("%d\n", node->children[0]->ival);  
+            }else if(node->children[0]->dtype == 2){
+               printf("%f\n", node->children[0]->fval);    
+            }else if(node->children[0]->dtype == 3){
+               printf("%s\n", node->children[0]->str);    
+            }
+
+
+         }
+
+      }else if(node->dtype == 9){
       }
    }
 }

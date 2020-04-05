@@ -171,6 +171,16 @@ evaluation:
             #if DEBUGTAG
                printf(" ~RULE~: evaluation --> statement \n"); 
             #endif
+            
+            //evaluate statement here
+            evaluate($<datanode>1);
+
+            //This needs to happen ON EVALUATE only 
+               //insert IDENTIFIER in varContainer (variable array)
+               //ie: create var 
+            //insertChild(varContainer,$<datanode>1);        
+            ///////
+
          }
       ;
 
@@ -234,14 +244,15 @@ fundecl:
             #if DEBUGTAG 
                printf(" ~RULE:fundecl --> ");
                printf("FUNC IDENTIFIER '(' parameters ')' '{' statements '}'\n"); 
-
                
+               /*
                printf(" parameter node name: %s\n", $<datanode->name>4); 
                printf(" parameter node type: %d\n", $<datanode->dtype>4); 
                printf(" Parameter 1: %s\n", $<datanode->children[0]->name>4); 
                printf(" Parameter 2: %s\n", $<datanode->children[1]->name>4); 
                printf(" Parameter 3: %s\n", $<datanode->children[2]->name>4); 
                printf(" Parameter 4: %s\n", $<datanode->children[3]->name>4); 
+               */
             #endif
          }
       ;
@@ -347,16 +358,29 @@ vardecl:
             #if DEBUGTAG
                printf(" ~RULE:vardecl --> VAR IDENTIFIER \n");    //DEBUG
             #endif
+            
+            //create instruction node: declareVar
+            struct DataNode *node = constructNode(1);
+            strcpy(node->name,"declareVar");
+            node->dtype = 8; //instruction
 
-            insertChild(varContainer,$<datanode>2);        
+            //insert the var as instruction node's child
+            insertChild(node,$<datanode>2);
+            $<datanode>$ = node;
 
-            $<datanode>$ = $<datanode>2;  //vardel will be the IDENTIFIER
+            //This needs to happen ON EVALUATE only 
+               //insert IDENTIFIER in varContainer (variable array)
+               //ie: create var 
+               //insertChild(varContainer,$<datanode>2);        
+            ///////
+
+            //$<datanode>$ = $<datanode>2;  //vardecl will be the IDENTIFIER
             
             #if DEBUGTAG
-               int lastElement = varContainer->size - 1;
+               //int lastElement = varContainer->size - 1;
                //printf("%d \n", lastElement);
-               printf("varContainer->children[lastElement]->name: %s\n",
-                  varContainer->children[lastElement]->name);   
+               //printf("varContainer->children[lastElement]->name: %s\n",
+                 // varContainer->children[lastElement]->name);   
 
             #endif
          }
@@ -370,15 +394,23 @@ assignexpr:
             #if DEBUGTAG
                printf(" ~RULE: assignexpr --> IDENTIFIER '=' expression \n");    //DEBUG
             #endif
-
+            
+            //create operator node
             struct DataNode *node = constructNode(2) ;
             node ->dtype = 5 ; //operator type
-            
+            strcpy(node->name,"opEqual");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
+
+            /* ON EVALUATION
             //find the var node and insert it in operator node
             struct DataNode *var = findVar($<datanode->name>1); 
             insertChild(node, var); // pos = 0 
             insertChild(node, $<datanode>3) ;//pos = 1 
-            
+            */
+
             $<datanode>$ = node ;
             /*
             struct DataNode *node = findVar($<datanode->name>1);
@@ -389,17 +421,18 @@ assignexpr:
             $<datanode>$ = node ; 
             */
                // TEMP: DELETE ME 
-                  var->dtype = 1;
-                  var->ival = $<datanode->ival>3;
+                  //var->dtype = 1;
+                  //var->ival = $<datanode->ival>3;
                   //$<datanode>$ = var ;
 
                //
-            #if DEBUGTAG
-               printf("$<datanode->children[0]->name>$: %s\n", 
-                  $<datanode->children[0]->name>$);
-               printf("$<datanode->children[0]->ival>$: %d\n",
-                  $<datanode->children[0]->ival>$);
-            #endif
+
+            //#if DEBUGTAG
+               //printf("$<datanode->children[0]->name>$: %s\n", 
+                //  $<datanode->children[0]->name>$);
+               //printf("$<datanode->children[0]->ival>$: %d\n",
+                  //$<datanode->children[0]->ival>$);
+            //#endif
          }
 
 /*      IDENTIFIER '=' strexpr
@@ -457,7 +490,7 @@ ioexpr:
             #endif
 
             struct DataNode *io = constructNode(1);
-            io->dtype = 8; //io type
+            io->dtype = 8; //instruction type
             strcpy(io->name, "print");
 
             //find and insert var
@@ -465,42 +498,14 @@ ioexpr:
             insertChild(io,expr);
             $<datanode>$ = io ;
             
-            //BROKEN
+            //BROKEN ? //EVALUATION
+            /*
             if(io->children[0]->dtype == 1){
                printf("%d\n", io->children[0]->ival);  
             }else if(io->children[0]->dtype == 3){
                printf("%s\n", io->children[0]->str);    
             }
-
-
-
-
-
-
-
-
-            /*
-
-            struct DataNode *io = constructNode(1);
-            io->dtype = 8; //io type
-            strcpy(io->name, "print");
-            io->children[0] = $<datanode>3 ; //FIXME should be insert()
-
-            $<datanode>$ = io ;
-
-            
-            #if DEBUGTAG
-            
-               if(io->children[0]->dtype == 1){
-                  printf("io->children[0]->ival: %d\n", io->children[0]->ival);    //DEBUG
-               }else if(io->children[0]->dtype == 3){
-                  printf("io->children[0]->str: %s\n", io->children[0]->str);    //DEBUG
-               }
-
-            #endif
             */
-
-
          }
 
 
@@ -511,7 +516,7 @@ ioexpr:
             #endif
 
             struct DataNode *io = constructNode(1);
-            io->dtype = 8; //io type
+            io->dtype = 8; //instruction type
             strcpy(io->name, "print");
 
             
@@ -552,32 +557,6 @@ strexpr:
             #endif
          }
   
-/* BROKEN: DELETE ME
-      | IDENTIFIER
-         {
-            #if DEBUGTAG
-               printf(" ~RULE:strexpr--> IDENTIFIER \n");    //DEBUG
-            #endif
-            
-            //look for IDENTIFIER
-            struct DataNode *node = findVar($<datanode->name>1);
-            
-            //if VAR is initialize with int value
-
-            if(node->dtype == 3) 
-            {
-               $<datanode>$ = node ;
-               //$<datanode>$ = $<datanode>1;
-            }
-
-            #if DEBUGTAG
-               printf("%s is a string IDENTIFIER \n",$<datanode->name>$);
-               printf("%s's value is: %s\n",
-                  $<datanode->name>1, $<datanode->str>$);
-            #endif
-         }
-
-*/
       ;
 
 intexpr: 
@@ -595,32 +574,6 @@ intexpr:
             #endif
          }
 
-/* BROKEN: DELETE ME
-      | IDENTIFIER 
-         {
-            #if DEBUGTAG
-               printf(" ~RULE:intexpr--> IDENTIFIER \n");    //DEBUG
-            #endif
-            
-            //look for IDENTIFIER
-            struct DataNode *node = findVar($<datanode->name>1);
-            
-            //if VAR is initialize with int value
-
-            if(node->dtype == 1) 
-            //if($<datanode->dtype>1 == 1) 
-            {
-               $<datanode>$ = node ;
-               //$<datanode>$ = $<datanode>1;
-            }
-
-            #if DEBUGTAG
-               printf("%s is an integer IDENTIFIER \n",$<datanode->name>$);
-               printf("%s's values is: %d\n",
-                  $<datanode->name>1, $<datanode->ival>$);
-            #endif
-         }
-*/
 
       | '-' intexpr    %prec '*' 
          {
