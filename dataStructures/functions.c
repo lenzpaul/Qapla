@@ -10,7 +10,26 @@
 //evaluates a node and all its children
 struct DataNode evaluate(struct DataNode *node)
 {
+   for(int i=0; i<node->size; i++)
+   {
+      struct DataNode *child = node->children[i];
+      
+      //vardecl
+      if(child->dtype == 0){
+           
+      }else if(child->dtype == 1){
 
+      }else if(child->dtype == 2){
+
+      }else if(child->dtype == 3){
+      }else if(child->dtype == 4){
+      }else if(child->dtype == 5){
+      }else if(child->dtype == 6){
+      }else if(child->dtype == 7){
+      }else if(child->dtype == 8){
+      }else if(child->dtype == 9){
+      }
+   }
 }
 
 

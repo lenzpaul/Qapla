@@ -124,7 +124,6 @@ script:
             #if DEBUGTAG 
                printf(" ~RULE: script --> threads \n "); 
             #endif
-            
          }
       ;
 
@@ -457,12 +456,10 @@ ioexpr:
                printf(" ~RULE:ioexpr --> PRINT '(' expression ')' \n");    //DEBUG
             #endif
 
-
             struct DataNode *io = constructNode(1);
             io->dtype = 8; //io type
             strcpy(io->name, "print");
 
-            
             //find and insert var
             struct DataNode *expr = $<datanode>3 ;
             insertChild(io,expr);
@@ -522,7 +519,6 @@ ioexpr:
             struct DataNode *var = findVar($<datanode->name>3);
             insertChild(io,var);
             $<datanode>$ = io ;
-            
             
             if(io->children[0]->dtype == 1){
                printf("%d\n", io->children[0]->ival);  
