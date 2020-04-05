@@ -187,7 +187,18 @@ statements:
       ;
 
 statement:
-       expression ';'
+       assignexpr ';'
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> assignexpr \n");    //DEBUG
+            #endif
+
+            $<datanode>$ = $<datanode>1;
+
+         }
+
+
+      | expression ';'
          { 
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression ; \n"); 
@@ -327,15 +338,6 @@ expression:
 
          }
 
-      | assignexpr
-         { 
-            #if DEBUGTAG
-               printf(" ~RULE:expression--> assignexpr \n");    //DEBUG
-            #endif
-
-            $<datanode>$ = $<datanode>1;
-
-         }
       ;
 
 
@@ -364,12 +366,12 @@ vardecl:
 
 
 assignexpr:
-      IDENTIFIER '=' intexpr
+      IDENTIFIER '=' expression
          { 
             #if DEBUGTAG
                printf(" ~RULE: assignexpr --> IDENTIFIER '=' intexpr \n");    //DEBUG
             #endif
-            struct DataNode *node = findVar($<datanode->name>1);
+/*            struct DataNode *node = findVar($<datanode->name>1);
             //printf("node->name: %s\n", node->name);    //DEBUG
             node->dtype = 1 ;
             node->ival = $<datanode->ival>3;
@@ -379,9 +381,9 @@ assignexpr:
                printf("$<datanode->name>$: %s\n", $<datanode->name>$);    //DEBUG
                printf("$<datanode->ival>$: %d\n",$<datanode->ival>$);    //DEBUG
             #endif
-         }
+*/         }
 
-      IDENTIFIER '=' strexpr
+/*      IDENTIFIER '=' strexpr
          { 
             #if DEBUGTAG
                printf(" ~RULE: assignexpr --> IDENTIFIER '=' strexpr \n");    //DEBUG
@@ -397,7 +399,7 @@ assignexpr:
                printf("$<datanode->str>$: %d\n",$<datanode->str>$);    //DEBUG
             #endif
          }
-
+*/
 
 /*
       IDENTIFIER '=' floatexpr

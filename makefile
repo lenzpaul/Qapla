@@ -15,8 +15,8 @@ fooCheckerd: fooChecker.lex fooChecker.yacc
 debug: fooChecker 
 	cp fooChecker.yacc fooChecker_debug.yacc
 	sed -i 's/#define DEBUGTAG 0/#define DEBUGTAG 1/gI' fooChecker_debug.yacc
-	lex fooChecker.lex
-	yacc fooChecker_debug.yacc
+	lex -d fooChecker.lex
+	yacc -dv fooChecker_debug.yacc
 	gcc dataStructures/Nodes.c dataStructures/functions.c y.tab.c lex.yy.c -o fooChecker_debug -lm
 
 
