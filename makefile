@@ -1,4 +1,4 @@
-all: fooChecker fooCheckerd debug
+all: fooChecker fooCheckerd debug debugFull
 
 fooChecker: fooCheckerd
 	lex fooChecker.lex
@@ -15,9 +15,15 @@ fooCheckerd: fooChecker.lex fooChecker.yacc
 debug: fooChecker 
 	cp fooChecker.yacc fooChecker_debug.yacc
 	sed -i 's/#define DEBUGTAG 0/#define DEBUGTAG 1/gI' fooChecker_debug.yacc
-	lex -d fooChecker.lex
-	yacc -dv fooChecker_debug.yacc
+	lex  fooChecker.lex
+	yacc fooChecker_debug.yacc
 	gcc dataStructures/Nodes.c dataStructures/functions.c y.tab.c lex.yy.c -o fooChecker_debug -lm
+
+
+debugFull: debug
+	lex -d fooChecker.lex
+	yacc -d fooChecker_debug.yacc
+	gcc dataStructures/Nodes.c dataStructures/functions.c y.tab.c lex.yy.c -o fooChecker_debug_full -lm
 
 
 files: 
@@ -26,5 +32,5 @@ files:
 .PHONY: clean
 clean: ;
 	rm -f y.tab.c y.tab.h y.output lex.yy.c fooCheckerd fooChecker \
-		fooChecker_debug fooChecker_debug.yacc
+		fooChecker_debug fooChecker_debug.yacc fooChecker_debug_full
 
