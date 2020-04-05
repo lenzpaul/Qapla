@@ -42,11 +42,7 @@ const int MaxLen = 128;
  /* for the keyword "VAR" return VAR as the type */
 "VAR"      { return(VAR); }
 
-"print"    { 
-             
-               return(PRINT); 
-   
-           } 
+"print"    { return(PRINT); } 
 
 "FUNC"     { return(FUNC); }
 
@@ -195,6 +191,8 @@ const int MaxLen = 128;
  "{"         { return *yytext; }
 
  "}"         { return *yytext; }
+
+ ":"         { return *yytext; }
 
 
  /* the semi-colon */

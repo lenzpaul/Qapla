@@ -190,9 +190,7 @@ statement:
          { 
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression ; \n"); 
-              
                //printf("expression children[0]: %d \n", $<datanode->children[0]->    ival>1 ); 
-
                printf(" \n");
             #endif
 
@@ -211,13 +209,79 @@ declaration:
       ;
 
 fundecl: 
-        FUNC IDENTIFIER '{' statements '}'
+
+        FUNC IDENTIFIER '(' ')' '{' statements '}' /* NO PARAMETERS CASE */
          {
             #if DEBUGTAG 
-               printf(" ~RULE:fundecl --> FUNC IDENTIFIER '{' statements '}'\n "); 
+               printf(" ~RULE:fundecl --> ");
+               printf("FUNC IDENTIFIER '(' ')' '{' statements '}'\n"); 
+            #endif           
+         }
+      | FUNC IDENTIFIER '(' parameters ')' '{' statements '}'
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:fundecl --> ");
+               printf("FUNC IDENTIFIER '(' parameters ')' '{' statements '}'\n"); 
+
+               
+               printf(" paramater node name: %s\n", $<datanode->name>4); 
+               printf(" paramater node type: %d\n", $<datanode->dtype>4); 
+               printf(" Parameter 1: %s\n", $<datanode->children[0]->name>4); 
+               printf(" Parameter 2: %s\n", $<datanode->children[1]->name>4); 
+               printf(" Parameter 3: %s\n", $<datanode->children[2]->name>4); 
+               printf(" Parameter 4: %s\n", $<datanode->children[3]->name>4); 
             #endif
          }
       ;
+
+parameters:
+        parameter
+         {   
+            #if DEBUGTAG 
+               printf(" ~RULE: parameters --> parameter \n ");
+               //printf("$<datanode->name>$ : %s \n ",$<datanode->name>$ );
+               //printf("$<datanode->name>1 : %s \n ",$<datanode->name>1 );
+               //printf("$<datanode->name>$ : %p \n ",$<datanode>$ );
+               //printf("$<datanode->name>1 : %p \n ",$<datanode>1 );
+               //printf(" $<datanode->children[0]->name>1: %s\n", $<datanode->children[0]->name$); 
+            #endif
+            $<datanode>$ = constructNode(2);
+            $<datanode->dtype>$ = 7; //parameters
+            strcpy($<datanode->name>$,"parameters");
+            insertChild($<datanode>$, $<datanode>1);
+
+         }
+      | parameters ':' parameter      
+         {   
+
+            #if DEBUGTAG 
+               printf(" ~RULE: parameters --> parameters : parameter \n ");
+               printf(" $<datanode->name>$: %s\n", $<datanode->name>$); 
+               //printf(" $<datanode->children[0]->name>$: %s\n", $<datanode->children[0]->name>$); 
+            #endif
+
+            insertChild($<datanode>$, $<datanode>3);
+
+            //printf(" $<datanode->children[1]->name>$: %s\n", $<datanode->children[1]->name>$); 
+
+         }
+      ;
+
+/* ! might conflict with vardecl */
+parameter:
+        IDENTIFIER    
+         { 
+            #if DEBUGTAG 
+               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
+            #endif
+
+            //$<datanode>$ = $<datanode>1;
+         }
+
+      ;
+
+
 /* REVIEW THIS 
 funcall:
         IDENTIFIER '(' IDENTIFIER ')'
@@ -261,7 +325,7 @@ ioexpr:
             #endif
 
             struct DataNode *io = constructNode(1);
-            io->dtype = 7; //operator type
+            io->dtype = 8; //io type
             strcpy(io->name, "print");
             io->children[0] = $<datanode>3 ;
 
