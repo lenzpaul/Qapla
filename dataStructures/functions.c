@@ -18,15 +18,24 @@ struct DataNode* findVar(char* varName)
 {
    for(int i=0; i<varContainer->size; i++)
    {
-      //if(varContainer->children[i]->name == varName)
+      //if the var exists
+      //and the var is NOT of type 0 (ie: uninitialized)...
       if(strcmp(varContainer->children[i]->name,varName) == 0)
       {
-         //printf("Found var \n");
+         
          return varContainer->children[i];
+
+         //printf("Found var \n");
+
+         //if(varContainer->children[i]->dtype != 0) // ie: var is uninitialized
+         //{   return varContainer->children[i]; }
+        
+         //here: var is found but dtype is 0 FIXME: add error msg
       }
    }
-   
-   //THERE SHOULD BE AN ERROR UP HERE IF VAR NOT FOUND FIXME
+
+   //here: var is NOT found
+   //THERE SHOULD BE AN ERROR UP HERE IF VAR NOT FOUND FIXME: add error msg
     
 }
 

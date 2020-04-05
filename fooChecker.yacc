@@ -59,6 +59,7 @@ int yyerror(char* s);
 
 
 /* Operator Precedence */ 
+/*%left ';'*/
 %right '='
 %left  '+'  '-'
 %left  '*'  '/' MOD
@@ -306,7 +307,15 @@ expression:
             $<datanode>$ = $<datanode>1;
 
          }
-      
+
+      | strexpr     
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> strexpr \n");    //DEBUG
+            #endif
+
+            $<datanode>$ = $<datanode>1;
+         }
                
       | ioexpr
          { 
@@ -319,6 +328,14 @@ expression:
          }
 
       | assignexpr
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> assignexpr \n");    //DEBUG
+            #endif
+
+            $<datanode>$ = $<datanode>1;
+
+         }
       ;
 
 
@@ -362,9 +379,26 @@ assignexpr:
                printf("$<datanode->name>$: %s\n", $<datanode->name>$);    //DEBUG
                printf("$<datanode->ival>$: %d\n",$<datanode->ival>$);    //DEBUG
             #endif
-
-
          }
+
+      IDENTIFIER '=' strexpr
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE: assignexpr --> IDENTIFIER '=' strexpr \n");    //DEBUG
+            #endif
+            struct DataNode *node = findVar($<datanode->name>1);
+            //printf("node->name: %s\n", node->name);    //DEBUG
+            node->dtype = 2 ;
+            node->ival = $<datanode->ival>3;
+            $<datanode>$ = node ; 
+
+            #if DEBUGTAG
+               printf("$<datanode->name>$: %s\n", $<datanode->name>$);    //DEBUG
+               printf("$<datanode->str>$: %d\n",$<datanode->str>$);    //DEBUG
+            #endif
+         }
+
+
 /*
       IDENTIFIER '=' floatexpr
          { 
@@ -408,9 +442,61 @@ ioexpr:
 
             $<datanode>$ = io ;
 
+            
+            #if DEBUGTAG
+               if(io->dtype == 1){
+                  printf("io->ival: %d\n", io->ival);    //DEBUG
+               }else if(io->dtype == 3){
+                  printf("io->str: %s\n", io->str);    //DEBUG
+               }
+            #endif
+
          }
 
-intexpr: INTEGER
+strexpr: 
+        STRING 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:strexpr--> STRING \n");    //DEBUG
+            #endif
+            
+            $<datanode>$ = $<datanode>1;
+
+            #if DEBUGTAG
+               printf("%s is a string \n",$<datanode->str>1);
+            #endif
+         }
+  
+/* BROKEN: DELETE ME
+      | IDENTIFIER
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:strexpr--> IDENTIFIER \n");    //DEBUG
+            #endif
+            
+            //look for IDENTIFIER
+            struct DataNode *node = findVar($<datanode->name>1);
+            
+            //if VAR is initialize with int value
+
+            if(node->dtype == 3) 
+            {
+               $<datanode>$ = node ;
+               //$<datanode>$ = $<datanode>1;
+            }
+
+            #if DEBUGTAG
+               printf("%s is a string IDENTIFIER \n",$<datanode->name>$);
+               printf("%s's value is: %s\n",
+                  $<datanode->name>1, $<datanode->str>$);
+            #endif
+         }
+
+*/
+      ;
+
+intexpr: 
+        INTEGER
          {
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> INTEGER \n");    //DEBUG
@@ -423,6 +509,33 @@ intexpr: INTEGER
                printf("It is also an intexpr with address: %p\n",$<datanode>$);
             #endif
          }
+
+/* BROKEN: DELETE ME
+      | IDENTIFIER 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:intexpr--> IDENTIFIER \n");    //DEBUG
+            #endif
+            
+            //look for IDENTIFIER
+            struct DataNode *node = findVar($<datanode->name>1);
+            
+            //if VAR is initialize with int value
+
+            if(node->dtype == 1) 
+            //if($<datanode->dtype>1 == 1) 
+            {
+               $<datanode>$ = node ;
+               //$<datanode>$ = $<datanode>1;
+            }
+
+            #if DEBUGTAG
+               printf("%s is an integer IDENTIFIER \n",$<datanode->name>$);
+               printf("%s's values is: %d\n",
+                  $<datanode->name>1, $<datanode->ival>$);
+            #endif
+         }
+*/
 
       | '-' intexpr    %prec '*' 
          {

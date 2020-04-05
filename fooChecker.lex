@@ -55,6 +55,7 @@ const int MaxLen = 128;
 		yytext[slen] = '\0';
 
       //creating space for storing yytext (input)
+         yylval.datanode = constructNode(0);
 		   //yylval.datanode->str = calloc(strlen(yytext), sizeof(char)); //size defined in struct in yacc file
      
 
@@ -125,6 +126,7 @@ const int MaxLen = 128;
    //yylval.datanode->alpha = strdup(yytext); 
    
    yylval.datanode = constructNode(1);
+
    yylval.datanode->str[0] = '\0';
    yylval.datanode->ival = 0;
    yylval.datanode->fval = 0;
@@ -159,6 +161,7 @@ const int MaxLen = 128;
  ({Neg})?({Num})+ { 
 
    yylval.datanode = constructNode(0);
+
    yylval.datanode->ival = atoi(yytext); 
    yylval.datanode->fval = atof(yytext);
 
