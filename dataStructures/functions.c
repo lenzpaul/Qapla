@@ -14,6 +14,21 @@ struct DataNode evaluate(struct DataNode *node)
 }
 
 
+struct DataNode* findVar(char* varName)
+{
+   for(int i=0; i<varContainer->size; i++)
+   {
+      //if(varContainer->children[i]->name == varName)
+      if(strcmp(varContainer->children[i]->name,varName) == 0)
+      {
+         //printf("Found var \n");
+         return varContainer->children[i];
+      }
+   }
+   
+   //THERE SHOULD BE AN ERROR UP HERE IF VAR NOT FOUND FIXME
+    
+}
 
 void declareVar(struct DataNode var)
 {

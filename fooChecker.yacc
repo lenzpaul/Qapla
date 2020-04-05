@@ -300,14 +300,14 @@ vardecl:
 
             insertChild(varContainer,$<datanode>2);        
 
-            $<datanode>$ = $<datanode>2;  //the IDENTIFIER
+            $<datanode>$ = $<datanode>2;  //vardel will be the IDENTIFIER
             
             #if DEBUGTAG
                int lastElement = varContainer->size - 1;
-               printf("%d \n", lastElement);
-               printf("varContainer->children[lastElement]->name: %s\n",varContainer->children[lastElement]->name);    //DEBUG
+               //printf("%d \n", lastElement);
+               printf("varContainer->children[lastElement]->name: %s\n",
+                  varContainer->children[lastElement]->name);   
 
-               //printf("$<datanode->children[lastElement]->name>$: %s\n",$<datanode->children[lastElement]->name>$);    //DEBUG
             #endif
          }
       ;
@@ -336,8 +336,58 @@ expression:
             $<datanode>$ = $<datanode>1;
 
          }
+
+      | assignexpr
       ;
 
+
+assignexpr:
+      IDENTIFIER '=' intexpr
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE: assignexpr --> IDENTIFIER '=' intexpr \n");    //DEBUG
+            #endif
+            struct DataNode *node = findVar($<datanode->name>1);
+            //printf("node->name: %s\n", node->name);    //DEBUG
+            node->dtype = 1 ;
+            node->ival = $<datanode->ival>3;
+            $<datanode>$ = node ; 
+
+            #if DEBUGTAG
+               printf("$<datanode->name>$: %s\n", $<datanode->name>$);    //DEBUG
+               printf("$<datanode->ival>$: %d\n",$<datanode->ival>$);    //DEBUG
+            #endif
+
+
+         }
+/*
+      IDENTIFIER '=' floatexpr
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> ioexpr \n");    //DEBUG
+            #endif
+
+            $<datanode>$ = $<datanode>1;
+         }
+      
+      IDENTIFIER '=' strexpr
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> ioexpr \n");    //DEBUG
+            #endif
+
+            $<datanode>$ = $<datanode>1;
+         }
+      IDENTIFIER '=' boolexpr
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> ioexpr \n");    //DEBUG
+            #endif
+
+            $<datanode>$ = $<datanode>1;
+         }
+*/  
+      ;
 
 ioexpr: 
         PRINT '(' expression ')' 

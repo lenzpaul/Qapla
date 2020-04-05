@@ -19,6 +19,9 @@ struct DataNode evaluate(struct DataNode *node);
 //void setConstant(struct DataNode* con);
 
 
+struct DataNode* findVar(char* varName);
+
+
 void setOperator(char *operator, struct DataNode *op,
    struct DataNode *leftOperand, struct DataNode *rightOperand);
 //   struct DataNode *leftOperand, struct DataNode *rightOperand);
