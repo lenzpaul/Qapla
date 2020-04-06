@@ -211,12 +211,13 @@ statements:
             insertChild($<datanode>$, $<datanode>2);
             /////////////////////////////////////////////////////////////
          }
-      |  /*empty*/  /*FIXME: I need an action */
+      |  /*empty*/  /*FIXME: NECESSARY????  I need an action */
          { 
             #if DEBUGTAG
                printf(" ~RULE~:statements --> /*empty*/ \n"); 
             #endif
          }
+         /* ***************^^^ EMPTY? ^^^**********************************/
       ;
 
 statement:
@@ -337,16 +338,14 @@ fundecl:
             insertChild(func,paramNode);
 
 
-            //FIXME insert the statements FIXME
+            //INSERT THE LIST OF STATEMENTS
                struct DataNode *stmts = $<datanode>7;
                int numStatements = stmts->size;
-               printf("numStatements is: %d                                \n\n\n\n", numStatements);
-               printf("statement name  is: %s                                \n\n\n\n", stmts->name);
                for(int i=0; i<numStatements; i++){
                   insertChild(func,stmts->children[i]);
-                  //insertChild(func,stmts);
                }
-            //FIXME FIXME
+
+
             $<datanode>$ = func;
 
  //           #if DEBUGTAG 

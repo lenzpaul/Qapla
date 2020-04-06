@@ -155,19 +155,19 @@ struct DataNode evaluate(struct DataNode *node, ...)
          struct DataNode *parameters = va_arg(paramList, struct DataNode *);
 
          int numParams = parameters -> size ; //nb of parameters
-            printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
-            printf("node -> size is : %d \n !!!!!!!!!!!!!     \n", numParams);
+            //printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");    //DELETE ME
+            //printf("node -> size is : %d \n !!!!!!!!!!!!!     \n", numParams);                   //DELETE ME
          for(int i=0;i<numParams;i++)
          {
-            printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
+            //printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n")       //DELETE ME;
             varContainer->children[i]->dtype = parameters->children[i]->dtype;
             varContainer->children[i]->ival = parameters->children[i]->ival;
             varContainer->children[i]->fval = parameters->children[i]->fval;
             strcpy(varContainer->children[i]->str, parameters->children[i]->str);
             varContainer->children[i]->bval = parameters->children[i]->bval;
-            printf("VARCONTAINER->CHILDREN[%d];  With varname %s; value is now: %d \n", 
-               i, varContainer->children[i]->name, 
-               varContainer->children[i]->ival);
+            //printf("VARCONTAINER->CHILDREN[%d];  With varname %s; value is now: %d \n",             //DELETE ME
+            //   i, varContainer->children[i]->name, 
+            //  varContainer->children[i]->ival);
             //
             //FIXME
          }
@@ -207,7 +207,7 @@ struct DataNode evaluate(struct DataNode *node, ...)
       //PRINT STATEMENT
       }else if(strcmp(node->name,"print") == 0){
          
-         printf("PRINT                                                             HERE!!!!!!!!!!!!!!\n");            //DELETE
+         //printf("PRINT                                                             HERE!!!!!!!!!!!!!!\n");            //DELETE
          //print the child node's value, based on its type
          if(node->children[0]->dtype == 1){              //int
             printf("%d\n", node->children[0]->ival);  
