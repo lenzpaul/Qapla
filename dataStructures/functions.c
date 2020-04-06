@@ -206,6 +206,8 @@ struct DataNode evaluate(struct DataNode *node, ...)
 
       //PRINT STATEMENT
       }else if(strcmp(node->name,"print") == 0){
+         
+         printf("PRINT                                                             HERE!!!!!!!!!!!!!!\n");            //DELETE
          //print the child node's value, based on its type
          if(node->children[0]->dtype == 1){              //int
             printf("%d\n", node->children[0]->ival);  

@@ -325,9 +325,20 @@ fundecl:
             paramNode->dtype = 8;
             insertChild(func,paramNode);
 
+
+            //FIXME insert the statements FIXME
+               struct DataNode *stmts = $<datanode>7;
+               int numStatements = stmts->size;
+               printf("numStatements is: %d                                \n\n\n\n", numStatements);
+               printf("statement name  is: %s                                \n\n\n\n", stmts->name);
+               for(int i=0; i<numStatements; i++){
+                  //insertChild(func,stmts->children[i]);
+                  insertChild(func,stmts);
+               }
+            //FIXME FIXME
             $<datanode>$ = func;
 
-            #if DEBUGTAG 
+ //           #if DEBUGTAG 
                
                /*
                printf(" parameter node name: %s\n", $<datanode->name>4); 
@@ -337,7 +348,7 @@ fundecl:
                printf(" Parameter 3: %s\n", $<datanode->children[2]->name>4); 
                printf(" Parameter 4: %s\n", $<datanode->children[3]->name>4); 
                */
-            #endif
+ //           #endif
          }
       ;
 
