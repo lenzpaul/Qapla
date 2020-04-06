@@ -79,8 +79,18 @@ struct DataNode evaluate(struct DataNode *node, ...)
 
       //getting param node
       struct DataNode *parameters = va_arg(paramList, struct DataNode *);
+      //int numParams = parameters->size;
 
-      int numParams = parameters->size;
+      printf("HERE IN FUNCTION DECLARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
+
+      //evaluate every node in the function 
+      int instructsCount = node->size; //nb of instructions in the function
+      for(int i=0; i<instructsCount; i++) 
+         evaluate(node->children[i], parameters);
+
+
+
+      /*
       //CASE 1: w/o parameters
       if(numParams == 0) 
       {
@@ -88,29 +98,32 @@ struct DataNode evaluate(struct DataNode *node, ...)
          //return ? ;
       }
       //printf("PARAMETERS 1 : %d \n" , parameters->children[0]->ival);
+      */
 
       //CASE 2: with parameters
       //assign, positionally, the parameters provided to varContainer 
       //parameters declared
 
-      /*     
+
+         //printf("VARCONTAINER->CHILDREN[0] name is %s \n", varContainer->children[0]->name);
+      
+      /*
+      //FIXME This doesnt actually happen here
+      //This happens on evaluate(functionName, parameters)
       for(int i=0;i<numParams;i++)
       {
-         varContainer->children[i] = parameters->children[i];
-         printf("VARCONTAINER->CHILDREN[%d] is now: %d \n", i, varContainer->children[i]->ival);
-         printf("ITS SIZE: %d \n", varContainer->children[i]->size);
-         printf("ITS TYPE: %d \n", varContainer->children[i]->dtype);
-         //DELETE ME 
-      }
-      */
-
-
-      for(int i=0;i<numParams;i++)
-      {
-         varContainer->children[i] = parameters->children[i];
+         varContainer->children[i]->dtype = parameters->children[i]->dtype;
+         varContainer->children[i]->ival = parameters->children[i]->ival;
+         varContainer->children[i]->fval = parameters->children[i]->fval;
+         strcpy(varContainer->children[i]->str, parameters->children[i]->str);
+         varContainer->children[i]->bval = parameters->children[i]->bval;
+         printf("VARCONTAINER->CHILDREN[%d];  With varname %s; value is now: %d \n", 
+            i, varContainer->children[i]->name, 
+            varContainer->children[i]->ival);
          //
          //FIXME
       }
+      */
       
       
       va_end(paramList);
@@ -123,7 +136,36 @@ struct DataNode evaluate(struct DataNode *node, ...)
       if(strcmp(node->name,"declareVar") == 0){ 
          //insert IDENTIFIER in varContainer (variable array of current scope)
          //ie: create var 
+
+
+         //DELETE ME
+         printf("HERE IN VAR DECLARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
+
          insertChild(varContainer,node->children[0]);
+
+      //PARAMETERS ASSIGNMENT
+      }else if(strcmp(node->name,"parameters") == 0){
+         
+         //DELETE ME
+         printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
+
+
+         int numParams = node -> size ; //nb of parameters
+         for(int i=0;i<numParams;i++)
+         {
+            varContainer->children[i]->dtype = node->children[i]->dtype;
+            varContainer->children[i]->ival = node->children[i]->ival;
+            varContainer->children[i]->fval = node->children[i]->fval;
+            strcpy(varContainer->children[i]->str, node->children[i]->str);
+            varContainer->children[i]->bval = node->children[i]->bval;
+            printf("VARCONTAINER->CHILDREN[%d];  With varname %s; value is now: %d \n", 
+               i, varContainer->children[i]->name, 
+               varContainer->children[i]->ival);
+            //
+            //FIXME
+         }
+
+
 
       //FUNCTION CALL 
       }else if(strcmp(node->name,"funCall") == 0){

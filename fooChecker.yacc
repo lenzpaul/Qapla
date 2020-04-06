@@ -289,9 +289,8 @@ fundecl:
                - create a parameter node that will do the assigning on 
                   funcall
             */ 
-            //create var for function
 
-
+            //CREATE VAR FOR FUNCTION
             struct DataNode *func = constructNode(4);  
             strcpy(func->name,$<datanode->name>2); //IDENTIFIER
             func->dtype = 6; //function type
