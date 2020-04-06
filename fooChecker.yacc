@@ -262,7 +262,10 @@ declarations:
                                                          $<datanode->name>1);
             #endif           
 
-            /*~HACK~*/ 
+            /*~HACK?~*/ 
+            //~~ The function should probably add itself to varContainer
+            //         on declaration! ~~ //
+
             //add function to varContainer local
             insertChild(varContainer, $<datanode>1); 
          }
@@ -272,14 +275,74 @@ declarations:
 
 fundecl: 
 
-        FUNC IDENTIFIER '(' ')' '{' statements '}' /* NO PARAMETERS CASE */
+        /* NO PARAMETERS CASE */
+        FUNC IDENTIFIER '(' ')' '{' statements '}' 
          {
             #if DEBUGTAG 
                printf(" ~RULE:fundecl --> ");
                printf("FUNC IDENTIFIER '(' ')' '{' statements '}'\n"); 
             #endif           
+
+            //FIXME FIXME FIXME : Broken? April 6
+
+            //CREATE VAR FOR FUNCTION
+            struct DataNode *func = constructNode(4);  
+            strcpy(func->name,$<datanode->name>2); //IDENTIFIER
+            func->dtype = 6; //function type
+
+            ////// Below are instructions only. 
+            // ie: will only get evaluated on a funcall/////
+            ////////////////////////////////////////////////
+
+            /*CREATE LOCAL VARCONTAINER (LOCAL SCOPE)*/
+            //instruction: createNewScope
+            struct DataNode *newScopeInst = constructNode(1);
+            strcpy(newScopeInst->name,"createNewScope");
+            newScopeInst->dtype = 8; //instruction type
+            insertChild(func, newScopeInst);
+            //^^when evaluated, this label creates new scope^^//
+            
+            /*DECLARE PARAMETERS AS VARS */
+            //No PARAMS: Do nothing
+            //loop through param list here
+            /*
+            struct DataNode *paramList = $<datanode>4;
+            for(int i=0; i<paramList->size; i++)
+            {
+               struct DataNode *declVarInst = constructNode(1);
+               strcpy(declVarInst->name,"declareVar");
+               declVarInst->dtype = 8;
+               strcpy(declVarInst->children[0]->name, paramList->children[i]->name);
+               //printf("declVarInst->children[0]->name:   %s \n" ,declVarInst->children[0]->name);
+               insertChild(func,declVarInst);
+            }
+            */
+            //
+
+            //CREATE A PARAMETER NODE THAT WILL DO THE ASSIGNING ON FUNCALL
+             //empty at first (on func declare)
+             //will be used to store values of the parameters passed
+
+            //FIXME FIXME FIXME Prob dont need this for empty param list FIXME//
+            struct DataNode *paramNode = constructNode(2);
+            strcpy(paramNode->name,"parameters");
+            paramNode->dtype = 8;
+            insertChild(func,paramNode);
+
+
+            //INSERT THE LIST OF STATEMENTS
+               struct DataNode *stmts = $<datanode>6;
+               int numStatements = stmts->size;
+               for(int i=0; i<numStatements; i++){
+                  insertChild(func,stmts->children[i]);
+               }
+
+
+            $<datanode>$ = func;
          }
 
+
+      
       | FUNC IDENTIFIER '(' paramdecl_list ')' '{' statements '}'
          {
             #if DEBUGTAG 
@@ -308,8 +371,12 @@ fundecl:
             strcpy(func->name,$<datanode->name>2); //IDENTIFIER
             func->dtype = 6; //function type
 
+            ////// Below are instructions only. 
+            // ie: will only get evaluated on a funcall/////
+            ////////////////////////////////////////////////
+
             /*CREATE LOCAL VARCONTAINER (LOCAL SCOPE)*/
-            //create instruction node. instruction: createNewScope
+            //instruction: createNewScope
             struct DataNode *newScopeInst = constructNode(1);
             strcpy(newScopeInst->name,"createNewScope");
             newScopeInst->dtype = 8; //instruction type
@@ -563,7 +630,21 @@ funcall: /* $$ should be the return value */
             #if DEBUGTAG
                printf(" ~RULE: funcall -->  IDENTIFIER '(' ')' \n");   
             #endif
-            //CALL FUNCTION HERE
+
+            // CREATE FUNCALL NODE
+            struct DataNode *funcall = constructNode(2);
+            funcall->dtype = 8; //instruction 
+            strcpy(funcall->name,"funCall");
+            
+
+            //LEFT CHILD IS FUNCTION TO BE CALLED 
+            insertChild(funcall,$<datanode>1);
+
+            //RIGHT CHILD IS PARAMETER LIST TO BE ASSIGNED TO FUNCTION
+            //FIXME FIXME Insert empty node as no param list but need for evaluate FIXME//
+            struct DataNode *emptyParamList = constructNode(0);
+            insertChild(funcall, emptyParamList); //paramassign_list
+            $<datanode>$ = funcall;
          }
       | IDENTIFIER '(' paramassign_list ')'
          {
