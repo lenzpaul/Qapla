@@ -81,7 +81,7 @@ struct DataNode evaluate(struct DataNode *node, ...)
       struct DataNode *parameters = va_arg(paramList, struct DataNode *);
       //int numParams = parameters->size;
 
-      printf("HERE IN FUNCTION DECLARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
+      //printf("HERE IN FUNCTION DECLARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
 
       //evaluate every node in the function 
       int instructsCount = node->size; //nb of instructions in the function
@@ -139,7 +139,7 @@ struct DataNode evaluate(struct DataNode *node, ...)
 
 
          //DELETE ME
-         printf("HERE IN VAR DECLARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
+         //printf("HERE IN VAR DECLARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
 
          insertChild(varContainer,node->children[0]);
 
@@ -147,17 +147,24 @@ struct DataNode evaluate(struct DataNode *node, ...)
       }else if(strcmp(node->name,"parameters") == 0){
          
          //DELETE ME
-         printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
+         //printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
 
+         va_list paramList;
+         va_start(paramList,node); //node is the last 'named' argument of evaluate
+         //getting param node
+         struct DataNode *parameters = va_arg(paramList, struct DataNode *);
 
-         int numParams = node -> size ; //nb of parameters
+         int numParams = parameters -> size ; //nb of parameters
+            printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
+            printf("node -> size is : %d \n !!!!!!!!!!!!!     \n", numParams);
          for(int i=0;i<numParams;i++)
          {
-            varContainer->children[i]->dtype = node->children[i]->dtype;
-            varContainer->children[i]->ival = node->children[i]->ival;
-            varContainer->children[i]->fval = node->children[i]->fval;
-            strcpy(varContainer->children[i]->str, node->children[i]->str);
-            varContainer->children[i]->bval = node->children[i]->bval;
+            printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
+            varContainer->children[i]->dtype = parameters->children[i]->dtype;
+            varContainer->children[i]->ival = parameters->children[i]->ival;
+            varContainer->children[i]->fval = parameters->children[i]->fval;
+            strcpy(varContainer->children[i]->str, parameters->children[i]->str);
+            varContainer->children[i]->bval = parameters->children[i]->bval;
             printf("VARCONTAINER->CHILDREN[%d];  With varname %s; value is now: %d \n", 
                i, varContainer->children[i]->name, 
                varContainer->children[i]->ival);
