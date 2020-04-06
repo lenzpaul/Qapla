@@ -242,6 +242,18 @@ declarations:
       
 declarations: 
         fundecl
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: declarations --> fundecl \n");
+               printf(" ~RULE: Declaring function name: %s\n", 
+                                                         $<datanode->name>1);
+            #endif           
+
+            /*~HACK~*/ 
+            //add function to varContainer local
+            insertChild(varContainer, $<datanode>1); 
+         }
+
       | declarations fundecl
       ;
 

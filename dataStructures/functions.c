@@ -53,7 +53,7 @@ struct DataNode evaluate(struct DataNode *node, ...)
          }
       }
    }else if(node->dtype == 6){                           //function
-      /* FUNCTION CALL */
+      /* FUNCTION EVALUATION */
       //for functions, evaluate() should always be called with 2 parameters
       //  - parameter 1: function to evaluate
       //  - parameter 2: parameter node 
@@ -61,6 +61,16 @@ struct DataNode evaluate(struct DataNode *node, ...)
       //      Will have 0 children (size 0) if no parameters)
 
 
+      /* 
+       *    - local varContainer was already created 
+       *       (its the first 'housekeeping' node of a func declaration,
+       *         just need to evaluate it)
+       *
+       */
+
+         /////DELETE ME FIXME ///////////////////////////////
+         // printf("EVALUATING FUNCTION NAME inside function evalauation noww: %s \n", node->name);
+         // ///////////////////////////////////////////////////
       //evaluate function call //FIXME
 
       //get parameters node
@@ -77,14 +87,33 @@ struct DataNode evaluate(struct DataNode *node, ...)
          //FIXME
          //return ? ;
       }
+      //printf("PARAMETERS 1 : %d \n" , parameters->children[0]->ival);
 
       //CASE 2: with parameters
+      //assign, positionally, the parameters provided to varContainer 
+      //parameters declared
+
+      /*     
       for(int i=0;i<numParams;i++)
       {
+         varContainer->children[i] = parameters->children[i];
+         printf("VARCONTAINER->CHILDREN[%d] is now: %d \n", i, varContainer->children[i]->ival);
+         printf("ITS SIZE: %d \n", varContainer->children[i]->size);
+         printf("ITS TYPE: %d \n", varContainer->children[i]->dtype);
+         //DELETE ME 
+      }
+      */
+
+
+      for(int i=0;i<numParams;i++)
+      {
+         varContainer->children[i] = parameters->children[i];
+         //
          //FIXME
       }
       
-
+      
+      va_end(paramList);
    }else if(node->dtype == 7){
 
       //INSTRUCTIONS
@@ -106,15 +135,17 @@ struct DataNode evaluate(struct DataNode *node, ...)
          // will be done with the parameter node)
          
          //FIXME: RETURN VALUE NEEDED HERE??
-            //node->children[0] //function to be called
-            //node->children[1] //parameters to be passed to function
-
+            //struct DataNode *funcName = node->children[0]; //name of function to be called
+            struct DataNode *func = findVar(node->children[0]->name); //returns actual node of function to be called
+            struct DataNode *params = node->children[1]; //parameters to be passed to function
          /////DELETE ME FIXME ///////////////////////////////
+         // printf("EVALUATING FUNCTION NAME: %s \n", func->name);
          //printf("EVALUATING FUNCTION NAME: %s \n", node->children[0]->name);
          /////////////////////////////////////////////////////// 
 
-         evaluate(node->children[0], node->children[1]);
+         evaluate(func, params);
 
+      //
       //CREATE NEW SCOPE
       }else if(strcmp(node->name,"createNewScope") == 0){
          struct DataNode *localVarContainer = constructNode(2);
@@ -170,11 +201,9 @@ struct DataNode* findVar(char* varName)
             //here: var is found but dtype is 0 FIXME: add error msg
          }
       }
-      //if not found locally, findVar in parent
-
-      //FIXME DELETE ME ////////
-      //printf("ONCE!");
-      //////////
+      //IF NOT FOUND LOCALLY, FINDVAR IN VARCONTAINER'S PARENT 
+         //
+         //FIXME : localVarContainer = localVarContainer -> parent ; 
 
       //localVarContainer = localVarContainer->parent;
       //return deleteMe;
