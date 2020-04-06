@@ -193,12 +193,23 @@ statements:
             #if DEBUGTAG
                printf(" ~RULE~:statements --> statement \n");
             #endif
+
+
+            //CREATE ARRAY OF STATMENTS//////////////////////
+            $<datanode>$ = constructNode(2);
+            insertChild($<datanode>$, $<datanode>1);
+            //strcpy($<datanode->name>$,"parameters");
+            ////////////////////////////////////////
          }
       | statements statement
          { 
             #if DEBUGTAG
                printf(" ~RULE~:statements --> statements statement \n");
             #endif
+
+            //insert addtional statements in statements array as children
+            insertChild($<datanode>$, $<datanode>2);
+            /////////////////////////////////////////////////////////////
          }
       |  /*empty*/  /*FIXME: I need an action */
          { 
@@ -332,8 +343,8 @@ fundecl:
                printf("numStatements is: %d                                \n\n\n\n", numStatements);
                printf("statement name  is: %s                                \n\n\n\n", stmts->name);
                for(int i=0; i<numStatements; i++){
-                  //insertChild(func,stmts->children[i]);
-                  insertChild(func,stmts);
+                  insertChild(func,stmts->children[i]);
+                  //insertChild(func,stmts);
                }
             //FIXME FIXME
             $<datanode>$ = func;
