@@ -53,6 +53,7 @@ struct DataNode evaluate(struct DataNode *node, ...)
          }
       }
    }else if(node->dtype == 6){                           //function
+      /* FUNCTION CALL */
       //for functions, evaluate() should always be called with 2 parameters
       //  - parameter 1: function to evaluate
       //  - parameter 2: parameter node 

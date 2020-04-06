@@ -249,6 +249,7 @@ fundecl:
                printf("FUNC IDENTIFIER '(' ')' '{' statements '}'\n"); 
             #endif           
          }
+
       | FUNC IDENTIFIER '(' paramdecl_list ')' '{' statements '}'
          {
             #if DEBUGTAG 
@@ -308,12 +309,9 @@ fundecl:
             paramNode->dtype = 8;
             insertChild(func,paramNode);
 
-            //
             $<datanode>$ = func;
 
             #if DEBUGTAG 
-               printf(" ~RULE:fundecl --> ");
-               printf("FUNC IDENTIFIER '(' paramdecl_list ')' '{' statements '}'\n"); 
                
                /*
                printf(" parameter node name: %s\n", $<datanode->name>4); 
