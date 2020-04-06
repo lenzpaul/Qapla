@@ -171,6 +171,9 @@ evaluation:
          { 
             #if DEBUGTAG
                printf(" ~RULE~: evaluation --> statement \n"); 
+               printf("statement dtype is: %d\n", $<datanode->dtype>1);
+               printf("statement name is: %s\n", $<datanode->name>1);
+               printf("statement children 0 name is: %s\n", $<datanode->children[0]->name>1);
             #endif
             
             //evaluate statement here
@@ -222,6 +225,8 @@ statement:
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression ; \n"); 
                //printf("expression children[0]: %d \n", $<datanode->children[0]->    ival>1 ); 
+               printf("expression dtype is: %d\n", $<datanode->dtype>1);
+               printf("expression name is: %s\n", $<datanode->name>1);
                printf(" \n");
             #endif
 
@@ -340,7 +345,8 @@ paramdecl_list:
             //$$ is an array of IDENTIFIER nodes
             //Its children are the IDENTIFIER parameters
             $<datanode>$ = constructNode(2);
-            $<datanode->dtype>$ = 7; //parameters
+            //$<datanode->dtype>$ = 7; //parameters  //FIXME: type 7 for var declaration list??? Useful?
+                  //^^ This node is just a container for the var names of the parameters, not their values?
             strcpy($<datanode->name>$,"parameters");
             insertChild($<datanode>$, $<datanode>1);
 
@@ -411,22 +417,21 @@ paramdecl:
       ;
 */
 
-funcall: /* $$ should be the return value */
-        IDENTIFIER '(' ')'
-      | IDENTIFIER '(' paramassign_list ')'
-
-/* REVIEW THIS 
-funcall:
-        IDENTIFIER '(' IDENTIFIER ')'
-      | IDENTIFIER '(' st
-*/
-
-
 
 expression:
         vardecl /* instruction node : "declareVar" */ 
 
-      
+      | funcall
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:  expression --> funcall \n");
+               printf("funcall dtype is: %d\n", $<datanode->dtype>1);
+               printf("funcall name is: %s\n", $<datanode->name>1);
+            #endif
+         }
+
+/*    | paramassign   FIXME: Not necessary??*/ 
+
       | IDENTIFIER
          {
             #if DEBUGTAG 
@@ -470,13 +475,6 @@ expression:
       | IDENTIFIER EVAL
       */
 
-
-
-
-      | funcall
-
-/*    | paramassign   FIXME: Not necessary??*/ 
-
       | intexpr 
          { 
             #if DEBUGTAG
@@ -508,16 +506,85 @@ expression:
 
       ;
 
+/* expression -> funcall */
+funcall: /* $$ should be the return value */
+        IDENTIFIER '(' ')'
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: funcall -->  IDENTIFIER '(' ')' \n");   
+            #endif
+            //CALL FUNCTION HERE
+         }
+      | IDENTIFIER '(' paramassign_list ')'
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: funcall --> IDENTIFIER '(' paramassign_list ')'  \n");   
+            #endif
+                    
+            //CALL FUNCTION HERE
+            //CREATE FUNCTIOn call node
+            /*
+               - create funcall node
+               - left child is function to be called 
+                  - look for function name in varContainer 
+               - right child is parameter list to be assigned to function
+               - when funcall node gets evaluated.. it uses the 2 
+            */
+
+            // CREATE FUNCALL NODE
+            struct DataNode *funcall = constructNode(2);
+            funcall->dtype = 8; //instruction 
+            strcpy(funcall->name,"funCall");
+            
+
+            //LEFT CHILD IS FUNCTION TO BE CALLED 
+            insertChild(funcall,$<datanode>1);
+
+            //RIGHT CHILD IS PARAMETER LIST TO BE ASSIGNED TO FUNCTION
+            insertChild(funcall, $<datanode>3); //paramassign_list
+            $<datanode>$ = funcall;
+            //evaluate();
+
+         }
+      ;
+
+/* REVIEW THIS 
+funcall:
+        IDENTIFIER '(' IDENTIFIER ')'
+      | IDENTIFIER '(' st
+*/
 
 paramassign_list:
         paramassign
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: paramassign_list --> paramassign \n");    //DEBUG
+            #endif
+            //$$ is an array of IDENTIFIER nodes
+            //Its children are the IDENTIFIER parameters
+            $<datanode>$ = constructNode(2);
+            $<datanode->dtype>$ = 7; //parameters
+            strcpy($<datanode->name>$,"parameters");
+            insertChild($<datanode>$, $<datanode>1);
+
+         }
       | paramassign_list ':' paramassign
-        
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: paramassign_list --> paramassign_list ':' paramassign \n");    //DEBUG
+            #endif
+            insertChild($<datanode>$, $<datanode>3);
+         }
       ;
 
 
 paramassign:
         expression 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: paramassign_list --> paramassign_list ':' paramassign \n");    //DEBUG
+            #endif
+         }
 
 vardecl: 
         VAR IDENTIFIER    /*SEMI COLON HERE? FIXME */

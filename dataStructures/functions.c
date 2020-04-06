@@ -66,6 +66,7 @@ struct DataNode evaluate(struct DataNode *node, ...)
       //get parameters node
       va_list paramList;
       va_start(paramList,node); //node is the last 'named' argument of evaluate
+
       //getting param node
       struct DataNode *parameters = va_arg(paramList, struct DataNode *);
 
@@ -94,6 +95,25 @@ struct DataNode evaluate(struct DataNode *node, ...)
          //insert IDENTIFIER in varContainer (variable array of current scope)
          //ie: create var 
          insertChild(varContainer,node->children[0]);
+
+      //FUNCTION CALL 
+      }else if(strcmp(node->name,"funCall") == 0){
+         //call evaluation on funCall node's left child
+         //which is a function of dtype 6
+         //MUST also pass optional argument of parameter node to evaluate
+         //even if there are no parameters
+         //(in which case, the parameter node size will be 0, and nothing
+         // will be done with the parameter node)
+         
+         //FIXME: RETURN VALUE NEEDED HERE??
+            //node->children[0] //function to be called
+            //node->children[1] //parameters to be passed to function
+
+         /////DELETE ME FIXME ///////////////////////////////
+         //printf("EVALUATING FUNCTION NAME: %s \n", node->children[0]->name);
+         /////////////////////////////////////////////////////// 
+
+         evaluate(node->children[0], node->children[1]);
 
       //CREATE NEW SCOPE
       }else if(strcmp(node->name,"createNewScope") == 0){
