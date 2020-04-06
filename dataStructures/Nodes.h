@@ -10,7 +10,7 @@
 
 /* Operators
  *    - opEqual
- *    - 
+ *    - opPlus
  */
 
 /* Instructions:

@@ -9,7 +9,7 @@
 
 
 //evaluates a node and all its children
-struct DataNode evaluate(struct DataNode *node, ...)
+struct DataNode* evaluate(struct DataNode *node, ...)
 {
    // for(int i=0; i<node->size; i++)
    // {
@@ -19,26 +19,27 @@ struct DataNode evaluate(struct DataNode *node, ...)
    if(node->dtype == 0){
 
    }else if(node->dtype == 1){
-
+      //FIXME
+      return node;
+      //FIXME
    }else if(node->dtype == 2){
 
    }else if(node->dtype == 3){
    }else if(node->dtype == 4){
    }else if(node->dtype == 5){
-      //ASSIGNMENT (DONT LOOP!)
+      //ASSIGNMENT 
       if(strcmp(node->name,"opEqual") == 0){
          //child 0 is variable | child 1 is expression to be assigned
          //can only assign to var "accessible in the current scope"
          struct DataNode *var = findLocalVar(node->children[0]->name);
-         //printf("OPEQUAL\n");                         //DELETE
 
          //FIXME: for children[1] it should be evaluate(children[1])
          //          and return a node
 
+         //"expr is a valid expression (of any data type)"
          if(node->children[1]->dtype == 1){              //int
             var->dtype = 1;
             var->ival = node->children[1]->ival;
-            //printf("HERE!!!!!!!!!!!!!!\n");            //DELETE
 
          }else if(node->children[1]->dtype == 2){        //real
             var->dtype = 2;
@@ -49,7 +50,30 @@ struct DataNode evaluate(struct DataNode *node, ...)
             strcpy(var->str, node->children[1]->str);
 
          }else if(node->children[1]->dtype == 4){        //bool
-            //FIXME
+            var->dtype = 4;
+            var->bval = node->children[1]->bval;
+         }
+      }
+
+      //Addition + 
+      if(strcmp(node->name,"opPlus") == 0){
+         //ADD 2 children if string
+         //Concatenate if both are string
+         //Float + Int = Floatexpr
+         //NOT valid for bool
+
+         
+            int dt1 = node->children[0]->dtype ;
+            int dt2 = node->children[1]->dtype ;
+
+         if(dt1==1 && dt2==1){              //int
+            node->ival = node->children[0]->ival + node->children[1]->ival ;
+         }else if((dt1==1 || dt2==2) && (dt1==1 || dt2==2)){        //real
+            //default value is 0, just add all the values
+            node->fval = node->children[0]->ival + node->children[0]->fval
+               + node->children[1]->ival + node->children[1]->fval ;
+         }else if(dt1==3 && dt2==3){        //string
+            strcat(node->children[0]->str, node->children[1]->str);
          }
       }
    }else if(node->dtype == 6){                           //function
@@ -218,6 +242,14 @@ struct DataNode evaluate(struct DataNode *node, ...)
          }else if(node->children[0]->dtype == 4){        //bool
             //FIXME
          }
+
+         //ELSE EVALUATE??? ///
+         //FIXME
+            //else{evaluate(node->children[0]) ;}  
+         //FIXME
+
+
+
       } 
    }else if(node->dtype == 9){
    }
@@ -261,7 +293,7 @@ struct DataNode* findVar(char* varName)
    }while(localVarContainer->parent != NULL);
 
    //DELETE ME ////////FIXME
-   printf("Out of the loop: VAR doesnt exist!\n");
+   printf("Oops: VAR doesn't exist!\n");
    return deleteMe;
    ///////^^^^DELETE ME^^^^ ////////
 

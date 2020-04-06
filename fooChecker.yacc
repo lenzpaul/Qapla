@@ -173,7 +173,8 @@ evaluation:
                printf(" ~RULE~: evaluation --> statement \n"); 
                printf("statement dtype is: %d\n", $<datanode->dtype>1);
                printf("statement name is: %s\n", $<datanode->name>1);
-               printf("statement children 0 name is: %s\n", $<datanode->children[0]->name>1);
+               printf("statement children 0 ival is: %d\n", $<datanode->children[0]->ival>1);
+               printf("statement children 0 name is: %s\n", $<datanode->children[0]->str>1);
             #endif
             
             //evaluate statement here
@@ -452,13 +453,18 @@ paramdecl:
 
 expression:
         vardecl /* instruction node : "declareVar" */ 
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:  expression --> vardecl \n");
+            #endif
+         }
 
       | funcall
          {
             #if DEBUGTAG 
                printf(" ~RULE:  expression --> funcall \n");
-               printf("funcall dtype is: %d\n", $<datanode->dtype>1);
-               printf("funcall name is: %s\n", $<datanode->name>1);
+             //  printf("funcall dtype is: %d\n", $<datanode->dtype>1);          // DELETE ME
+             //  printf("funcall name is: %s\n", $<datanode->name>1);            // DELETE ME
             #endif
          }
 
@@ -481,6 +487,18 @@ expression:
             #if DEBUGTAG 
                printf(" ~RULE:  expression --> expression '+' expression \n");
             #endif
+
+            //create operator + node
+            struct DataNode *node = constructNode(2) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opPlus");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
+
+            $<datanode>$ = node ;
+            
          }
 
 

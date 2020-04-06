@@ -14,7 +14,7 @@
 //void declareVar(struct DataNode var);
 
 //evaluates a node and all its children
-struct DataNode evaluate(struct DataNode *node, ...);
+struct DataNode* evaluate(struct DataNode *node, ...);
 
 
 //for: string, boolean, integer or real
