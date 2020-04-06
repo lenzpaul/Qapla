@@ -46,6 +46,8 @@ const int MaxLen = 128;
 
 "FUNC"     { return(FUNC); }
 
+"=="       { return(EVAL); }
+
  /* Matches string (ie: begins & ends with ", may include escaped \ or " */
 ({String}) { 
 

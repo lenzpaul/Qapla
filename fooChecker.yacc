@@ -53,7 +53,8 @@ int yyerror(char* s);
  /* identify what kind of values can be associated with the language components */
 
  /* for the token types that have an associated value, identify its type */
-%token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD FUNC
+%token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD 
+%token<struct DataNode> FUNC EVAL
 /* %type<struct DataNode>  */
 
 
@@ -238,11 +239,54 @@ fundecl:
                printf("FUNC IDENTIFIER '(' ')' '{' statements '}'\n"); 
             #endif           
          }
-      | FUNC IDENTIFIER '(' parameters ')' '{' statements '}'
+      | FUNC IDENTIFIER '(' paramdecl_list ')' '{' statements '}'
          {
+            /*
+               paramdecl_list has the names of the var that we should
+               declare in the housekeeping instructions part, before the 
+               statements
+            */
+
+            /* 
+               - create a var, the func name  <- this happens now
+
+               Housekeeping instructions (happens  later, on eval of that var )
+               - create local varContainer (local scope)
+               - declare parameters as vars 
+               - create a parameter node that will do the assigning on 
+                  funcall
+            */ 
+            //create var for function
+            struct DataNode *func = constructNode(4);  
+            strcpy(func->name,$<datanode->name>2); //IDENTIFIER
+            func->dtype = 6; //function type
+
+            /*CREATE LOCAL VARcONTAINER (LOCAL SCOPE)*/
+            //create instruction node. instruction: createNewScope
+            struct DataNode *newScopeInst = constructNode(1);
+            strcpy(newScopeInst->name,"createNewScope");
+            newScopeInst->dtype = 8; //instruction type
+            insertChild(func, newScopeInst);
+            //^^when evaluated, this label creates new scope^^//
+            
+            /*DECLARE PARAMETERS AS VARS */
+            //loop through param list here
+            struct DataNode *paramList = $<datanode>4;
+            for(int i=0; i<paramList->size; i++)
+            {
+               struct DataNode *declVarInst = constructNode(1);
+               strcpy(newScopeInst->name,"declareVar");
+               declVarInst->dtype = 8;
+               declVarInst->children[0]->name = paramList->children[i]->name;
+               insertChild(func,declVarInst);
+            }
+            //
+
+            $<datanode>$ = func;
+
             #if DEBUGTAG 
                printf(" ~RULE:fundecl --> ");
-               printf("FUNC IDENTIFIER '(' parameters ')' '{' statements '}'\n"); 
+               printf("FUNC IDENTIFIER '(' paramdecl_list ')' '{' statements '}'\n"); 
                
                /*
                printf(" parameter node name: %s\n", $<datanode->name>4); 
@@ -256,11 +300,12 @@ fundecl:
          }
       ;
 
-parameters:
-        parameter
+paramdecl_list:
+        /*Instruction to declare vars */
+        paramdecl
          {   
             #if DEBUGTAG 
-               printf(" ~RULE: parameters --> parameter \n ");
+               printf(" ~RULE: paramdecl_list --> paramdecl \n ");
                //printf("$<datanode->name>$ : %s \n ",$<datanode->name>$ );
                //printf("$<datanode->name>1 : %s \n ",$<datanode->name>1 );
                //printf("$<datanode->name>$ : %p \n ",$<datanode>$ );
@@ -275,17 +320,17 @@ parameters:
             insertChild($<datanode>$, $<datanode>1);
 
          }
-      | parameters ':' parameter      
+      | paramdecl_list ':' paramdecl      
          {   
             #if DEBUGTAG 
-               printf(" ~RULE: parameters --> parameters : parameter \n ");
+               printf(" ~RULE: paramdecl_list --> paramdecl_list : paramdecl \n ");
                printf(" $<datanode->name>$: %s\n", $<datanode->name>$); 
                //printf(" $<datanode->children[0]->name>$: %s\n", $<datanode->children[0]->name>$); 
             #endif
             
             //*USING DEFAULT YACC BEHAVIOUR: $$ = $1 *
-            //parameters was already 'constructed' in 'parameter rule'.
-            //inserting new parameter (IDENTIFIER) as a new children
+            //paramdecl_list was already 'constructed' in 'paramdecl rule'.
+            //inserting new paramdecl (IDENTIFIER) as a new children
             insertChild($<datanode>$, $<datanode>3);
 
 
@@ -293,11 +338,12 @@ parameters:
       ;
 
 /* ! might conflict with vardecl */
-parameter:
+/* this is a declaration of parameter, not for parameter passing on funcall */
+paramdecl:
         IDENTIFIER    
          { 
             #if DEBUGTAG 
-               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf(" ~RULE: paramdecl --> IDENTIFIER \n ");
                printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
             #endif
 
@@ -307,7 +353,7 @@ parameter:
       | INTEGER /*FIXME should be intexpr */   
          { 
             #if DEBUGTAG 
-               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf(" ~RULE: paramdecl --> IDENTIFIER \n ");
                printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
             #endif
          }
@@ -315,7 +361,7 @@ parameter:
       | REAL    
          { 
             #if DEBUGTAG 
-               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf(" ~RULE: paramdecl --> IDENTIFIER \n ");
                printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
             #endif
          }
@@ -324,7 +370,7 @@ parameter:
       | STRING    
          { 
             #if DEBUGTAG 
-               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf(" ~RULE: paramdecl --> IDENTIFIER \n ");
                printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
             #endif
          }
@@ -333,7 +379,7 @@ parameter:
       | BOOLEAN    
          { 
             #if DEBUGTAG 
-               printf(" ~RULE: parameter --> IDENTIFIER \n ");
+               printf(" ~RULE: paramdecl --> IDENTIFIER \n ");
                printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
             #endif
          }
@@ -342,7 +388,7 @@ parameter:
 
 funcall: /* $$ should be the return value */
         IDENTIFIER '(' ')'
-      | IDENTIFIER '(' parameters ')'
+      | IDENTIFIER '(' paramassign_list ')'
 
 /* REVIEW THIS 
 funcall:
@@ -355,7 +401,57 @@ funcall:
 expression:
         vardecl /* instruction node : "declareVar" */ 
 
+      
+      | IDENTIFIER
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:  expression --> IDENTIFIER \n");
+            #endif
+         }
+
+      /*
+         expression + expression covers the different types case. 
+         ID + ID case; int + ID ; ID + int; int + float ; 
+         even int + str (which should cause error)
+      */
+      | expression '+' expression  
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:  expression --> expression '+' expression \n");
+            #endif
+         }
+
+
+      /*| IDENTIFIER '+' intexpr 
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:  expression --> IDENTIFIER '+' intexpr \n");
+            #endif
+         }
+      | IDENTIFIER '*' intexpr
+
+      */
+
+
+      /* | IDENTIFIER '+' floatexpr */
+      /* | IDENTIFIER '+' strexpr */
+      /* | IDENTIFIER '*' floatexpr */
+      
+      /*
+      | IDENTIFIER '-'
+      | IDENTIFIER '/'
+      | IDENTIFIER '^'
+      | IDENTIFIER MOD
+      | IDENTIFIER EVAL
+      */
+
+
+
+
       | funcall
+
+/*    | paramassign   FIXME: Not necessary??*/ 
+
       | intexpr 
          { 
             #if DEBUGTAG
@@ -388,6 +484,15 @@ expression:
       ;
 
 
+paramassign_list:
+        paramassign
+      | paramassign_list ':' paramassign
+        
+      ;
+
+
+paramassign:
+        expression 
 
 vardecl: 
         VAR IDENTIFIER    /*SEMI COLON HERE? FIXME */

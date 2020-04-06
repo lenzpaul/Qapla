@@ -7,11 +7,14 @@
 #include <stdbool.h>
 #include <string.h>
 
+//dtypes: 0:var, 1:int, 2:float, 3:str, 4:bool, 5:operator,
+//        6:functions, 7:parameters 8:instruction, 9:while
+
 
 //void declareVar(struct DataNode var);
 
 //evaluates a node and all its children
-struct DataNode evaluate(struct DataNode *node);
+struct DataNode evaluate(struct DataNode *node, ...);
 
 
 //for: string, boolean, integer or real

@@ -16,6 +16,7 @@
 /* Instructions:
  *    - declareVar
  *    - print
+ *    - createNewScope
  */
 
 

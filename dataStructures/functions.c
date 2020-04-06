@@ -1,6 +1,7 @@
 #include "Nodes.h"
 #include "functions.h"
 
+#include <stdarg.h>
 #include <stdlib.h> 
 #include <stdio.h>
 #include <stdbool.h>
@@ -8,7 +9,7 @@
 
 
 //evaluates a node and all its children
-struct DataNode evaluate(struct DataNode *node)
+struct DataNode evaluate(struct DataNode *node, ...)
 {
    // for(int i=0; i<node->size; i++)
    // {
@@ -30,6 +31,10 @@ struct DataNode evaluate(struct DataNode *node)
          //can only assign to var "accessible in the current scope"
          struct DataNode *var = findLocalVar(node->children[0]->name);
          //printf("OPEQUAL\n");                         //DELETE
+
+         //FIXME: for children[1] it should be evaluate(children[1])
+         //          and return a node
+
          if(node->children[1]->dtype == 1){              //int
             var->dtype = 1;
             var->ival = node->children[1]->ival;
@@ -47,19 +52,58 @@ struct DataNode evaluate(struct DataNode *node)
             //FIXME
          }
       }
-   }else if(node->dtype == 6){
+   }else if(node->dtype == 6){                           //function
+      //for functions, evaluate() should always be called with 2 parameters
+      //  - parameter 1: function to evaluate
+      //  - parameter 2: parameter node 
+      //     (node containing parameters as its children.
+      //      Will have 0 children (size 0) if no parameters)
+
+
+      //evaluate function call //FIXME
+
+      //get parameters node
+      va_list paramList;
+      va_start(paramList,node); //node is the last 'named' argument of evaluate
+      //getting param node
+      struct DataNode *parameters = va_arg(paramList, struct DataNode *);
+
+      int numParams = parameters->size;
+      //CASE 1: w/o parameters
+      if(numParams == 0) 
+      {
+         //FIXME
+         //return ? ;
+      }
+
+      //CASE 2: with parameters
+      for(int i=0;i<numParams;i++)
+      {
+         //FIXME
+      }
+      
+
    }else if(node->dtype == 7){
 
       //INSTRUCTIONS
    }else if(node->dtype == 8){
 
-      //var declaration
+      //VAR DECLARATION
       if(strcmp(node->name,"declareVar") == 0){ 
          //insert IDENTIFIER in varContainer (variable array of current scope)
          //ie: create var 
          insertChild(varContainer,node->children[0]);
 
-         //print statement
+      //CREATE NEW SCOPE
+      }else if(strcmp(node->name,"createNewScope") == 0){
+         struct DataNode *localVarContainer = constructNode(2);
+         //make current scope a parent of new local scope 
+         localVarContainer->parent = varContainer;
+         //make new local scope the new varContainer
+         varContainer = localVarContainer;
+
+
+      //PRINT STATEMENT
       }else if(strcmp(node->name,"print") == 0){
          //print the child node's value, based on its type
          if(node->children[0]->dtype == 1){              //int
@@ -116,7 +160,7 @@ struct DataNode* findVar(char* varName)
    }while(localVarContainer->parent != NULL);
 
    //DELETE ME ////////FIXME
-   printf("out of the loop!");
+   printf("Out of the loop: VAR doesnt exist!\n");
    return deleteMe;
    ///////^^^^DELETE ME^^^^ ////////
 
