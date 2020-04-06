@@ -186,11 +186,21 @@ evaluation:
 
 statements:
         statement 
-      | statements statement
-      | 
          { 
             #if DEBUGTAG
-               printf(" ~RULE~:statement \n"); 
+               printf(" ~RULE~:statements --> statement \n");
+            #endif
+         }
+      | statements statement
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE~:statements --> statements statement \n");
+            #endif
+         }
+      |  /*empty*/  /*FIXME: I need an action */
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE~:statements --> /*empty*/ \n"); 
             #endif
          }
       ;
@@ -241,6 +251,11 @@ fundecl:
          }
       | FUNC IDENTIFIER '(' paramdecl_list ')' '{' statements '}'
          {
+            #if DEBUGTAG 
+               printf(" ~RULE:fundecl --> ");
+                  printf("FUNC IDENTIFIER '(' paramdecl_list ')'"); 
+                  printf("'{' statements '}'\n");
+            #endif           
             /*
                paramdecl_list has the names of the var that we should
                declare in the housekeeping instructions part, before the 
@@ -257,11 +272,13 @@ fundecl:
                   funcall
             */ 
             //create var for function
+
+
             struct DataNode *func = constructNode(4);  
             strcpy(func->name,$<datanode->name>2); //IDENTIFIER
             func->dtype = 6; //function type
 
-            /*CREATE LOCAL VARcONTAINER (LOCAL SCOPE)*/
+            /*CREATE LOCAL VARCONTAINER (LOCAL SCOPE)*/
             //create instruction node. instruction: createNewScope
             struct DataNode *newScopeInst = constructNode(1);
             strcpy(newScopeInst->name,"createNewScope");
@@ -275,13 +292,23 @@ fundecl:
             for(int i=0; i<paramList->size; i++)
             {
                struct DataNode *declVarInst = constructNode(1);
-               strcpy(newScopeInst->name,"declareVar");
+               strcpy(declVarInst->name,"declareVar");
                declVarInst->dtype = 8;
-               declVarInst->children[0]->name = paramList->children[i]->name;
+               strcpy(declVarInst->children[0]->name, paramList->children[i]->name);
+               //printf("declVarInst->children[0]->name:   %s \n" ,declVarInst->children[0]->name);
                insertChild(func,declVarInst);
             }
             //
 
+            //CREATE A PARAMETER NODE THAT WILL DO THE ASSIGNING ON FUNCALL
+             //empty at first (on func declare)
+             //will be used to store values of the parameters passed
+            struct DataNode *paramNode = constructNode(2);
+            strcpy(paramNode->name,"parameters");
+            paramNode->dtype = 8;
+            insertChild(func,paramNode);
+
+            //
             $<datanode>$ = func;
 
             #if DEBUGTAG 

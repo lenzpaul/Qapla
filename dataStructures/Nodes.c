@@ -12,8 +12,14 @@ struct DataNode* constructNode(size_t capacity){
    node = malloc(sizeof(struct DataNode));
 
    if(capacity > 0)
-      node->children = malloc(capacity * sizeof(struct DataNode));
-
+   {   
+      node->children = malloc(capacity * sizeof(struct DataNode *));
+      //initialize children? FIXME
+      for(int i=0; i<capacity; i++){
+         struct DataNode *child = malloc(sizeof(struct DataNode));
+         node->children[i] = child;
+      }
+   }
    node->size = 0;
    node->capacity = capacity;
    return node;
