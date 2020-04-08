@@ -37,6 +37,26 @@ const int MaxLen = 128;
  /****** Rules for tokens ******/
 "exit"     { return 0; }
 
+
+"AND"      { return (AND); } 
+
+"OR"       { return (OR); } 
+
+"NOT"      { return (NOT); } 
+
+
+ /* selection */ 
+"if"      { return (IF); } 
+
+"else-if"      { return (ELSEIF); } 
+
+"else"      { return (ELSE); } 
+
+ /* iteration */
+"while"      { return (WHILE); } 
+
+
+
 "return"      { return (RETURN); } 
 
 "MOD"      { return (MOD); } 

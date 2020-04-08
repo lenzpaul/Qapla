@@ -54,7 +54,7 @@ int yyerror(char* s);
 
  /* for the token types that have an associated value, identify its type */
 %token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD 
-%token<struct DataNode> FUNC EVAL RETURN
+%token<struct DataNode> FUNC EVAL RETURN IF ELSEIF ELSE WHILE AND OR NOT
 /* %type<struct DataNode>  */
 
 
@@ -249,13 +249,22 @@ statement:
        assignexpr ';' /* operator node : "opEqual" */
          { 
             #if DEBUGTAG
-               printf(" ~RULE:expression--> assignexpr \n");    //DEBUG
+               printf(" ~RULE: statement --> assignexpr \n");    //DEBUG
             #endif
 
             $<datanode>$ = $<datanode>1;
 
          }
 
+
+      | selection
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE: statement --> selection \n");    //DEBUG
+            #endif
+
+            $<datanode>$ = $<datanode>1;
+         }
 
       | expression ';'
          { 
@@ -270,6 +279,13 @@ statement:
             $<datanode>$ = $<datanode>1;
          }
 
+      ;
+
+
+
+
+selection:
+        IF '(' ')' '{' statements '}' 
       ;
 /* NOT NEEDED 
 declarations: 
@@ -624,7 +640,6 @@ expression:
             insertChild(node,$<datanode>3);      
 
             $<datanode>$ = node ;
-            
          }
 
 
@@ -677,6 +692,15 @@ expression:
             #endif
 
             $<datanode>$ = $<datanode>1;
+
+         }
+
+
+      | boolexpr
+         { 
+            #if DEBUGTAG
+               printf(" ~RULE: expression--> boolexpr \n");    //DEBUG
+            #endif
 
          }
 
@@ -988,6 +1012,44 @@ ioexpr:
             */
          }
 
+      ;
+
+
+boolexpr:
+        '(' boolexpr ')' 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: boolexpr --> '(' boolexpr ')' \n");    //DEBUG
+            #endif
+         }  
+
+      | boolexpr AND boolexpr 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: boolexpr --> boolexpr  \n");    //DEBUG
+            #endif
+         }  
+         
+      | boolexpr OR boolexpr 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: boolexpr --> boolexpr  \n");    //DEBUG
+            #endif
+         }  
+         
+      | NOT boolexpr
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: boolexpr --> boolexpr  \n");    //DEBUG
+            #endif
+         }  
+         
+      | boolexpr
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: boolexpr --> boolexpr  \n");    //DEBUG
+            #endif
+         }  
       ;
 
 
