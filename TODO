@@ -13,21 +13,48 @@
 
 [ ] Selection: If/else
 
-[ ] add opTimes for intexpr * intexpr
+[x] AND NOT OR
 
+[ ] add opTimes for intexpr * intexpr
 
 
 
 [ ] Make a list of unusable keywords; ie: cannot use 'print' outside of the specific print context
 
 
-
+[ ] FIX BUG 1 : print ( x + y ) //strings
 
 
 [ ] FUNC p ( w ) {  } <-- doesnt work (syntax error) 
       - Just need to add grammar rule for no statements (fundecl) 
 
 ________________________________________________________
+
+BUG 1 :
+==============================================
+VAR x ;
+
+VAR y ;
+
+x = "hello " ;
+
+y = "Welcome to my video" ;
+
+print ( x + y ) ;
+
+
+print ( x ) ;
+hello Welcome to my video
+
+print ( y ) ;
+Welcome to my video
+
+print ( x ) ;
+hello Welcome to my video
+========================================
+
+
+
 
 Tue Apr  7 22:21:51 PDT 2020
 

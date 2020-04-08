@@ -70,6 +70,8 @@ const int MaxLen = 128;
 
 "=="       { return(EVAL); }
 
+"<>"       { return(NEQ); }
+
  /* Matches string (ie: begins & ends with ", may include escaped \ or " */
 ({String}) { 
 
@@ -212,11 +214,13 @@ const int MaxLen = 128;
 
  "-"         { return *yytext; }
 
- "="         { return *yytext; }
-
  "*"         { return *yytext; }
 
  "/"         { return *yytext; }
+
+ "="         { return *yytext; }
+
+ "<"         { return *yytext; }
 
  "^"         { return *yytext; }
 

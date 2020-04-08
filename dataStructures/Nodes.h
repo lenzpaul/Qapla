@@ -14,6 +14,9 @@
  *    - opOR 
  *    - opAND
  *    - opNOT
+ *    - opLT
+ *    - opEVAL
+ *    - opNEQ
  */
 
 /* Instructions:

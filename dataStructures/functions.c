@@ -70,6 +70,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          if(rdt==1){              //int
             leftChild->ival = rightChild->ival; 
             leftChild-> dtype = 1 ;
+            //return???
          }else if(rdt==2){        //real
             //default value is 0, just add all the values
             leftChild->fval= rightChild->fval ;
@@ -196,7 +197,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       }
 
 
-      //dtype 5 cont'd boolean operators
+      //dtype 5 cont'd --> boolean operators
       if(strcmp(node->name,"opAND") == 0){
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
@@ -206,6 +207,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          return node;
          
       }
+
       if(strcmp(node->name,"opOR") == 0){
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
@@ -215,6 +217,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          return node;
 
       }
+
       if(strcmp(node->name,"opNOT") == 0){
 
          //printf("\n\n\n\n HERE \n\n\n " ) ;
@@ -228,6 +231,76 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       
 
 
+      //if we find these labels,
+      //evaluate, compare, and return boolean
+      if(strcmp(node->name,"opLT") == 0){
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         
+         //printf("WE GET HERE \n\n\n\n");
+         int ldt = leftChild->dtype; 
+         int rdt = rightChild->dtype; 
+   
+         if( (ldt == 1 ) && (rdt == 1) ) {
+            node->bval = leftChild->ival < rightChild->ival; 
+            node->dtype = 4 ;
+            return node;
+         }else if ( (ldt==1 && rdt==2) || (ldt==2 && rdt==1) 
+                                                      || (ldt==2 && rdt==2) ){ 
+            node->bval = (leftChild->ival + leftChild->fval) < 
+                                          (leftChild->ival + rightChild->fval); 
+            node->dtype = 4 ;
+            return node;
+
+         }else if (ldt == 3 && rdt == 3 )  {  
+            node->bval = (strcmp(leftChild->str, rightChild->str) ) < 0;
+            node->dtype = 4 ;
+            return node;
+
+         }
+         //}else if (ldt == 4 && rdt == 4 )  {  //no comparison for boolean yet
+
+         /*
+         //based on datatype
+         if(child->dtype == 1){              //int
+            printf("%d\n", child->ival);  
+         }else if(child->dtype == 2){        //real
+            printf("%f\n", child->fval);    
+         }else if(child->dtype == 3){        //string
+            printf("%s\n", child->str);    
+         }else if(child->dtype == 4){        //bool
+            (child->bval) ? 
+               printf("true\n") : printf("false\n");
+         */
+
+
+
+         node->bval = leftChild->bval < rightChild->bval;   
+
+         node->dtype=4;
+         return node;
+
+      }
+
+      if(strcmp(node->name,"opEVAL") == 0){
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         
+         node->bval = leftChild->bval || rightChild->bval;   
+         node->dtype=4;
+         return node;
+
+      }
+
+      if(strcmp(node->name,"opNEQ") == 0){
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         
+         node->bval = leftChild->bval || rightChild->bval;   
+         node->dtype=4;
+         return node;
+
+      }
 
 
    }else if(node->dtype == 6){                           //function
@@ -438,7 +511,11 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //- Then, print the child node's return value, based on its type
          //printf("child info %s \n\n\n\n ", node->children[0]->name);
          //printf("child info %d \n\n\n\n ", node->children[0]->dtype);
+
          struct DataNode *child = evaluate(node->children[0]); 
+
+            //printf( " \n\n\n HERERERERERE \n\n\n\n");
+            //printf( " \n child -> dtype %d \n", child->dtype);
          //printf("child->name: %s \n\n\n\n",child->name); 
            // printf("Type of child: %s \n", child -> name);
          if(child->dtype == 1){              //int

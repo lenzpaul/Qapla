@@ -54,7 +54,7 @@ int yyerror(char* s);
 
  /* for the token types that have an associated value, identify its type */
 %token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD 
-%token<struct DataNode> FUNC EVAL RETURN IF ELSEIF ELSE WHILE AND OR NOT
+%token<struct DataNode> FUNC EVAL RETURN IF ELSEIF ELSE WHILE AND OR NOT NEQ
 /* %type<struct DataNode>  */
 
 
@@ -285,7 +285,8 @@ statement:
 
 
 selection:
-        IF '(' ')' '{' statements '}' 
+        IF '(' boolexpr ')' '{' statements '}' 
+
       ;
 /* NOT NEEDED 
 declarations: 
@@ -695,7 +696,7 @@ expression:
 
          }
 
-
+/* expression -> boolexpr */
       | boolexpr
          { 
             #if DEBUGTAG
@@ -706,7 +707,7 @@ expression:
 
       ;
 
-/* expression -> funcall */
+/* expression <- funcall */
 funcall: /* $$ should be the return value */
         IDENTIFIER '(' ')'
          {
@@ -1078,6 +1079,64 @@ boolexpr:
             insertChild(node,$<datanode>2);      
 
             $<datanode>$ = node ;
+         }  
+         
+      | expression '<' expression
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: boolexpr --> expression < expression\n");    //DEBUG
+            #endif
+
+            //create operator OR node
+            struct DataNode *node = constructNode(2) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opLT");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
+
+            $<datanode>$ = node ;
+
+
+         }  
+         
+      | expression EVAL expression
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: boolexpr --> expression EVAL expression\n");    //DEBUG
+            #endif
+
+            //create operator OR node
+            struct DataNode *node = constructNode(2) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opEVAL");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
+
+            $<datanode>$ = node ;
+
+         }  
+         
+      | expression NEQ expression
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: boolexpr --> expression NEQ expression\n");    //DEBUG
+            #endif
+
+            //create operator OR node
+            struct DataNode *node = constructNode(2) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opNEQ");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
+
+            $<datanode>$ = node ;
+
          }  
          
       | BOOLEAN
