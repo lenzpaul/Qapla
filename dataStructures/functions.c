@@ -258,47 +258,63 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             return node;
 
          }
-         //}else if (ldt == 4 && rdt == 4 )  {  //no comparison for boolean yet
-
-         /*
-         //based on datatype
-         if(child->dtype == 1){              //int
-            printf("%d\n", child->ival);  
-         }else if(child->dtype == 2){        //real
-            printf("%f\n", child->fval);    
-         }else if(child->dtype == 3){        //string
-            printf("%s\n", child->str);    
-         }else if(child->dtype == 4){        //bool
-            (child->bval) ? 
-               printf("true\n") : printf("false\n");
-         */
-
-
-
-         node->bval = leftChild->bval < rightChild->bval;   
-
-         node->dtype=4;
-         return node;
-
       }
 
-      if(strcmp(node->name,"opEVAL") == 0){
+      if(strcmp(node->name,"opEVAL") == 0){    // ==
+
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
          
-         node->bval = leftChild->bval || rightChild->bval;   
-         node->dtype=4;
-         return node;
+         //printf("WE GET HERE \n\n\n\n");
+         int ldt = leftChild->dtype; 
+         int rdt = rightChild->dtype; 
+   
+         if( (ldt == 1 ) && (rdt == 1) ) {
+            node->bval = leftChild->ival == rightChild->ival; 
+            node->dtype = 4 ;
+            return node;
+         }else if ( ldt==2 && rdt==2 ) { 
+            node->bval = leftChild->fval == rightChild->fval; 
+            node->dtype = 4 ;
+            return node;
 
+         }else if (ldt == 3 && rdt == 3 )  {  
+            node->bval = (strcmp(leftChild->str, rightChild->str) ) == 0;
+            node->dtype = 4 ;
+            return node;
+
+         }
       }
 
       if(strcmp(node->name,"opNEQ") == 0){
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
          
-         node->bval = leftChild->bval || rightChild->bval;   
-         node->dtype=4;
-         return node;
+         //printf("WE GET HERE \n\n\n\n");
+         int ldt = leftChild->dtype; 
+         int rdt = rightChild->dtype; 
+   
+         node -> bval = true;
+         if( (ldt == 1 ) && (rdt == 1) ) {
+            node->bval = leftChild->ival != rightChild->ival; 
+            node->dtype = 4 ;
+            return node;
+         }else if ( ldt==2 && rdt==2 ) { 
+            node->bval = leftChild->fval != rightChild->fval; 
+            node->dtype = 4 ;
+            return node;
+
+         }else if (ldt == 3 && rdt == 3 )  {  
+            node->bval = (strcmp(leftChild->str, rightChild->str) ) != 0;
+            node->dtype = 4 ;
+            return node;
+
+         }
+
+
+
+
+
 
       }
 
