@@ -25,6 +25,9 @@ struct DataNode* evaluate(struct DataNode *node, ...)
    }else if(node->dtype == 2){
 
    }else if(node->dtype == 3){
+
+      return node;
+
    }else if(node->dtype == 4){
    }else if(node->dtype == 5){
       //ASSIGNMENT 

@@ -167,6 +167,7 @@ evaluations:
       ;
 
 evaluation: 
+      /* Evaluates single statements here */ 
       statement 
          { 
             #if DEBUGTAG
@@ -178,7 +179,7 @@ evaluation:
             #endif
             
             //evaluate statement here
-            evaluate($<datanode>1);
+            evaluate($<datanode>1);    //its children no?
 
             //This needs to happen ON EVALUATE only 
                //insert IDENTIFIER in varContainer (variable array)
@@ -189,6 +190,8 @@ evaluation:
       ;
 
 statements:
+        /*statements is an unnamed array which will hold 
+            Instructions to each individual statment to be evaluated */
         statement 
          { 
             #if DEBUGTAG
@@ -335,6 +338,9 @@ fundecl:
                int numStatements = stmts->size;
                for(int i=0; i<numStatements; i++){
                   insertChild(func,stmts->children[i]);
+                  ////DELETE ME ////
+                  printf("statment %d name : %s \n", i, stmts->children[i]->name);
+                  /////////////////
                }
 
 
@@ -434,7 +440,7 @@ fundecl:
       ;
 
 paramdecl_list:
-        /*Instruction to declare vars */
+        /*_list is an unnamed array which will hold Instructions to declare vars */
         paramdecl
          {   
             #if DEBUGTAG 
@@ -450,7 +456,8 @@ paramdecl_list:
             $<datanode>$ = constructNode(2);
             //$<datanode->dtype>$ = 7; //parameters  //FIXME: type 7 for var declaration list??? Useful?
                   //^^ This node is just a container for the var names of the parameters, not their values?
-            //strcpy($<datanode->name>$,"parameters");
+
+            //strcpy($<datanode->name>$,"parameters"); //DOES NOT NEED TO BE NAMED... 
             insertChild($<datanode>$, $<datanode>1);
 
          }
