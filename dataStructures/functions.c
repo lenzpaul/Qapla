@@ -416,9 +416,6 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       //INSTRUCTIONS
    }else if(node->dtype == 8){
 
-      
-
-
       //VAR DECLARATION
       if(strcmp(node->name,"declareVar") == 0){ 
          //insert IDENTIFIER in varContainer (variable array of current scope)
@@ -475,7 +472,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          }
 
 
-
+      //node->dtype == 8
       //FUNCTION CALL 
       }else if(strcmp(node->name,"funCall") == 0){
          // - evaluate leftChild, which is a function Node (dtype 6)
@@ -501,6 +498,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          return evaluate(func, params);  //TODO : Add return here : *return = evaluate ... 
 
       //
+      //node->dtype == 8
       //CREATE NEW SCOPE
       }else if(strcmp(node->name,"createNewScope") == 0){
             
@@ -520,6 +518,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             printf("            ...address of parent scope is: %p \n\n", varContainer->parent);
          #endif
 
+      //node->dtype == 8
       //PRINT STATEMENT
       }else if(strcmp(node->name,"print") == 0){
          
@@ -550,8 +549,69 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //FIXME
          return child;
 
+//
+      //node->dtype == 8
+      //SELECTION IF ELSE
+      }else if(strcmp(node->name,"selectBlock") == 0){   
+            //select block is an array of 
+            //ifBlock, elseIfBlock(s) or elseBlock
+            
+            //evaluate its children until one return true
+               //nb: selection must have bool condition (cannot be if () ) 
+            int condBlockCount = node->size ;
+            bool conditionMet = node -> bval;  //starts at false
 
-      } 
+            for(int i=0; i<condBlockCount; i++) {
+               struct DataNode *currentBlock = evaluate(node->children[i]) ;
+               conditionMet = currentBlock->bval;
+               if(conditionMet) break;
+            }
+               //nothing to return??
+
+      //node->dtype == 8
+      }else if(strcmp(node->name,"ifBlock") == 0){   
+         
+         struct DataNode *currentBlock = evaluate(node->children[0]) ;//condition
+         bool conditionMet = currentBlock->bval;
+
+         int instructsCount = node->size;  //number of statements
+         
+         //printf("child 0 is %s " , node -> children[0] ->name);
+
+         if(conditionMet){
+            for(int i=0; i<instructsCount; i++)
+               evaluate(node->children[i]);
+         }
+         node->bval = conditionMet;
+         return node;
+
+
+      //node->dtype == 8
+      }else if(strcmp(node->name,"elseIfBlock") == 0){
+
+
+         struct DataNode *currentBlock = evaluate(node->children[0]) ;//condition
+         bool conditionMet = currentBlock->bval;
+
+         int instructsCount = node->size;  //number of statements
+
+         if(conditionMet){
+            for(int i=0; i<instructsCount; i++)
+               evaluate(node->children[i]);
+         }
+         node->bval = conditionMet;
+         return node;
+
+      //node->dtype == 8
+      }else if(strcmp(node->name,"elseBlock") == 0){   
+
+         int instructsCount = node->size;  //number of statements
+         for(int i=0; i<instructsCount; i++)
+            evaluate(node->children[i]);
+
+         node->bval = true;
+         return node;
+      }
    }else if(node->dtype == 9){
    }
    //}//for loop

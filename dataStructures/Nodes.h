@@ -26,6 +26,10 @@
  *    - funCall
  *    - parametersAssign
  *    - returnInstr
+ *    - ifBlock
+ *    - elseIfBlock
+ *    - elseBlock
+ *    - selectBlock
  *                                            - parameters [unused...]
  */
 

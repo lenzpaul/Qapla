@@ -227,9 +227,8 @@ statements:
 
             //CREATE ARRAY OF STATMENTS//////////////////////
             $<datanode>$ = constructNode(2);
+            strcpy($<datanode->name>$, "info_statements");//info label only, has no use
             insertChild($<datanode>$, $<datanode>1);
-            //strcpy($<datanode->name>$,"parameters");
-            ////////////////////////////////////////
          }
       | statements statement
          { 
@@ -263,7 +262,7 @@ statement:
                printf(" ~RULE: statement --> selection \n");    //DEBUG
             #endif
 
-            $<datanode>$ = $<datanode>1;
+           // $<datanode>$ = $<datanode>1;
          }
 
       | expression ';'
@@ -285,9 +284,204 @@ statement:
 
 
 selection:
+        ifcomponent
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: selection --> ifcomponent \n" );
+            #endif           
+            struct DataNode *node = constructNode (1) ;
+            strcpy(node->name, "selectBlock");
+            node = insertChild(node, $<datanode>1);
+            node->bval = false;
+            node->dtype = 8 ; //instruction
+            $<datanode>$ = node;
+         }
+
+      | ifcomponent elseifcomponents
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: selection --> ifcomponent elseifcomponents\n" );
+            #endif           
+
+            struct DataNode *node = constructNode (2) ;
+            strcpy(node->name, "selectBlock");
+            node = insertChild(node, $<datanode>1);
+            
+            int elseIfCount = $<datanode>2->size;
+            for(int i=0; i<elseIfCount; i++) 
+                node = insertChild(node, $<datanode->children[i]>2);
+            
+            node->bval = false;
+            node->dtype = 8 ; //instruction
+            $<datanode>$ = node;
+         }
+
+      | ifcomponent elseifcomponents elsecomponent
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: selection --> ifcomponent elseifcomponents elsecomponent\n" );
+            #endif           
+
+            struct DataNode *node = constructNode (2) ;
+            strcpy(node->name, "selectBlock");
+            node = insertChild(node, $<datanode>1);
+
+            int elseIfCount = $<datanode>2->size;
+            for(int i=0; i<elseIfCount; i++) 
+                node = insertChild(node, $<datanode->children[i]>2);
+            
+            node = insertChild(node, $<datanode>3);
+            node->bval = false;
+            node->dtype = 8 ; //instruction
+            $<datanode>$ = node;
+         }
+
+      | ifcomponent elsecomponent
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: selection --> ifcomponent elsecomponent\n" );
+            #endif           
+
+            struct DataNode *node = constructNode (2) ;
+            strcpy(node->name, "selectBlock");
+            node = insertChild(node, $<datanode>1);
+            node = insertChild(node, $<datanode>2);
+            node->bval = false;
+            node->dtype = 8 ; //instruction
+            $<datanode>$ = node;
+         }
+      ;
+
+
+ifcomponent: 
+        /* BASE COMPONENT */
         IF '(' boolexpr ')' '{' statements '}' 
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: ifcomponent --> IF '(' boolexpr ')' '{' statements '}'  \n");
+            #endif           
+
+
+            struct DataNode *node = constructNode(4);
+            strcpy(node->name,"ifBlock");  
+            insertChild(node, $<datanode>3);
+
+            //INSERT THE LIST OF STATEMENTS
+            //ie; storing every instruction individually 
+            //as children of the if node
+            //NOTE: statements is an array of individual instruction nodes
+            //    statements->children should be inserted and NOT the whole
+            //      container node
+            struct DataNode *stmts = $<datanode>6;
+            int numStatements = stmts->size;
+            for(int i=0; i<numStatements; i++){
+               insertChild(node,stmts->children[i]);
+            }
+
+            node->dtype = 8 ;
+            node->bval = false;
+            $<datanode>$ = node;
+         }
 
       ;
+/*
+NOTE! The plural represents a list!!
+This is an ARRAY of elseifcomponent
+The instructions to be evaluated are in $$->children[i] 
+NOT $$
+The label "info_elseifcomponents" is informative only, for debugging
+and cannot be evaluated
+*/
+elseifcomponents:
+        elseifcomponent
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: elseifcomponents --> elseifcomponent \n");
+            #endif           
+
+            //$$ is an array of elseifcomponent nodes
+            //Its children are individual elseifcomponent's
+            $<datanode>$ = constructNode(2);
+            //$<datanode->dtype>$ = 7; //parameters  FIXME should be for decl only ?
+            strcpy($<datanode->name>$,"info_elseifcomponents");  //informative label only
+            insertChild($<datanode>$, $<datanode>1);
+         }
+         
+      | elseifcomponents elseifcomponent
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: elseifcomponents --> elseifcomponents elseifcomponent \n");
+            #endif           
+            insertChild($<datanode>$, $<datanode>2);
+         }
+         
+      ;
+
+elseifcomponent:
+      ELSEIF '(' boolexpr ')' '{' statements '}' 
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE: elseifcomponent -->  ELSEIF '(' boolexpr ')' '{' statements '}'\n");
+            #endif           
+
+            struct DataNode *node = constructNode(4);
+            strcpy(node->name,"elseIfBlock");  
+            insertChild(node, $<datanode>3);
+
+            //INSERT THE LIST OF STATEMENTS
+            //ie; storing every instruction individually 
+            //as children of the elseif node
+            //NOTE: statements is an array of individual instruction nodes
+            //    statements->children should be inserted and NOT the whole
+            //      container node
+            struct DataNode *stmts = $<datanode>6;
+            int numStatements = stmts->size;
+            for(int i=0; i<numStatements; i++){
+               insertChild(node,stmts->children[i]);
+            }
+
+            node->dtype = 8 ;
+            node->bval = false;
+            $<datanode>$ = node;
+
+         }
+
+      ;
+
+elsecomponent:
+        ELSE '{' statements '}' 
+         {
+
+            #if DEBUGTAG 
+               printf(" ~RULE: elsecomponent -->ELSE '(' boolexpr ')' '{' statements '}'\n");
+            #endif           
+
+
+            struct DataNode *node = constructNode(4);
+            strcpy(node->name,"elseBlock");  
+            insertChild(node, $<datanode>3);
+
+            //INSERT THE LIST OF STATEMENTS
+            //ie; storing every instruction individually 
+            //as children of the else node
+            //NOTE: statements is an array of individual instruction nodes
+            //    statements->children should be inserted and NOT the whole
+            //      container node
+            struct DataNode *stmts = $<datanode>3;
+            int numStatements = stmts->size;
+            for(int i=0; i<numStatements; i++){
+               insertChild(node,stmts->children[i]);
+            }
+
+            node->dtype = 8 ;
+            node->bval = true; //if you get to else block, just run the code
+            $<datanode>$ = node;
+         }
+      ;
+
+
+
+      
 /* NOT NEEDED 
 declarations: 
         declaration 
@@ -364,10 +558,6 @@ fundecl:
             //CREATE A PARAMETER NODE THAT WILL DO THE ASSIGNING ON FUNCALL
              //empty at first (on func declare)
              //will be used to store values of the parameters passed
-
-
-
-
 
 
             struct DataNode *paramNode = constructNode(2);
