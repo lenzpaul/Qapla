@@ -20,6 +20,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       
       //struct DataNode *var = findLocalVar(node->children[0]->name); //EVALUATE ?? FIXME
 
+         //printf("HERE! OK ! \n\n\n\n");
       return findLocalVar(node->name);
 
       //return node;
@@ -45,6 +46,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //struct DataNode *var = findLocalVar(node->children[0]->name); //EVALUATE ?? FIXME
 
          //printf("var name is : %s", var->name); 
+         
 
          //evaluationg uninitialized variable [NECESSARY?!]
          struct DataNode *leftChild = evaluate(node->children[0]); //var to assign to 
@@ -296,7 +298,15 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       //returnInstr node is a Node with a single child:
       //the expression to be evaluated and returned
       }else if(strcmp(node->name,"returnInstr") == 0){
-         return evaluate(node->children[0]);         
+         struct DataNode *retVal = evaluate(node->children[0]);         
+         
+         //destroy local scope
+         struct DataNode *localScope = varContainer;
+         varContainer = varContainer -> parent; 
+
+         //localScope->parent = NULL;
+         freeNode(localScope);
+         return retVal;
 
 
       //PARAMETERS ASSIGNMENT
@@ -352,20 +362,31 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       //
       //CREATE NEW SCOPE
       }else if(strcmp(node->name,"createNewScope") == 0){
+            
+         #if FUNCDEBUG
+            printf("address of GLOBAL VarContainer is : %p  \n\n", varContainer);
+         #endif
+
          struct DataNode *localVarContainer = constructNode(2);
          //make current scope a parent of new local scope 
          localVarContainer->parent = varContainer;
          //make new local scope the new varContainer
          varContainer = localVarContainer;
 
+         #if FUNCDEBUG
+            printf("address of new LOCAL VarContainer is : %p  \n\n", varContainer);
+            printf("address of new LOCAL VarContainer->parent is : %p  \n\n", varContainer->parent);
+         #endif
 
       //PRINT STATEMENT
       }else if(strcmp(node->name,"print") == 0){
          
          //- First evaluate child node recursively
          //- Then, print the child node's return value, based on its type
+         //printf("child info %s \n\n\n\n ", node->children[0]->name);
+         //printf("child info %d \n\n\n\n ", node->children[0]->dtype);
          struct DataNode *child = evaluate(node->children[0]); 
-            
+         //printf("child->name: %s \n\n\n\n",child->name); 
            // printf("Type of child: %s \n", child -> name);
          if(child->dtype == 1){              //int
             printf("%d\n", child->ival);  
@@ -380,7 +401,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //FIXME
             //else{evaluate(node->children[0]) ;}  
          //FIXME
-
+         return child;
 
 
       } 

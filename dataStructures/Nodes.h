@@ -50,7 +50,7 @@ typedef union {
 //expects a capacity, returns the new node
 struct DataNode* constructNode(size_t capacity);
 
-void insertChild(struct DataNode *node, struct DataNode *element);
+struct DataNode* insertChild(struct DataNode *node, struct DataNode *element);
 
 void freeNode(struct DataNode *node) ;
 

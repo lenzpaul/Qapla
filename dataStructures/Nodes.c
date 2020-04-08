@@ -31,7 +31,7 @@ struct DataNode* constructNode(size_t capacity){
 
 
 
-void insertChild(struct DataNode *node, struct DataNode *element){
+struct DataNode* insertChild(struct DataNode *node, struct DataNode *element){
    //grow if necessary
    if (node->size == node->capacity) {
       node->capacity *= 2;
@@ -40,6 +40,7 @@ void insertChild(struct DataNode *node, struct DataNode *element){
    }
    //insert
    node->children[node->size++] = element;
+   return node;
 }
 
 void freeNode(struct DataNode *node) {

@@ -191,6 +191,30 @@ evaluation:
          }
       ;
 
+
+funbody:
+        statements retstmt
+         {
+            #if DEBUGTAG
+               printf(" ~RULE~: funbody -->  statements retstmt \n");
+            #endif
+            //FIXME create array of retstmt + statements
+            //insert addtional statements in statements array as children
+            $<datanode>$ = insertChild($<datanode>1, $<datanode>2);
+              
+         }
+      | retstmt
+         {
+            #if DEBUGTAG
+               printf(" ~RULE~: funbody -->  retstmt \n");
+            #endif
+            $<datanode>$ = constructNode(1); //container for instruction
+            $<datanode>$ = insertChild($<datanode>$, $<datanode>1);
+
+         }
+
+      ;
+
 statements:
         /*statements is an unnamed array which will hold 
             Instructions to each individual statment to be evaluated */
@@ -245,6 +269,7 @@ statement:
 
             $<datanode>$ = $<datanode>1;
          }
+
       ;
 /* NOT NEEDED 
 declarations: 
@@ -346,12 +371,12 @@ fundecl:
 
 
       
-      | FUNC IDENTIFIER '(' paramdecl_list ')' '{' statements '}'
+      | FUNC IDENTIFIER '(' paramdecl_list ')' '{' funbody '}'
          {
             #if DEBUGTAG 
                printf(" ~RULE:fundecl --> ");
                   printf("FUNC IDENTIFIER '(' paramdecl_list ')'"); 
-                  printf("'{' statements '}'\n");
+                  printf("'{' funbody '}'\n");
             #endif           
             /*
                paramdecl_list has the names of the var that we should
@@ -413,12 +438,25 @@ fundecl:
 
 
             //INSERT THE LIST OF STATEMENTS
+
                struct DataNode *stmts = $<datanode>7;
                int numStatements = stmts->size;
                for(int i=0; i<numStatements; i++){
                   insertChild(func,stmts->children[i]);
                }
+               
+               /*
+               printf("func->size %d\n", func->size);
+               for(int i=0; i<func->size; i++){
+                  printf("func->name %d is %s\n", i , func->children[i]->name);
+               }
+               */
 
+         //printf("HERE! OK ! \n\n\n\n");
+
+            //INSERT RETURN STATMENT AND DELETE SCOPE 
+              // struct DataNode *retInst = $<datanode>8;
+               //insertChild(func, retInst); //return instruction
 
             $<datanode>$ = func;
 
@@ -537,8 +575,6 @@ expression:
          {
             #if DEBUGTAG 
                printf(" ~RULE:  expression --> funcall \n");
-             //  printf("funcall dtype is: %d\n", $<datanode->dtype>1);          // DELETE ME
-             //  printf("funcall name is: %s\n", $<datanode->name>1);            // DELETE ME
             #endif
          }
 
@@ -724,6 +760,26 @@ paramassign:
             #endif
          }
 
+
+retstmt:
+        RETURN expression ';'
+         {
+            #if DEBUGTAG 
+               printf(" ~RULE:  retstmt --> RETURN expression ';'\n");
+            #endif
+
+            //create instruction node: declareVar
+            struct DataNode *node = constructNode(1);
+            strcpy(node->name,"returnInstr");
+            node->dtype = 8; //instruction
+
+            //insert the var as instruction node's child
+            insertChild(node,$<datanode>2);
+            $<datanode>$ = node;
+         }
+         ;
+
+
 vardecl: 
         VAR IDENTIFIER    /*SEMI COLON HERE? FIXME */
          {
@@ -893,8 +949,9 @@ ioexpr:
 
             
             //find and insert var in print node
-            struct DataNode *var = findVar($<datanode->name>3);
-            insertChild(io,var);
+               //struct DataNode *var = findVar($<datanode->name>3);
+               //insertChild(io,var);
+            insertChild(io,$<datanode>3);
             $<datanode>$ = io ;
             
             /*
