@@ -301,11 +301,11 @@ declarations:
 fundecl: 
 
         /* NO PARAMETERS CASE */
-        FUNC IDENTIFIER '(' ')' '{' statements '}' 
+        FUNC IDENTIFIER '(' ')' '{' funbody '}' 
          {
             #if DEBUGTAG 
                printf(" ~RULE:fundecl --> ");
-               printf("FUNC IDENTIFIER '(' ')' '{' statements '}'\n"); 
+               printf("FUNC IDENTIFIER '(' ')' '{' funbody '}'\n"); 
             #endif           
 
             //FIXME FIXME FIXME : Broken? April 6
@@ -348,10 +348,19 @@ fundecl:
              //empty at first (on func declare)
              //will be used to store values of the parameters passed
 
+
+
+
+
+
             struct DataNode *paramNode = constructNode(2);
             strcpy(paramNode->name,"parametersAssign");  //this node is empty ( no params) 
             paramNode->dtype = 8;
             insertChild(func,paramNode);
+
+
+
+
 
 
             //INSERT THE LIST OF STATEMENTS
@@ -361,12 +370,18 @@ fundecl:
                for(int i=0; i<numStatements; i++){
                   insertChild(func,stmts->children[i]);
                   ////DELETE ME ////
-                  printf("statment %d name : %s \n", i, stmts->children[i]->name);
+                  //printf("statment %d name : %s \n", i, stmts->children[i]->name);
                   /////////////////
                }
 
-
+            
             $<datanode>$ = func;
+            /*
+            for(int i =0 ; i<func->size; i++){
+               printf("       FUNC -> CHILD %d name is %s \n\n\n\n", i, func->children[i]->name);
+            }
+            */
+           
          }
 
 
@@ -444,11 +459,12 @@ fundecl:
                for(int i=0; i<numStatements; i++){
                   insertChild(func,stmts->children[i]);
                }
-               
+
+
                /*
                printf("func->size %d\n", func->size);
                for(int i=0; i<func->size; i++){
-                  printf("func->name %d is %s\n", i , func->children[i]->name);
+                  printf(" \n\n\n      func->name %d is %s\n", i , func->children[i]->name);
                }
                */
 
@@ -738,7 +754,7 @@ paramassign_list:
             //Its children are the IDENTIFIER parameters
             $<datanode>$ = constructNode(2);
             //$<datanode->dtype>$ = 7; //parameters  FIXME should be for decl only ?
-            //strcpy($<datanode->name>$,"parameters");
+            strcpy($<datanode->name>$,"info_paramassign_list");  //informative label only
             insertChild($<datanode>$, $<datanode>1);
 
          }

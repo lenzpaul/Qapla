@@ -1,3 +1,5 @@
+#define FUNCDEBUG 0
+
 #include "Nodes.h"
 #include "functions.h"
 
@@ -47,14 +49,18 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
          //printf("var name is : %s", var->name); 
          
+            //printf("\n\n   ~SCOPE address before evaluating leftChild : %p\n", varContainer);
 
          //evaluationg uninitialized variable [NECESSARY?!]
          struct DataNode *leftChild = evaluate(node->children[0]); //var to assign to 
 
+            //printf("\n\n   ~SCOPE address AFTER evaluating leftChild : %p\n", varContainer);
+
+
          //Expression to evaluate. 
          //The result of which we assign to the leftChild
          struct DataNode *rightChild = evaluate(node->children[1]); 
-         
+
          //int ldt = leftChild->dtype;
          int rdt = rightChild->dtype;
 
@@ -348,23 +354,29 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //(in which case, the parameter node size will be 0, and nothing
          // will be done with the parameter node)
          
+            //printf("\n\n\nNAME IS %s\n\n",node->children[0]->name);
+
          //FIXME: RETURN VALUE NEEDED HERE??
             //struct DataNode *funcName = node->children[0]; //name of function to be called
+
             struct DataNode *func = findVar(node->children[0]->name); //returns actual node of function to be called
+         //printf("\n\n\nPARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
             struct DataNode *params = node->children[1]; //parameters to be passed to function
          /////DELETE ME FIXME ///////////////////////////////
          // printf("EVALUATING FUNCTION NAME: %s \n", func->name);
          //printf("EVALUATING FUNCTION NAME: %s \n", node->children[0]->name);
          /////////////////////////////////////////////////////// 
-
+         
+         //printf("\n\n\n params->name: %s \n\n\n",params->name);
          return evaluate(func, params);  //TODO : Add return here : *return = evaluate ... 
 
       //
       //CREATE NEW SCOPE
       }else if(strcmp(node->name,"createNewScope") == 0){
             
+         //printf("\n\n\nPARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
          #if FUNCDEBUG
-            printf("address of GLOBAL VarContainer is : %p  \n\n", varContainer);
+            printf("\n\n   ~SCOPE CHG~ address GLOBAL scope is : %p\n", varContainer);
          #endif
 
          struct DataNode *localVarContainer = constructNode(2);
@@ -374,8 +386,8 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          varContainer = localVarContainer;
 
          #if FUNCDEBUG
-            printf("address of new LOCAL VarContainer is : %p  \n\n", varContainer);
-            printf("address of new LOCAL VarContainer->parent is : %p  \n\n", varContainer->parent);
+            printf("            ...address of new LOCAL scope is : %p\n", varContainer);
+            printf("            ...address of parent scope is: %p \n\n", varContainer->parent);
          #endif
 
       //PRINT STATEMENT

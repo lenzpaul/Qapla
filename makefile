@@ -25,7 +25,7 @@ fooChecker_debug: fooChecker.lex fooChecker_debug.yacc dataStructures/Nodes.c da
 
 
 #Copy yacc file and switch DEBUGTAG to 1 
-fooChecker_debug.yacc: fooChecker.yacc
+fooChecker_debug.yacc: fooChecker.yacc dataStructures/functions.c
 	cp fooChecker.yacc fooChecker_debug.yacc
 	cp dataStructures/functions.c dataStructures/functions_debug.c
 	sed -i 's/#define DEBUGTAG 0/#define DEBUGTAG 1/gI' fooChecker_debug.yacc

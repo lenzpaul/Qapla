@@ -1,7 +1,6 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#define FUNCDEBUG 0
 
 #include "Nodes.h"
 #include <stdlib.h> 
