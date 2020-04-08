@@ -174,7 +174,7 @@ evaluation:
                printf("statement dtype is: %d\n", $<datanode->dtype>1);
                printf("statement name is: %s\n", $<datanode->name>1);
                printf("statement children 0 ival is: %d\n", $<datanode->children[0]->ival>1);
-               printf("statement children 0 name is: %s\n", $<datanode->children[0]->str>1);
+               printf("statement children 0 name is: %s\n", $<datanode->children[0]->name>1);
             #endif
             
             //evaluate statement here
@@ -331,6 +331,7 @@ fundecl:
 
 
             //INSERT THE LIST OF STATEMENTS
+            //ie; storing every instruction of the function
                struct DataNode *stmts = $<datanode>6;
                int numStatements = stmts->size;
                for(int i=0; i<numStatements; i++){
@@ -792,12 +793,12 @@ assignexpr:
 
                //
 
-            //#if DEBUGTAG
+            #if DEBUGTAG
                //printf("$<datanode->children[0]->name>$: %s\n", 
                 //  $<datanode->children[0]->name>$);
                //printf("$<datanode->children[0]->ival>$: %d\n",
                   //$<datanode->children[0]->ival>$);
-            //#endif
+            #endif
          }
 
 /*      IDENTIFIER '=' strexpr
@@ -858,7 +859,7 @@ ioexpr:
             io->dtype = 8; //instruction type
             strcpy(io->name, "print");
 
-            //find and insert var
+            //insert expression Node as child 
             struct DataNode *expr = $<datanode>3 ;
             insertChild(io,expr);
             $<datanode>$ = io ;
@@ -964,22 +965,23 @@ intexpr:
                printf(" ~RULE:intexpr--> intexpr + intexpr \n");    //DEBUG
             #endif
            
-           
-           
-           struct DataNode *op = constructNode(2);
-           op->dtype = 5; //operator type
-           strcpy(op->name, "+");
-           op->children[0] = $<datanode>1 ;
-           op->children[1] = $<datanode>3 ;
-           
-           $<datanode>$ = op ;
 
+            //create operator + node
+            struct DataNode *node = constructNode(2) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opPlus");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
 
-            #if DEBUGTAG
+            $<datanode>$ = node ;
+
+            //#if DEBUGTAG
                //printf("%d + %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
-               printf("The address is %p \n",op);
-               printf("The address is %p \n",$<datanode>$);
-            #endif
+               //printf("The address is %p \n",op);
+               //printf("The address is %p \n",$<datanode>$);
+            //#endif
          }
 
       | intexpr '*' intexpr

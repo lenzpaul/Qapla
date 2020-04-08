@@ -31,7 +31,45 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       if(strcmp(node->name,"opEqual") == 0){
          //child 0 is variable | child 1 is expression to be assigned
          //can only assign to var "accessible in the current scope"
-         struct DataNode *var = findLocalVar(node->children[0]->name);
+         struct DataNode *var = findLocalVar(node->children[0]->name); //EVALUATE ?? FIXME
+         printf("var name is : %s", var->name); 
+
+
+
+
+
+
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         int ldt = leftChild->dtype;
+         int rdt = rightChild->dtype;
+
+
+         if(ldt==1 && rdt==1){              //int
+            node->ival = leftChild->ival + rightChild->ival; 
+            node -> dtype = 1 ;
+         }else if((ldt==1 || rdt==2) && (ldt==1 || rdt==2)){        //real
+            //default value is 0, just add all the values
+            node->fval = leftChild->ival + leftChild->fval
+                           + rightChild->ival + rightChild->fval ;
+         }else if(ldt==3 && rdt==3){        //string
+            strcat(leftChild->str, rightChild->str);
+         }
+
+         //BOOL FIXME
+          
+         return node ; // value returned to caller
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
 
          //FIXME: for children[1] it should be evaluate(children[1])
          //          and return a node
@@ -57,12 +95,41 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
       //Addition + 
       if(strcmp(node->name,"opPlus") == 0){
+         //First, evaluate both children recursively
+         //leftChild is the return val of leftChild evaluation
+         //rightChild the right one
+
          //ADD 2 children if string
          //Concatenate if both are string
          //Float + Int = Floatexpr
          //NOT valid for bool
 
          
+
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         int ldt = leftChild->dtype;
+         int rdt = rightChild->dtype;
+
+
+         if(ldt==1 && rdt==1){              //int
+            node->ival = leftChild->ival + rightChild->ival; 
+            node -> dtype = 1 ;
+         }else if((ldt==1 || rdt==2) && (ldt==1 || rdt==2)){        //real
+            //default value is 0, just add all the values
+            node->fval = leftChild->ival + leftChild->fval
+                           + rightChild->ival + rightChild->fval ;
+         }else if(ldt==3 && rdt==3){        //string
+            strcat(leftChild->str, rightChild->str);
+         }
+
+         //BOOL FIXME
+          
+         return node ; // value returned to caller
+
+
+         /*
+
             int dt1 = node->children[0]->dtype ;
             int dt2 = node->children[1]->dtype ;
 
@@ -75,6 +142,8 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          }else if(dt1==3 && dt2==3){        //string
             strcat(node->children[0]->str, node->children[1]->str);
          }
+
+         */
       }
    }else if(node->dtype == 6){                           //function
       /* FUNCTION EVALUATION */
@@ -92,10 +161,6 @@ struct DataNode* evaluate(struct DataNode *node, ...)
        *
        */
 
-         /////DELETE ME FIXME ///////////////////////////////
-         // printf("EVALUATING FUNCTION NAME inside function evalauation noww: %s \n", node->name);
-         // ///////////////////////////////////////////////////
-      //evaluate function call //FIXME
 
       //get parameters node
       va_list paramList;
@@ -105,9 +170,20 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       struct DataNode *parameters = va_arg(paramList, struct DataNode *);
       //int numParams = parameters->size;
 
-      //printf("HERE IN FUNCTION DECLARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
 
       //evaluate every node in the function 
+      //when function gets called, evaluate every one of its children
+      //child 0 (housekeeping) : create localVarContainer (local scope)
+      //child 1+ (housekeeping) : declare a var in local scope for every param 
+         //... this will happen for as many times as there are parameters,
+         //or 0 times if there aren't any
+
+      //Next children are instructions (ie: happen on funcall only): 
+      // - Assign passed values to the params. 
+      //    These are stored in parameters argument as a va_list
+      // - Evaluate (execute) every statement (the function body).
+      //    Note: The function body is an array
+      //
       int instructsCount = node->size; //nb of instructions in the function
       for(int i=0; i<instructsCount; i++) 
          evaluate(node->children[i], parameters);
@@ -231,18 +307,20 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       //PRINT STATEMENT
       }else if(strcmp(node->name,"print") == 0){
          
-         //printf("PRINT                                                             HERE!!!!!!!!!!!!!!\n");            //DELETE
-         //print the child node's value, based on its type
+         //- First evaluate child node recursively
+         //- Then, print the child node's return value, based on its type
+         struct DataNode *child = evaluate(node->children[0]); 
+            
+           // printf("Type of child: %s \n", child -> name);
          if(node->children[0]->dtype == 1){              //int
-            printf("%d\n", node->children[0]->ival);  
+            printf("%d\n", child->ival);  
          }else if(node->children[0]->dtype == 2){        //real
-            printf("%f\n", node->children[0]->fval);    
-         }else if(node->children[0]->dtype == 3){        //string
-            printf("%s\n", node->children[0]->str);    
-         }else if(node->children[0]->dtype == 4){        //bool
+            printf("%f\n", child->fval);    
+         }else if(child->dtype == 3){        //string
+            printf("%s\n", child->str);    
+         }else if(child->dtype == 4){        //bool
             //FIXME
          }
-
          //ELSE EVALUATE??? ///
          //FIXME
             //else{evaluate(node->children[0]) ;}  
