@@ -11,6 +11,9 @@
 /* Operators
  *    - opEqual
  *    - opPlus
+ *    - opOR 
+ *    - opAND
+ *    - opNOT
  */
 
 /* Instructions:

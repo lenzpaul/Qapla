@@ -13,8 +13,15 @@
 
 [ ] Selection: If/else
 
+[ ] add opTimes for intexpr * intexpr
+
+
+
 
 [ ] Make a list of unusable keywords; ie: cannot use 'print' outside of the specific print context
+
+
+
 
 
 [ ] FUNC p ( w ) {  } <-- doesnt work (syntax error) 

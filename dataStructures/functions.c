@@ -28,9 +28,9 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       //return node;
 
    }else if(node->dtype == 1){
-      //FIXME
+
       return node;
-      //FIXME
+
    }else if(node->dtype == 2){
 
    }else if(node->dtype == 3){
@@ -38,6 +38,9 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       return node;
 
    }else if(node->dtype == 4){
+
+      return node;
+
    }else if(node->dtype == 5){
       //ASSIGNMENT 
       if(strcmp(node->name,"opEqual") == 0){
@@ -75,7 +78,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             strcat(leftChild->str, rightChild->str);
             leftChild-> dtype = 3 ;
          }else if(rdt==4){        //bool
-            leftChild->fval= rightChild->bval ;
+            leftChild->bval= rightChild->bval ;
             leftChild-> dtype = 4 ;
          }
 
@@ -163,8 +166,10 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             //default value is 0, just add all the values
             node->fval = leftChild->ival + leftChild->fval
                            + rightChild->ival + rightChild->fval ;
+            node -> dtype = 2 ;
          }else if(ldt==3 && rdt==3){        //string
             strcat(leftChild->str, rightChild->str);
+            node -> dtype = 3 ;
          }
 
          //BOOL FIXME
@@ -189,6 +194,42 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
          */
       }
+
+
+      //dtype 5 cont'd boolean operators
+      if(strcmp(node->name,"opAND") == 0){
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+           
+         node->bval = leftChild->bval && rightChild->bval;   
+         node->dtype=4;
+         return node;
+         
+      }
+      if(strcmp(node->name,"opOR") == 0){
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         
+         node->bval = leftChild->bval || rightChild->bval;   
+         node->dtype=4;
+         return node;
+
+      }
+      if(strcmp(node->name,"opNOT") == 0){
+
+         //printf("\n\n\n\n HERE \n\n\n " ) ;
+         struct DataNode *child = evaluate(node->children[0]);
+         
+         node->bval = !child->bval ;
+         node->dtype=4;
+         return node;
+   
+      }
+      
+
+
+
+
    }else if(node->dtype == 6){                           //function
       /* FUNCTION EVALUATION */
       //for functions, evaluate() should always be called with 2 parameters
@@ -407,7 +448,8 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          }else if(child->dtype == 3){        //string
             printf("%s\n", child->str);    
          }else if(child->dtype == 4){        //bool
-            //FIXME
+            (child->bval) ? 
+               printf("true\n") : printf("false\n");
          }
          //ELSE EVALUATE??? ///
          //FIXME

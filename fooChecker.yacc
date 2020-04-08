@@ -1021,33 +1021,69 @@ boolexpr:
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> '(' boolexpr ')' \n");    //DEBUG
             #endif
+
+            $<datanode>$ =  $<datanode>2;
          }  
 
       | boolexpr AND boolexpr 
          {
             #if DEBUGTAG
-               printf(" ~RULE: boolexpr --> boolexpr  \n");    //DEBUG
+               printf(" ~RULE: boolexpr --> boolexpr AND boolexpr \n");    //DEBUG
             #endif
+
+            //create operator AND node
+            struct DataNode *node = constructNode(2) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opAND");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
+
+            $<datanode>$ = node ;
+
          }  
          
       | boolexpr OR boolexpr 
          {
             #if DEBUGTAG
-               printf(" ~RULE: boolexpr --> boolexpr  \n");    //DEBUG
+               printf(" ~RULE: boolexpr --> boolexpr OR boolexpr \n");    //DEBUG
             #endif
-         }  
+
+            //create operator OR node
+            struct DataNode *node = constructNode(2) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opOR");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
+
+            $<datanode>$ = node ;
+
+         }
          
       | NOT boolexpr
          {
             #if DEBUGTAG
-               printf(" ~RULE: boolexpr --> boolexpr  \n");    //DEBUG
+               printf(" ~RULE: boolexpr --> NOT boolexpr \n");    //DEBUG
             #endif
+
+            //create operator NOT node
+            struct DataNode *node = constructNode(1) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opNOT");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>2);      
+
+            $<datanode>$ = node ;
          }  
          
-      | boolexpr
+      | BOOLEAN
          {
             #if DEBUGTAG
-               printf(" ~RULE: boolexpr --> boolexpr  \n");    //DEBUG
+               printf(" ~RULE: boolexpr --> BOOLEAN  \n");    //DEBUG
             #endif
          }  
       ;

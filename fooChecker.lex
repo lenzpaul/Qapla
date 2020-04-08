@@ -130,7 +130,12 @@ const int MaxLen = 128;
 
  /* Match exactly 1 Boolean */
  ({Bool}) { 
-      ( *yytext == 'T' ) ? 
+      /* ( *yytext == "T" ) ? */
+
+
+      yylval.datanode = constructNode(1);
+
+      (strcmp(yytext,"T") == 0) ? 
          (yylval.datanode->bval = true ) : (yylval.datanode->bval = false);
 
       yylval.datanode->str[0] = '\0'; 
