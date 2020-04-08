@@ -169,7 +169,11 @@ struct DataNode* evaluate(struct DataNode *node, ...)
                            + rightChild->ival + rightChild->fval ;
             node -> dtype = 2 ;
          }else if(ldt==3 && rdt==3){        //string
-            strcat(leftChild->str, rightChild->str);
+            char str[4096];
+            strcat(str, leftChild->str);
+            strcat(str, rightChild->str);
+            //strcat(leftChild->str, rightChild->str);
+            strcpy(node->str,str);
             node -> dtype = 3 ;
          }
 
