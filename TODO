@@ -5,7 +5,14 @@
       ie: print( 3 + 4 ) doesnt work as the + operator doesnt get evaluated
       x = 3 + 4 ; print ( x ) ;  <- doesnt work
 
-[ ] Need to add EXIT of scope; Cureently there is only increase of scope, not decrease
+[x] Need to add EXIT of scope; Cureently there is only increase of scope, not decrease
+
+[ ] While loop...
+
+[ ] Input/Output operations
+
+[ ] Selection: If/else
+
 
 [ ] Make a list of unusable keywords; ie: cannot use 'print' outside of the specific print context
 
