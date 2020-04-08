@@ -15,7 +15,18 @@
 
 ________________________________________________________
 
+Tue Apr  7 22:21:51 PDT 2020
+
+
+
 NOTE: removed   ~RULE~:statements --> /*empty*/  .. honestly not sure if that broke anything
+
+NOTE: Review this
+                struct DataNode *emptyParamList = constructNode(0);
+                insertChild(funcall, emptyParamList); //paramassign_list
+
+
+
 
 FUNC p ( a : b : c ) { VAR x ; VAR y ; VAR z ;  z = 3 ; print ( z ) ; }  <-- print z gets evaluated BEFORE funcall!
 p ( 9 : 8 : 7 ) ;
@@ -24,3 +35,4 @@ print ( c ) ;
 FUNC p ( a : b : c ) { VAR x ; VAR y ; VAR z ;  z = 3 ; }   <-- WORKS ! 
 p ( 9 : 8 : 7 ) ;
 print ( c ) ;
+

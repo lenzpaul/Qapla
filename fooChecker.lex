@@ -37,6 +37,8 @@ const int MaxLen = 128;
  /****** Rules for tokens ******/
 "exit"     { return 0; }
 
+"return"      { return (RETURN); } 
+
 "MOD"      { return (MOD); } 
 
  /* for the keyword "VAR" return VAR as the type */

@@ -19,6 +19,7 @@
  *    - createNewScope
  *    - funCall
  *    - parametersAssign
+ *    - returnInstr
  *                                            - parameters [unused...]
  */
 

@@ -56,7 +56,6 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //int ldt = leftChild->dtype;
          int rdt = rightChild->dtype;
 
-         
          if(rdt==1){              //int
             leftChild->ival = rightChild->ival; 
             leftChild-> dtype = 1 ;
@@ -220,12 +219,23 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       //    These are stored in parameters argument as a va_list
       // - Evaluate (execute) every statement (the function body).
       //    Note: The function body is an array
-      //
-      int instructsCount = node->size; //nb of instructions in the function
-      for(int i=0; i<instructsCount; i++) 
+      
+      //nb of instructions in the function - 1 
+      //the last one is the return value
+      int instructsCount = node->size ;
+      for(int i=0; i<instructsCount-1; i++) 
          evaluate(node->children[i], parameters);
 
+      struct DataNode *retVal = evaluate(node->children[instructsCount - 1], 
+                                                                  parameters); 
 
+      va_end(paramList);
+
+
+      //last statment returned to caller
+      return retVal;
+
+      
 
       /*
       //CASE 1: w/o parameters
@@ -263,11 +273,13 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       */
       
       
-      va_end(paramList);
    }else if(node->dtype == 7){
 
       //INSTRUCTIONS
    }else if(node->dtype == 8){
+
+      
+
 
       //VAR DECLARATION
       if(strcmp(node->name,"declareVar") == 0){ 
@@ -279,6 +291,13 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //printf("HERE IN VAR DECLARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
 
          insertChild(varContainer,node->children[0]);
+
+      //FUNCTION RETURN VAL
+      //returnInstr node is a Node with a single child:
+      //the expression to be evaluated and returned
+      }else if(strcmp(node->name,"returnInstr") == 0){
+         return evaluate(node->children[0]);         
+
 
       //PARAMETERS ASSIGNMENT
       }else if(strcmp(node->name,"parametersAssign") == 0){
@@ -328,7 +347,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //printf("EVALUATING FUNCTION NAME: %s \n", node->children[0]->name);
          /////////////////////////////////////////////////////// 
 
-         evaluate(func, params);
+         return evaluate(func, params);  //TODO : Add return here : *return = evaluate ... 
 
       //
       //CREATE NEW SCOPE

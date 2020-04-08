@@ -54,7 +54,7 @@ int yyerror(char* s);
 
  /* for the token types that have an associated value, identify its type */
 %token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD 
-%token<struct DataNode> FUNC EVAL
+%token<struct DataNode> FUNC EVAL RETURN
 /* %type<struct DataNode>  */
 
 
