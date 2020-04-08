@@ -17,6 +17,12 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
    //vardecl
    if(node->dtype == 0){
+      
+      //struct DataNode *var = findLocalVar(node->children[0]->name); //EVALUATE ?? FIXME
+
+      return findLocalVar(node->name);
+
+      //return node;
 
    }else if(node->dtype == 1){
       //FIXME
@@ -34,20 +40,39 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       if(strcmp(node->name,"opEqual") == 0){
          //child 0 is variable | child 1 is expression to be assigned
          //can only assign to var "accessible in the current scope"
-         struct DataNode *var = findLocalVar(node->children[0]->name); //EVALUATE ?? FIXME
-         printf("var name is : %s", var->name); 
 
 
+         //struct DataNode *var = findLocalVar(node->children[0]->name); //EVALUATE ?? FIXME
 
+         //printf("var name is : %s", var->name); 
 
+         //evaluationg uninitialized variable [NECESSARY?!]
+         struct DataNode *leftChild = evaluate(node->children[0]); //var to assign to 
 
-
-         struct DataNode *leftChild = evaluate(node->children[0]);
+         //Expression to evaluate. 
+         //The result of which we assign to the leftChild
          struct DataNode *rightChild = evaluate(node->children[1]); 
-         int ldt = leftChild->dtype;
+         
+         //int ldt = leftChild->dtype;
          int rdt = rightChild->dtype;
 
+         
+         if(rdt==1){              //int
+            leftChild->ival = rightChild->ival; 
+            leftChild-> dtype = 1 ;
+         }else if(rdt==2){        //real
+            //default value is 0, just add all the values
+            leftChild->fval= rightChild->fval ;
+            leftChild-> dtype = 2 ;
+         }else if(rdt==3){        //string
+            strcat(leftChild->str, rightChild->str);
+            leftChild-> dtype = 3 ;
+         }else if(rdt==4){        //bool
+            leftChild->fval= rightChild->bval ;
+            leftChild-> dtype = 4 ;
+         }
 
+         /* 
          if(ldt==1 && rdt==1){              //int
             node->ival = leftChild->ival + rightChild->ival; 
             node -> dtype = 1 ;
@@ -58,10 +83,15 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          }else if(ldt==3 && rdt==3){        //string
             strcat(leftChild->str, rightChild->str);
          }
+         */
 
-         //BOOL FIXME
-          
-         return node ; // value returned to caller
+
+         //FIXME Do you ever need to return an opEqual node to someone???? 
+         return leftChild ;
+
+
+
+         //return node ; // value returned to caller
 
 
 
@@ -78,6 +108,8 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //          and return a node
 
          //"expr is a valid expression (of any data type)"
+         //////DELETE ME /////////////////////////////////
+         /*
          if(node->children[1]->dtype == 1){              //int
             var->dtype = 1;
             var->ival = node->children[1]->ival;
@@ -94,6 +126,8 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             var->dtype = 4;
             var->bval = node->children[1]->bval;
          }
+         */
+         /////////////////////////////////////////////////////////////
       }
 
       //Addition + 
@@ -314,9 +348,9 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          struct DataNode *child = evaluate(node->children[0]); 
             
            // printf("Type of child: %s \n", child -> name);
-         if(node->children[0]->dtype == 1){              //int
+         if(child->dtype == 1){              //int
             printf("%d\n", child->ival);  
-         }else if(node->children[0]->dtype == 2){        //real
+         }else if(child->dtype == 2){        //real
             printf("%f\n", child->fval);    
          }else if(child->dtype == 3){        //string
             printf("%s\n", child->str);    

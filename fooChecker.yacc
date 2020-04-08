@@ -174,8 +174,10 @@ evaluation:
                printf(" ~RULE~: evaluation --> statement \n"); 
                printf("statement dtype is: %d\n", $<datanode->dtype>1);
                printf("statement name is: %s\n", $<datanode->name>1);
-               printf("statement children 0 ival is: %d\n", $<datanode->children[0]->ival>1);
-               printf("statement children 0 name is: %s\n", $<datanode->children[0]->name>1);
+               //DELETE ME //////////////////////////////////////////////////////////
+                     //printf("statement children 0 ival is: %d\n", $<datanode->children[0]->ival>1);
+                     //printf("statement children 0 name is: %s\n", $<datanode->children[0]->name>1);
+               ////////////////////////////////////////////////////////////////////////////////////
             #endif
             
             //evaluate statement here
@@ -802,12 +804,12 @@ assignexpr:
 
                //
 
-            #if DEBUGTAG
+            //#if DEBUGTAG
                //printf("$<datanode->children[0]->name>$: %s\n", 
                 //  $<datanode->children[0]->name>$);
                //printf("$<datanode->children[0]->ival>$: %d\n",
                   //$<datanode->children[0]->ival>$);
-            #endif
+            //#endif
          }
 
 /*      IDENTIFIER '=' strexpr
@@ -948,7 +950,7 @@ intexpr:
 
             #if DEBUGTAG
                printf("%d is an integer \n",$<datanode->ival>1);
-               printf("It is also an intexpr with address: %p\n",$<datanode>$);
+               //printf("It is also an intexpr with address: %p\n",$<datanode>$);
             #endif
          }
 
