@@ -1,0 +1,26 @@
+[x] ioexpr might have to be a statement. Since it will always be on its own..
+   statement --> ioexpr ';'
+    
+[x] Print might have to be a statemnt; Expressions dont evaluate; 
+      ie: print( 3 + 4 ) doesnt work as the + operator doesnt get evaluated
+      x = 3 + 4 ; print ( x ) ;  <- doesnt work
+
+[ ] Need to add EXIT of scope; Cureently there is only increase of scope, not decrease
+
+[ ] Make a list of unusable keywords; ie: cannot use 'print' outside of the specific print context
+
+
+[ ] FUNC p ( w ) {  } <-- doesnt work (syntax error) 
+      - Just need to add grammar rule for no statements (fundecl) 
+
+________________________________________________________
+
+NOTE: removed   ~RULE~:statements --> /*empty*/  .. honestly not sure if that broke anything
+
+FUNC p ( a : b : c ) { VAR x ; VAR y ; VAR z ;  z = 3 ; print ( z ) ; }  <-- print z gets evaluated BEFORE funcall!
+p ( 9 : 8 : 7 ) ;
+print ( c ) ;
+
+FUNC p ( a : b : c ) { VAR x ; VAR y ; VAR z ;  z = 3 ; }   <-- WORKS ! 
+p ( 9 : 8 : 7 ) ;
+print ( c ) ;

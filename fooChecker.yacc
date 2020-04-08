@@ -217,12 +217,7 @@ statements:
             insertChild($<datanode>$, $<datanode>2);
             /////////////////////////////////////////////////////////////
          }
-      |  /*empty*/  /*FIXME: NECESSARY????  I need an action */
-         { 
-            #if DEBUGTAG
-               printf(" ~RULE~:statements --> /*empty*/ \n"); 
-            #endif
-         }
+
          /* ***************^^^ EMPTY? ^^^**********************************/
       ;
 
