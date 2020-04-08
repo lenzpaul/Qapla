@@ -323,9 +323,8 @@ fundecl:
              //empty at first (on func declare)
              //will be used to store values of the parameters passed
 
-            //FIXME FIXME FIXME Prob dont need this for empty param list FIXME//
             struct DataNode *paramNode = constructNode(2);
-            strcpy(paramNode->name,"parameters");
+            strcpy(paramNode->name,"parametersAssign");  //this node is empty ( no params) 
             paramNode->dtype = 8;
             insertChild(func,paramNode);
 
@@ -393,6 +392,9 @@ fundecl:
                strcpy(declVarInst->name,"declareVar");
                declVarInst->dtype = 8;
                strcpy(declVarInst->children[0]->name, paramList->children[i]->name);
+               //declVarInst->children[0] = paramList->children[i]; 
+                  //^^^ not this because separating items from front and back 
+               
                //printf("declVarInst->children[0]->name:   %s \n" ,declVarInst->children[0]->name);
                insertChild(func,declVarInst);
             }
@@ -402,7 +404,7 @@ fundecl:
              //empty at first (on func declare)
              //will be used to store values of the parameters passed
             struct DataNode *paramNode = constructNode(2);
-            strcpy(paramNode->name,"parameters");
+            strcpy(paramNode->name,"parametersAssign");
             paramNode->dtype = 8;
             insertChild(func,paramNode);
 
@@ -448,7 +450,7 @@ paramdecl_list:
             $<datanode>$ = constructNode(2);
             //$<datanode->dtype>$ = 7; //parameters  //FIXME: type 7 for var declaration list??? Useful?
                   //^^ This node is just a container for the var names of the parameters, not their values?
-            strcpy($<datanode->name>$,"parameters");
+            //strcpy($<datanode->name>$,"parameters");
             insertChild($<datanode>$, $<datanode>1);
 
          }
@@ -695,8 +697,8 @@ paramassign_list:
             //$$ is an array of IDENTIFIER nodes
             //Its children are the IDENTIFIER parameters
             $<datanode>$ = constructNode(2);
-            $<datanode->dtype>$ = 7; //parameters
-            strcpy($<datanode->name>$,"parameters");
+            //$<datanode->dtype>$ = 7; //parameters  FIXME should be for decl only ?
+            //strcpy($<datanode->name>$,"parameters");
             insertChild($<datanode>$, $<datanode>1);
 
          }

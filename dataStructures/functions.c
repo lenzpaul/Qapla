@@ -244,7 +244,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          insertChild(varContainer,node->children[0]);
 
       //PARAMETERS ASSIGNMENT
-      }else if(strcmp(node->name,"parameters") == 0){
+      }else if(strcmp(node->name,"parametersAssign") == 0){
          
          //DELETE ME
          //printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n");
@@ -276,8 +276,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
       //FUNCTION CALL 
       }else if(strcmp(node->name,"funCall") == 0){
-         //call evaluation on funCall node's left child
-         //which is a function of dtype 6
+         // - evaluate leftChild, which is a function Node (dtype 6)
          //MUST also pass optional argument of parameter node to evaluate
          //even if there are no parameters
          //(in which case, the parameter node size will be 0, and nothing

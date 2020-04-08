@@ -18,7 +18,8 @@
  *    - print
  *    - createNewScope
  *    - funCall
- *    - parameters
+ *    - parametersAssign
+ *                                            - parameters [unused...]
  */
 
 
