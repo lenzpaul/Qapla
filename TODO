@@ -24,7 +24,7 @@
 [ ] Make a list of unusable keywords; ie: cannot use 'print' outside of the specific print context
 
 
-[ ] FIX BUG 1 : print ( x + y ) //strings
+[x] FIX BUG 1 : print ( x + y ) //strings
 
 
 [ ] FUNC p ( w ) {  } <-- doesnt work (syntax error) 
