@@ -625,9 +625,9 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 struct DataNode* findVar(char* varName)
 {
    //FIXME DELETE ME////////
-   struct DataNode *deleteMe = constructNode(0);
-   strcpy(deleteMe->name,"y");
-   deleteMe->ival=0;
+   //struct DataNode *deleteMe = constructNode(0);
+   //strcpy(deleteMe->name,"deleteMe");
+   //deleteMe->ival=0;
    ////////////////
 
    struct DataNode *localVarContainer = varContainer;
@@ -658,12 +658,19 @@ struct DataNode* findVar(char* varName)
    }while(localVarContainer->parent != NULL);
 
    //DELETE ME ////////FIXME
-   printf("Oops: VAR doesn't exist!\n");
-   return deleteMe;
+   //printf("Oops: VAR doesn't exist!\n");
+   //return deleteMe;
    ///////^^^^DELETE ME^^^^ ////////
 
    //here: var is NOT found
    //THERE SHOULD BE AN ERROR UP HERE IF VAR NOT FOUND FIXME: add error msg
+   //DELETE ME ////////FIXME
+   struct DataNode *deleteMe = constructNode(0);
+   strcpy(deleteMe->name,"deleteMe");
+   deleteMe->ival=0;
+   printf("Oops: VAR %s doesn't exist in this scope!\n", varName);
+   return deleteMe;
+   ///////^^^^DELETE ME^^^^ ////////
 
 }
 
@@ -678,6 +685,13 @@ struct DataNode* findLocalVar(char* varName)
          return varContainer->children[i];
       }
    }
+   //FIXME DELETE ME////////
+   struct DataNode *deleteMe = constructNode(0);
+   strcpy(deleteMe->name,"deleteMe");
+   deleteMe->ival=0;
+   printf("Oops: VAR %s doesn't exist in this scope!\n", varName);
+   return deleteMe;
+   ////////////////
    //FIXME : here var is NOT found
    //THERE SHOULD BE AN ERROR UP HERE IF VAR NOT FOUND FIXME: add error msg
 }
