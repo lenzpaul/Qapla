@@ -1,0 +1,9 @@
+FUNC p ( a : b : c ) { VAR x ; VAR y ; VAR z ;  z = 3 ; }
+
+p ( 9 : 8 : 7 ) ;
+
+print ( c ) ;
+
+print ( z + 1 ) ;
+
+print ( a + z ) ;

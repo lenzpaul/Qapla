@@ -1,0 +1,2 @@
+   VAR a ; a = 5 ; FUNC test(x) { x = x + 1 ; print ( "Yup" ) ; return x ; } 
+    a = test ( a ) ; print ( a ) ; a = test ( a ) ;

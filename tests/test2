@@ -1,0 +1,5 @@
+FUNC f ( ) { return 3 ; }
+VAR x ;
+x = f (  ) ;
+print ( x ) ;
+

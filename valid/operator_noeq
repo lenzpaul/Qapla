@@ -1,0 +1,13 @@
+print ( 4 <> 8 ) ;
+
+print ( 7 <> 7 ) ;
+
+print ( "hello" <> "hello" ) ;
+
+print ( "hello" <> "hello1" ) ;
+
+VAR x ;
+
+x = 5 ;
+
+print ( x == 5 ) ;

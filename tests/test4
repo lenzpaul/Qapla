@@ -1,0 +1,15 @@
+VAR x ;
+
+VAR y ;
+
+x = "hello " ;
+
+y = "Welcome to my video" ;
+
+print ( x + y ) ;
+
+
+print ( x ) ;
+print ( y ) ;
+
+print ( x ) ;

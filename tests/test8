@@ -1,0 +1,17 @@
+FUNC test(x) {
+        x = x + 1 ;
+        print ( "Yup" ) ;
+        return x ;
+}
+
+VAR a ;
+a = test ( 2 ) ;
+print ( a ) ;
+3
+a = test ( a ) ;
+Oops: VAR x doesn't exist in this scope!
+Yup
+Oops: VAR x doesn't exist in this scope!
+print ( a ) ;
+3
+

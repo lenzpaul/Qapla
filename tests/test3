@@ -1,0 +1,7 @@
+FUNC f ( ) { 
+	print ( 5 ) ; 
+	print ( 99 ) ;
+	print ( "This is really cool" ) ;  
+	return 0 ;
+}
+f();
