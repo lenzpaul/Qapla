@@ -13,3 +13,27 @@ File f1.foo contains a set of function definitions and calls
   - a function call passing a literal value
   - a function call passing a variable
   - a function call passing an expression
+
+
+   - funcall0: 
+      multiple function call with the same parameter. The parameter keeps updating.
+   - funcall1
+      function call with < operator and testing the else selection statement
+   - funcall2
+      returns the opposite of funcall1. Testing the if selection statement
+   - funcall3
+      function call with no parameter. Print statements
+   - print0 
+      print and string concat 
+   
+   - selection/ 
+      multiple tests of if , if/else, if/elseif/else, no match
+      -if0 : if
+      -if1 : if/else
+      -if2 : multiple if/elseif, no match
+      -if3 : multiple if/elseif, with match
+      -if4 : multiple if/elseif/else, with match on else
+
+   - operator_noeq : multiple tests on <> operator
+
+

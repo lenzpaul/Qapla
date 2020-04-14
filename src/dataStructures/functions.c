@@ -78,7 +78,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             leftChild->fval= rightChild->fval ;
             leftChild-> dtype = 2 ;
          }else if(rdt==3){        //string
-            strcat(leftChild->str, rightChild->str);
+            strcpy(leftChild->str, rightChild->str);
             leftChild-> dtype = 3 ;
          }else if(rdt==4){        //bool
             leftChild->bval= rightChild->bval ;
@@ -122,9 +122,8 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             char str[4096];
             strcat(str, leftChild->str);
             strcat(str, rightChild->str);
-            //strcat(leftChild->str, rightChild->str);
             strcpy(result->str,str);
-            node -> dtype = 3 ;
+            result -> dtype = 3 ;
          }
 
          //N/A to BOOLEAN type

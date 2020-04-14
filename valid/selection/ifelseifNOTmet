@@ -1,5 +1,0 @@
-if( 8 < 5 ) { print( 7 ); } 
-else-if( 5 < 5  ) { print( 1 ); } 
-else-if( 55 < 5 ) { print( 9 ); } 
-else-if( 8 < 5 ) { print( 0 ); } 
-print ("Didnt match anything");

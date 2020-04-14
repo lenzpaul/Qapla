@@ -5,3 +5,8 @@ along with a description of which fooChecker features each
 file is specifically meant to demonstrate.
 ---
 
+- funcall0:
+  function call 2 parameters. Testing bool parameters with if/else in body.
+  Always returns true.
+
+-

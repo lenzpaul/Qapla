@@ -1,1 +1,1 @@
-FUNC test ( x : y ) { x = x + 5 ; VAR z ; z = "This is my programming language!"; print ( x ) ; return y + z ; } print ( test ( 5 : "Hello" ) ) ; print ( x ) ; 
+FUNC test ( x : y ) { x = x + 5 ; VAR z ; z = "This is my programming language!"; print ( x ) ; z = y + z ; print ( y ) ; return 0 ; } VAR a ; a = test ( 5 : "Hello" )  ; print ( a ) ; 
