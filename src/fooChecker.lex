@@ -275,6 +275,11 @@ const int MaxLen = 128;
  /* the semi-colon */
 ";"        { return *yytext; }
 
+
+ /* strip out comment from # to end of line */
+([#](.)*[\n]) { }
+
+
  /* skip whitespace (spaces, tabs, form feeds etc */
 [ \t\f\v]  { }
 
