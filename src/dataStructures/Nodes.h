@@ -11,6 +11,9 @@
 /* Operators
  *    - opEqual
  *    - opPlus
+ *    - opMinus
+ *    - opTimes
+ *    - opDiv
  *    - opOR 
  *    - opAND
  *    - opNOT

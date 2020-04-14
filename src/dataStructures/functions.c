@@ -13,6 +13,7 @@
 //evaluates a node and all its children
 struct DataNode* evaluate(struct DataNode *node, ...)
 {
+   //bad evaluation
    if(node->dtype == -1 ) {
       return node;
 
@@ -24,6 +25,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       return findVar(node->name);
       //return findLocalVar(node->name);
 
+   //int
    }else if(node->dtype == 1){
       return node;
 
@@ -33,17 +35,21 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       // if (variable->dtype == -1) return node;  //a literal
       // return variable ;                         //a variable
 
+   //real
    }else if(node->dtype == 2){
-
+      return node
+   //string
    }else if(node->dtype == 3){
 
       return node;
-
+   //bool
    }else if(node->dtype == 4){
 
       return node;
-
+     
+   //operators
    }else if(node->dtype == 5){
+
       //ASSIGNMENT 
       if(strcmp(node->name,"opEqual") == 0){
          //child 0 is variable | child 1 is expression to be assigned
@@ -80,8 +86,6 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          }
 
          return leftChild ;
-
-
 
       }
 
@@ -131,8 +135,118 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
          return result ; // value returned to caller
 
-      }
+      }else if (strcmp(node->name,"opMinus") == 0){
+         //First, evaluate both children recursively
+         //leftChild is the return val of leftChild evaluation
+         //rightChild the right one
 
+         //ADD 2 children if string
+         //Concatenate if both are string
+         //Float + Int = Floatexpr
+         //NOT valid for bool
+
+
+         struct DataNode *result = constructNode(2);
+         result->parent = programContainer;
+         insertChild(programContainer, result);
+
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         int ldt = leftChild->dtype;
+         int rdt = rightChild->dtype;
+
+
+         if(ldt==1 && rdt==1){              //int
+            result->ival = leftChild->ival - rightChild->ival; 
+            result -> dtype = 1 ;
+         }else if((ldt==1 || rdt==2) && (ldt==1 || rdt==2)){        //real
+            //default value is 0, just add all the values
+            result->fval = leftChild->ival - leftChild->fval
+               - rightChild->ival - rightChild->fval ;
+            result -> dtype = 2 ;
+         }
+
+         //N/A to BOOLEAN type
+
+
+         return result ; // value returned to caller
+
+
+
+      //multiplication
+      }else if(strcmp(node->name,"opTimes") == 0){
+         //First, evaluate both children recursively
+         //leftChild is the return val of leftChild evaluation
+         //rightChild the right one
+
+         struct DataNode *result = constructNode(2);
+         result->parent = programContainer;
+         insertChild(programContainer, result);
+
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         int ldt = leftChild->dtype;
+         int rdt = rightChild->dtype;
+
+         //int
+         if(ldt==1 && rdt==1){              
+            result->ival = leftChild->ival * rightChild->ival; 
+            result -> dtype = 1 ;
+
+         //real
+         }else if(ldt==1 && rdt==2){ 
+            result->fval = leftChild->ival * rightChild->fval;
+            result -> dtype = 2 ;
+         }else if(ldt==2 && rdt==1){
+            result->fval = leftChild->fval * rightChild->ival;
+            result -> dtype = 2 ;
+         }else if(ldt==2 && rdt==2){ 
+            result->fval = leftChild->fval * rightChild->fval;
+            result -> dtype = 2 ;
+         }
+
+         //N/A to BOOLEAN type or string
+
+         return result ; // value returned to caller
+
+
+      //division
+      }else if(strcmp(node->name,"opDiv") == 0){
+         //First, evaluate both children recursively
+         //leftChild is the return val of leftChild evaluation
+         //rightChild the right one
+
+         struct DataNode *result = constructNode(2);
+         result->parent = programContainer;
+         insertChild(programContainer, result);
+
+         struct DataNode *leftChild = evaluate(node->children[0]);
+         struct DataNode *rightChild = evaluate(node->children[1]); 
+         int ldt = leftChild->dtype;
+         int rdt = rightChild->dtype;
+
+         //int
+         if(ldt==1 && rdt==1){              
+            result->ival = leftChild->ival / rightChild->ival; 
+            result -> dtype = 1 ;
+
+         //real
+         }else if(ldt==1 && rdt==2){ 
+            result->fval = leftChild->ival / rightChild->fval;
+            result -> dtype = 2 ;
+         }else if(ldt==2 && rdt==1){
+            result->fval = leftChild->fval / rightChild->ival;
+            result -> dtype = 2 ;
+         }else if(ldt==2 && rdt==2){ 
+            result->fval = leftChild->fval / rightChild->fval;
+            result -> dtype = 2 ;
+         }
+
+         //N/A to BOOLEAN type or string
+
+         return result ; // value returned to caller
+
+      }
 
       //dtype 5 cont'd --> boolean operators
       if(strcmp(node->name,"opAND") == 0){
