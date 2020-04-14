@@ -1,26 +1,17 @@
+## datalore  
 
-README: CSCI 330 Project 2020
+A first stab at creating a programming language interpreter, using lexical analyze LEX, YACC parser and C.  
+______________________________
 
-Lenz Thierry Paul
-
-Unfortunately, due to time and personal concerns related to the current
-pandemic, I haven't been able to complete this project to the extent that 
-I wanted to. Nonetheless, it remains a first attempt at developing a language
-of which I am proud.
-
-==============================================================================
-
-Program 
---------------------
+### Program description:  
 This is an interactive interpreter for the fooish language.
-To exit the interpreter, type: exit
-
 
 INSTALLATION
 --------------------
-- run makefile, located in src/ 
-- execute program by running fooChecker 
-- the grammar is detailed in y.output (auto generated) 
+- run `makefile`, located in `src/` 
+- execute program by running `./fooChecker` 
+- the grammar is detailed in `src/y.output` (auto generated) 
+- To exit the interpreter, type: `exit`
 
 [optional] 
    I've added the following files for different levels of debugging and
@@ -56,10 +47,13 @@ FEATURES
          proper handling of parameters and return values
 
 
-- Non working features 
+- Non working features [ To be developed  ]  
    - string expressions
       - substring operators
    - arithmetic expressions
       -  MOD, and ^ 
    - iteration 
       - while loops are not implemented 
+      
+      
+      
