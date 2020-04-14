@@ -1391,6 +1391,18 @@ intexpr:
             #endif
          }
 
+      | intexpr '-' intexpr
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: intexpr--> intexpr * intexpr \n");    //DEBUG
+            #endif
+            $<datanode->dtype>$ = 1;
+            $<datanode->ival>$ = $<datanode->ival>1 - $<datanode->ival>3;
+            #if DEBUGTAG
+               printf("%d * %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
+            #endif
+         }
+
       | intexpr '*' intexpr
          {
             #if DEBUGTAG
@@ -1402,6 +1414,20 @@ intexpr:
                printf("%d * %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
             #endif
          }
+
+
+      | intexpr '/' intexpr
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: intexpr--> intexpr / intexpr \n");    //DEBUG
+            #endif
+            $<datanode->dtype>$ = 1;
+            $<datanode->ival>$ = $<datanode->ival>1 / $<datanode->ival>3;
+            #if DEBUGTAG
+               printf("%d * %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
+            #endif
+         }
+
       ;
 
 %%
