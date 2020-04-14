@@ -1,34 +1,41 @@
 
 README: CSCI 330 Project 2020
 
-Currently the repository contains this README,
-   a makefile to build fooChecker and fooCheckerd,
-   a sample/starter fooChecker.lex and fooChecker.yacc,
-   | sample input file valid/t0 that passes the initial fooChecker,
-   a sample input file invalid/e0 that fails on the initial fooChecker
-
-To build fooChecker simply run the command 'make',
-   to use it to check the validity of sample foo files use
-      ./fooChecker < filename
-   e.g.  ./fooChecker < valid/t0
-         ./fooChecker < invalid/e0
-
-Details on the project requirements and language specification
-   can be found at:
-
-   csci.viu.ca/~wesselsd/courses/csci330/project/index.html
-
----
-A careful description of what you did/did not get working for
-your fooChecker should be inserted here.
----
-
-
-==============================================================================
 Lenz Thierry Paul
 
+Unfortunately, due to time and personal concerns related to the current
+pandemic, I haven't been able to complete this project to the extent that 
+I wanted to. Nonetheless, it remains a first attempt at developing a language
+of which I am proud.
 
-Working features 
+==============================================================================
+
+Program 
+--------------------
+This is an interactive interpreter for the fooish language.
+To exit the interpreter, type: exit
+
+
+INSTALLATION
+--------------------
+- run makefile, located in src/ 
+- execute program by running fooChecker 
+- the grammar is detailed in y.output (auto generated) 
+
+[optional] 
+   I've added the following files for different levels of debugging and
+   informative messages. 
+
+   - fooCheckerd
+   - fooChecker_debug
+   - fooChecker_debug_full
+
+
+FEATURES
+-----------
+
+- Working features
+
    - comments
    - assignment statements
    - variables
@@ -49,7 +56,7 @@ Working features
          proper handling of parameters and return values
 
 
-Non working features 
+- Non working features 
    - string expressions
       - substring operators
    - arithmetic expressions
