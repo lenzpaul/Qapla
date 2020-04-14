@@ -61,7 +61,7 @@ struct DataNode *varContainer;
 //general nodes container
 struct DataNode *programContainer;
 
-
+struct DataNode *dummyNode;
 
 //expects a capacity, returns the new node
 struct DataNode* constructNode(size_t capacity);

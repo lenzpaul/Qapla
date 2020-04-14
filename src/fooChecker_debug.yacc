@@ -174,14 +174,16 @@ evaluation:
                printf(" ~RULE~: evaluation --> statement \n"); 
                printf("statement dtype is: %d\n", $<datanode->dtype>1);
                printf("statement name is: %s\n", $<datanode->name>1);
+
                //DELETE ME //////////////////////////////////////////////////////////
                      //printf("statement children 0 ival is: %d\n", $<datanode->children[0]->ival>1);
                      //printf("statement children 0 name is: %s\n", $<datanode->children[0]->name>1);
                ////////////////////////////////////////////////////////////////////////////////////
+
             #endif
             
             //evaluate statement here
-            evaluate($<datanode>1);    //its children no?
+            evaluate($<datanode>1);  
 
             //This needs to happen ON EVALUATE only 
                //insert IDENTIFIER in varContainer (variable array)
@@ -1389,56 +1391,6 @@ intexpr:
             #endif
          }
 
-      | intexpr '+' IDENTIFIER
-         {
-            #if DEBUGTAG
-               printf(" ~RULE:intexpr--> intexpr + IDENTIFIER \n");    //DEBUG
-            #endif
-           
-
-            //create operator + node
-            struct DataNode *node = constructNode(2) ;
-            node->dtype = 5 ; //operator type
-            strcpy(node->name,"opPlus");
-   
-            //insert 2 operands as children
-            insertChild(node,$<datanode>1);      
-            insertChild(node,$<datanode>3);      
-
-            $<datanode>$ = node ;
-
-            //#if DEBUGTAG
-               //printf("%d + %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
-               //printf("The address is %p \n",op);
-               //printf("The address is %p \n",$<datanode>$);
-            //#endif
-         }
-
-      | intexpr '+' intexpr
-         {
-            #if DEBUGTAG
-               printf(" ~RULE:intexpr--> intexpr + intexpr \n");    //DEBUG
-            #endif
-           
-
-            //create operator + node
-            struct DataNode *node = constructNode(2) ;
-            node->dtype = 5 ; //operator type
-            strcpy(node->name,"opPlus");
-   
-            //insert 2 operands as children
-            insertChild(node,$<datanode>1);      
-            insertChild(node,$<datanode>3);      
-
-            $<datanode>$ = node ;
-
-            //#if DEBUGTAG
-               //printf("%d + %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
-               //printf("The address is %p \n",op);
-               //printf("The address is %p \n",$<datanode>$);
-            //#endif
-         }
-
       | intexpr '*' intexpr
          {
             #if DEBUGTAG
@@ -1459,13 +1411,24 @@ intexpr:
 
 int main()
 {
+   dummyNode = constructNode(1);//dummy node for errors
+   dummyNode->dtype=-1; //to prevent evaluation
+   strcpy(dummyNode->name,"dummyNode");
+   dummyNode->ival=dummyNode->fval=dummyNode->bval=0;
+
    varContainer = constructNode(2);       //variables
    programContainer = constructNode(4);   //general nodes
+   insertChild(programContainer,dummyNode);
+
    //printf("Beginning syntax checking:\n\n");
-   printf("Begin input, and may the foo be with you! \n\n");
+   printf("You may proceed with input...\n\n");
    int result = yyparse();
    //printf("\nSyntax checking complete\n\n");
-   printf("\nAll hail Lenz\n\n");
+   printf("\nMay the foo be with you!  \n\n");
+
+   freeNode(varContainer);
+   freeNode(programContainer);
+
    return result;
 }
 

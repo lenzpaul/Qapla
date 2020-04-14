@@ -415,9 +415,9 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  29
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  65
+#define YYNRULES  63
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  121
+#define YYNSTATES  118
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -466,12 +466,12 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,   123,   123,   132,   133,   137,   144,   154,   161,   171,
-     196,   206,   221,   236,   251,   262,   271,   290,   303,   322,
-     342,   361,   399,   413,   424,   455,   496,   512,   518,   599,
-     705,   725,   745,   755,   793,   800,   809,   821,   863,   873,
-     882,   893,   905,   926,   967,   980,   991,  1000,  1019,  1055,
-    1149,  1175,  1214,  1223,  1242,  1261,  1278,  1298,  1317,  1336,
-    1346,  1362,  1377,  1392,  1417,  1442
+     198,   208,   223,   238,   253,   264,   273,   292,   305,   324,
+     344,   363,   401,   415,   426,   457,   498,   514,   520,   601,
+     707,   727,   747,   757,   795,   802,   811,   823,   865,   875,
+     884,   895,   907,   928,   969,   982,   993,  1002,  1021,  1057,
+    1151,  1177,  1216,  1225,  1244,  1263,  1280,  1300,  1319,  1338,
+    1348,  1364,  1379,  1394
 };
 #endif
 
@@ -505,10 +505,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -67
+#define YYPACT_NINF -69
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-67)))
+  (!!((Yystate) == (-69)))
 
 #define YYTABLE_NINF -56
 
@@ -519,19 +519,18 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     150,   -67,     3,   -67,   -67,   -27,    21,    48,    30,   210,
-       9,   210,    71,   150,   -67,   200,   -67,   -67,   -67,    64,
-      10,   -67,   164,   -67,   -67,    35,   -67,    73,   -67,    63,
-     210,    11,   235,   -67,    45,   210,    66,    16,    54,   -67,
-      59,   -67,   -67,   -67,    83,    52,    64,   -67,   -67,   -67,
-     210,   210,   210,   -67,   210,   -67,   210,   210,     5,     9,
-      16,   -67,    16,    24,   -67,    75,    86,     6,   147,   -67,
-     210,   200,   -67,   -67,    16,    16,    26,    16,   115,   119,
-     -67,    90,   -67,   -67,   210,   -67,   -67,   -67,   -67,    88,
-      28,   -67,    91,   172,    61,   -67,   -67,   175,    93,   108,
-     200,   101,   -67,   -67,   210,    89,   175,   -67,   175,   -67,
-      94,   200,   224,   -67,   -67,   103,   -67,   122,   -67,   -67,
-     -67
+     150,   -69,   -13,   -69,   -69,   -17,    14,    26,     3,   210,
+       2,   210,    38,   150,   -69,   200,   -69,   -69,   -69,    83,
+      34,   -69,    13,   -69,   -69,    25,   -69,   121,   -69,    54,
+     210,   122,   235,   -69,    40,   210,    53,    16,    44,   -69,
+      78,   -69,   -69,   -69,    56,    61,    83,   -69,   -69,   -69,
+     210,   210,   210,   -69,   210,   -69,   210,   210,     2,    16,
+     -69,    16,   -16,   -69,   137,   142,     5,   130,   -69,   210,
+     200,   -69,   -69,    16,    16,    -1,    16,    48,   105,   -69,
+     -69,   210,   -69,   -69,   -69,   -69,    63,   -12,   -69,    71,
+     167,    51,   -69,   -69,   175,    73,    65,   200,    75,   -69,
+     -69,   210,    80,   175,   -69,   175,   -69,    81,   200,    88,
+     -69,   -69,   102,   -69,   112,   -69,   -69,   -69
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -544,30 +543,29 @@ static const yytype_uint8 yydefact[] =
        6,    26,     0,    35,    34,     0,    40,    41,    39,    38,
        0,     0,     0,    48,     0,     0,    36,     0,    41,    62,
       41,     1,     4,     8,     0,     0,    18,    22,    20,    27,
-       0,     0,     0,    16,     0,    14,     0,     0,     0,     0,
-      49,    42,    46,     0,    44,    36,     0,     0,    41,    52,
-       0,     0,    23,    19,    57,    58,    37,    56,    41,    41,
-      63,    64,    65,    43,     0,    51,    50,    33,    32,     0,
-       0,    30,     0,    41,     0,    12,    45,     0,     0,     0,
-       0,     0,    25,    13,     0,     0,     0,    11,     0,    31,
-       0,     0,     0,    28,    10,     0,    21,     0,    47,    29,
-      24
+       0,     0,     0,    16,     0,    14,     0,     0,     0,    49,
+      42,    46,     0,    44,    36,     0,     0,    41,    52,     0,
+       0,    23,    19,    57,    58,    37,    56,    41,    41,    63,
+      43,     0,    51,    50,    33,    32,     0,     0,    30,     0,
+      41,     0,    12,    45,     0,     0,     0,     0,     0,    25,
+      13,     0,     0,     0,    11,     0,    31,     0,     0,     0,
+      28,    10,     0,    21,     0,    47,    29,    24
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -67,   -67,   -67,   126,   -67,   125,    33,   -66,     0,   -67,
-     -67,   -67,    98,   104,   -67,   140,   -67,    68,    -8,   -67,
-     -67,    78,    57,   -67,   -67,   -67,    -5,   -67,    -3
+     -69,   -69,   -69,   124,   -69,   128,    42,   -68,     0,   -69,
+     -69,   -69,    99,   104,   -69,   148,   -69,    66,    -8,   -69,
+     -69,    90,    70,   -69,   -69,   -69,    -5,   -69,    -3
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,    12,    13,    14,    15,    16,   105,   106,    95,    18,
-      19,    46,    47,    48,    20,    21,    90,    91,    22,    23,
-      63,    64,   107,    24,    25,    26,    27,    28,    29
+      -1,    12,    13,    14,    15,    16,   102,   103,    92,    18,
+      19,    46,    47,    48,    20,    21,    87,    88,    22,    23,
+      62,    63,   104,    24,    25,    26,    27,    28,    29
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -575,63 +573,63 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      17,    37,    32,    37,    38,    94,    40,    39,     1,    87,
-      80,    88,     1,    17,     1,    17,    36,     3,     4,     5,
-       6,     7,    60,    62,    66,    30,    33,    37,    50,    10,
-      68,     9,    31,    10,   110,    10,    89,    51,    50,    52,
-      11,    61,    74,    75,    76,   117,    77,    51,    37,    37,
-      54,    78,    79,    34,    83,    81,    82,    84,    98,    35,
-      54,    99,    37,    55,     1,    93,     2,     3,     4,     5,
-       6,    41,    56,    57,    67,     8,    62,    56,    57,    44,
-      45,     9,   -55,    71,   -55,    10,    58,   -55,    59,    69,
-      11,    56,    57,   102,   103,    31,   112,     1,    50,     2,
-       3,     4,     5,     6,    31,    85,   103,    51,     8,    52,
-     103,    87,    70,    88,     9,    59,    86,   103,    10,    97,
-      54,   113,   100,    11,   108,     1,   116,     2,     3,     4,
-       5,     6,   111,    56,    57,   119,     8,    56,    57,    42,
-      43,   115,     9,   -53,    72,   -53,    10,   -54,   -53,   -54,
-      73,    11,   -54,     1,   120,     2,     3,     4,     5,     6,
-      49,     7,    96,   114,     8,    56,    57,   109,     0,     0,
-       9,     0,     0,     0,    10,     0,    50,    92,     1,    11,
-       2,     3,     4,     5,     6,    51,     0,    52,   104,     8,
-      56,    57,    53,     0,     0,     9,     0,     0,    54,    10,
-       0,     0,   101,     1,    11,     2,     3,     4,     5,     6,
+      17,    37,    91,    37,    38,     1,    40,    39,    84,    30,
+      85,    50,    32,    17,    80,    17,    31,    81,    95,    33,
+      51,    96,    59,    61,    65,    50,    10,    37,    50,   107,
+      67,    34,    35,    54,    51,    86,    52,    51,    41,    52,
+     114,    53,    73,    74,    75,     7,    76,    54,    37,    37,
+      54,    77,    78,    55,     1,    79,     2,     3,     4,     5,
+       6,    37,    56,    57,    90,     8,    56,    57,    84,    66,
+      85,     9,   -55,    61,   -55,    10,   -53,   -55,   -53,    58,
+      11,   -53,    31,    99,     1,    69,     2,     3,     4,     5,
+       6,   100,    70,   109,    94,     8,    56,    57,    44,    45,
+      50,     9,    97,   100,   105,    10,   108,   100,    68,    51,
+      11,    52,   110,   113,   100,     1,   115,     2,     3,     4,
+       5,     6,    54,    56,    57,     1,     8,    36,     3,     4,
+       5,     6,     9,   -54,   116,   -54,    10,    42,   -54,    56,
+      57,    11,     9,    43,   117,    71,    10,   112,    56,    57,
+      72,    11,    60,     1,    50,     2,     3,     4,     5,     6,
+      89,     7,   106,    51,     8,    52,    31,    82,    49,     0,
+       9,    93,    83,   111,    10,     0,    54,     0,     1,    11,
+       2,     3,     4,     5,     6,    56,    57,     0,   101,     8,
+       0,     0,     0,     0,     0,     9,     0,    98,     0,    10,
+       0,     0,     0,     1,    11,     2,     3,     4,     5,     6,
        0,     0,     0,     1,     8,    36,     3,     4,     5,     6,
        9,     0,     0,     0,    10,     0,     0,     0,     0,    11,
-       9,     0,     0,     0,    10,     0,    50,     0,     1,    11,
-      65,     3,     4,     5,     6,    51,     0,    52,     0,     0,
-       0,     0,   118,     0,     0,     9,     0,     0,    54,    10,
+       9,     0,     0,     0,    10,     0,     0,     0,     1,    11,
+      64,     3,     4,     5,     6,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     9,     0,     0,     0,    10,
        0,     0,     0,     0,    11
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     9,    29,    11,     9,    71,    11,    10,     3,     3,
-       5,     5,     3,    13,     3,    15,     5,     6,     7,     8,
-       9,    11,    30,    31,    32,    22,     5,    35,    12,    24,
-      35,    20,    29,    24,   100,    24,    30,    21,    12,    23,
-      29,    30,    50,    51,    52,   111,    54,    21,    56,    57,
-      34,    56,    57,     5,    30,    58,    59,    33,    30,    29,
-      34,    33,    70,    28,     3,    70,     5,     6,     7,     8,
-       9,     0,    18,    19,    29,    14,    84,    18,    19,    15,
-      16,    20,    28,    31,    30,    24,    23,    33,    25,    30,
-      29,    18,    19,    32,    94,    29,   104,     3,    12,     5,
-       6,     7,     8,     9,    29,    30,   106,    21,    14,    23,
-     110,     3,    29,     5,    20,    25,    30,   117,    24,    31,
-      34,    32,    31,    29,    31,     3,    32,     5,     6,     7,
-       8,     9,    31,    18,    19,    32,    14,    18,    19,    13,
-      15,   108,    20,    28,    46,    30,    24,    28,    33,    30,
-      46,    29,    33,     3,    32,     5,     6,     7,     8,     9,
-      20,    11,    84,   106,    14,    18,    19,    99,    -1,    -1,
-      20,    -1,    -1,    -1,    24,    -1,    12,    30,     3,    29,
-       5,     6,     7,     8,     9,    21,    -1,    23,    13,    14,
-      18,    19,    28,    -1,    -1,    20,    -1,    -1,    34,    24,
-      -1,    -1,    30,     3,    29,     5,     6,     7,     8,     9,
+       0,     9,    70,    11,     9,     3,    11,    10,     3,    22,
+       5,    12,    29,    13,    30,    15,    29,    33,    30,     5,
+      21,    33,    30,    31,    32,    12,    24,    35,    12,    97,
+      35,     5,    29,    34,    21,    30,    23,    21,     0,    23,
+     108,    28,    50,    51,    52,    11,    54,    34,    56,    57,
+      34,    56,    57,    28,     3,    58,     5,     6,     7,     8,
+       9,    69,    18,    19,    69,    14,    18,    19,     3,    29,
+       5,    20,    28,    81,    30,    24,    28,    33,    30,    25,
+      29,    33,    29,    32,     3,    29,     5,     6,     7,     8,
+       9,    91,    31,   101,    31,    14,    18,    19,    15,    16,
+      12,    20,    31,   103,    31,    24,    31,   107,    30,    21,
+      29,    23,    32,    32,   114,     3,    28,     5,     6,     7,
+       8,     9,    34,    18,    19,     3,    14,     5,     6,     7,
+       8,     9,    20,    28,    32,    30,    24,    13,    33,    18,
+      19,    29,    20,    15,    32,    46,    24,   105,    18,    19,
+      46,    29,    30,     3,    12,     5,     6,     7,     8,     9,
+      30,    11,    96,    21,    14,    23,    29,    30,    20,    -1,
+      20,    81,    30,   103,    24,    -1,    34,    -1,     3,    29,
+       5,     6,     7,     8,     9,    18,    19,    -1,    13,    14,
+      -1,    -1,    -1,    -1,    -1,    20,    -1,    30,    -1,    24,
+      -1,    -1,    -1,     3,    29,     5,     6,     7,     8,     9,
       -1,    -1,    -1,     3,    14,     5,     6,     7,     8,     9,
       20,    -1,    -1,    -1,    24,    -1,    -1,    -1,    -1,    29,
-      20,    -1,    -1,    -1,    24,    -1,    12,    -1,     3,    29,
-       5,     6,     7,     8,     9,    21,    -1,    23,    -1,    -1,
-      -1,    -1,    28,    -1,    -1,    20,    -1,    -1,    34,    24,
+      20,    -1,    -1,    -1,    24,    -1,    -1,    -1,     3,    29,
+       5,     6,     7,     8,     9,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    20,    -1,    -1,    -1,    24,
       -1,    -1,    -1,    -1,    29
 };
 
@@ -644,14 +642,13 @@ static const yytype_uint8 yystos[] =
       49,    50,    53,    54,    58,    59,    60,    61,    62,    63,
       22,    29,    29,     5,     5,    29,     5,    53,    61,    63,
       61,     0,    38,    40,    15,    16,    46,    47,    48,    50,
-      12,    21,    23,    28,    34,    28,    18,    19,    23,    25,
-      53,    30,    53,    55,    56,     5,    53,    29,    61,    30,
-      29,    31,    47,    48,    53,    53,    53,    53,    61,    61,
-       5,    63,    63,    30,    33,    30,    30,     3,     5,    30,
-      51,    52,    30,    61,    42,    43,    56,    31,    30,    33,
-      31,    30,    32,    43,    13,    41,    42,    57,    31,    52,
-      42,    31,    53,    32,    57,    41,    32,    42,    28,    32,
-      32
+      12,    21,    23,    28,    34,    28,    18,    19,    25,    53,
+      30,    53,    55,    56,     5,    53,    29,    61,    30,    29,
+      31,    47,    48,    53,    53,    53,    53,    61,    61,    63,
+      30,    33,    30,    30,     3,     5,    30,    51,    52,    30,
+      61,    42,    43,    56,    31,    30,    33,    31,    30,    32,
+      43,    13,    41,    42,    57,    31,    52,    42,    31,    53,
+      32,    57,    41,    32,    42,    28,    32,    32
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -663,7 +660,7 @@ static const yytype_uint8 yyr1[] =
       51,    51,    52,    52,    53,    53,    53,    53,    53,    53,
       53,    53,    54,    54,    55,    55,    56,    57,    58,    59,
       60,    60,    61,    61,    61,    61,    61,    61,    61,    61,
-      62,    63,    63,    63,    63,    63
+      62,    63,    63,    63
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -675,7 +672,7 @@ static const yytype_uint8 yyr2[] =
        1,     3,     1,     1,     1,     1,     1,     3,     1,     1,
        1,     1,     3,     4,     1,     3,     1,     3,     2,     3,
        4,     4,     3,     3,     3,     2,     3,     3,     3,     1,
-       1,     1,     2,     3,     3,     3
+       1,     1,     2,     3
 };
 
 
@@ -1358,7 +1355,7 @@ yyreduce:
                printf(" ~RULE: script --> threads \n "); 
             #endif
          }
-#line 1362 "y.tab.c" /* yacc.c:1646  */
+#line 1359 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
@@ -1369,7 +1366,7 @@ yyreduce:
             #endif
             
          }
-#line 1373 "y.tab.c" /* yacc.c:1646  */
+#line 1370 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
@@ -1380,7 +1377,7 @@ yyreduce:
             #endif
             
          }
-#line 1384 "y.tab.c" /* yacc.c:1646  */
+#line 1381 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
@@ -1390,7 +1387,7 @@ yyreduce:
                printf(" ~RULE~: evaluations --> evaluation \n"); 
             #endif
          }
-#line 1394 "y.tab.c" /* yacc.c:1646  */
+#line 1391 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
@@ -1400,7 +1397,7 @@ yyreduce:
                printf(" ~RULE~: evaluations --> evaluations evaluation \n"); 
             #endif
          }
-#line 1404 "y.tab.c" /* yacc.c:1646  */
+#line 1401 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
@@ -1410,14 +1407,16 @@ yyreduce:
                printf(" ~RULE~: evaluation --> statement \n"); 
                printf("statement dtype is: %d\n", (yyvsp[0].datanode->dtype));
                printf("statement name is: %s\n", (yyvsp[0].datanode->name));
+
                //DELETE ME //////////////////////////////////////////////////////////
                      //printf("statement children 0 ival is: %d\n", $<datanode->children[0]->ival>1);
                      //printf("statement children 0 name is: %s\n", $<datanode->children[0]->name>1);
                ////////////////////////////////////////////////////////////////////////////////////
+
             #endif
             
             //evaluate statement here
-            evaluate((yyvsp[0].datanode));    //its children no?
+            evaluate((yyvsp[0].datanode));  
 
             //This needs to happen ON EVALUATE only 
                //insert IDENTIFIER in varContainer (variable array)
@@ -1425,11 +1424,11 @@ yyreduce:
             //insertChild(varContainer,$<datanode>1);        
             ///////
          }
-#line 1429 "y.tab.c" /* yacc.c:1646  */
+#line 1428 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 197 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 199 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE~: funbody -->  statements retstmt \n");
@@ -1439,11 +1438,11 @@ yyreduce:
             (yyval.datanode) = insertChild((yyvsp[-1].datanode), (yyvsp[0].datanode));
               
          }
-#line 1443 "y.tab.c" /* yacc.c:1646  */
+#line 1442 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 207 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 209 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE~: funbody -->  retstmt \n");
@@ -1452,11 +1451,11 @@ yyreduce:
             (yyval.datanode) = insertChild((yyval.datanode), (yyvsp[0].datanode));
 
          }
-#line 1456 "y.tab.c" /* yacc.c:1646  */
+#line 1455 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 222 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 224 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE~:statements --> statement \n");
@@ -1471,11 +1470,11 @@ yyreduce:
 
             insertChild((yyval.datanode), (yyvsp[0].datanode));
          }
-#line 1475 "y.tab.c" /* yacc.c:1646  */
+#line 1474 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 237 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 239 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE~:statements --> statements statement \n");
@@ -1485,11 +1484,11 @@ yyreduce:
             insertChild((yyval.datanode), (yyvsp[0].datanode));
             /////////////////////////////////////////////////////////////
          }
-#line 1489 "y.tab.c" /* yacc.c:1646  */
+#line 1488 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 252 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 254 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE: statement --> assignexpr \n");    //DEBUG
@@ -1498,11 +1497,11 @@ yyreduce:
             (yyval.datanode) = (yyvsp[-1].datanode);
 
          }
-#line 1502 "y.tab.c" /* yacc.c:1646  */
+#line 1501 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 263 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 265 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE: statement --> selection \n");    //DEBUG
@@ -1510,11 +1509,11 @@ yyreduce:
 
            // $<datanode>$ = $<datanode>1;
          }
-#line 1514 "y.tab.c" /* yacc.c:1646  */
+#line 1513 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 272 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 274 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE:statement--> expression ; \n"); 
@@ -1526,11 +1525,11 @@ yyreduce:
 
             (yyval.datanode) = (yyvsp[-1].datanode);
          }
-#line 1530 "y.tab.c" /* yacc.c:1646  */
+#line 1529 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 291 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 293 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: selection --> ifcomponent \n" );
@@ -1542,11 +1541,11 @@ yyreduce:
             node->dtype = 8 ; //instruction
             (yyval.datanode) = node;
          }
-#line 1546 "y.tab.c" /* yacc.c:1646  */
+#line 1545 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 304 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 306 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: selection --> ifcomponent elseifcomponents\n" );
@@ -1564,11 +1563,11 @@ yyreduce:
             node->dtype = 8 ; //instruction
             (yyval.datanode) = node;
          }
-#line 1568 "y.tab.c" /* yacc.c:1646  */
+#line 1567 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 323 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 325 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: selection --> ifcomponent elseifcomponents elsecomponent\n" );
@@ -1587,11 +1586,11 @@ yyreduce:
             node->dtype = 8 ; //instruction
             (yyval.datanode) = node;
          }
-#line 1591 "y.tab.c" /* yacc.c:1646  */
+#line 1590 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 343 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 345 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: selection --> ifcomponent elsecomponent\n" );
@@ -1605,11 +1604,11 @@ yyreduce:
             node->dtype = 8 ; //instruction
             (yyval.datanode) = node;
          }
-#line 1609 "y.tab.c" /* yacc.c:1646  */
+#line 1608 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 362 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 364 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: ifcomponent --> IF '(' boolexpr ')' '{' statements '}'  \n");
@@ -1636,11 +1635,11 @@ yyreduce:
             node->bval = false;
             (yyval.datanode) = node;
          }
-#line 1640 "y.tab.c" /* yacc.c:1646  */
+#line 1639 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 400 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 402 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: elseifcomponents --> elseifcomponent \n");
@@ -1653,22 +1652,22 @@ yyreduce:
             strcpy((yyval.datanode->name),"info_elseifcomponents");  //informative label only
             insertChild((yyval.datanode), (yyvsp[0].datanode));
          }
-#line 1657 "y.tab.c" /* yacc.c:1646  */
+#line 1656 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 414 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 416 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: elseifcomponents --> elseifcomponents elseifcomponent \n");
             #endif           
             insertChild((yyval.datanode), (yyvsp[0].datanode));
          }
-#line 1668 "y.tab.c" /* yacc.c:1646  */
+#line 1667 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 425 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 427 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: elseifcomponent -->  ELSEIF '(' boolexpr ')' '{' statements '}'\n");
@@ -1695,11 +1694,11 @@ yyreduce:
             (yyval.datanode) = node;
 
          }
-#line 1699 "y.tab.c" /* yacc.c:1646  */
+#line 1698 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 456 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 458 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
 
             #if DEBUGTAG 
@@ -1727,11 +1726,11 @@ yyreduce:
             node->bval = true; //if you get to else block, just run the code
             (yyval.datanode) = node;
          }
-#line 1731 "y.tab.c" /* yacc.c:1646  */
+#line 1730 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 497 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 499 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE: declarations --> fundecl \n");
@@ -1746,11 +1745,11 @@ yyreduce:
             //add function to varContainer local
             insertChild(varContainer, (yyvsp[0].datanode)); 
          }
-#line 1750 "y.tab.c" /* yacc.c:1646  */
+#line 1749 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 519 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 521 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE:fundecl --> ");
@@ -1828,11 +1827,11 @@ yyreduce:
             */
            
          }
-#line 1832 "y.tab.c" /* yacc.c:1646  */
+#line 1831 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 600 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 602 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE:fundecl --> ");
@@ -1934,11 +1933,11 @@ yyreduce:
                */
  //           #endif
          }
-#line 1938 "y.tab.c" /* yacc.c:1646  */
+#line 1937 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 706 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 708 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {   
             #if DEBUGTAG 
                printf(" ~RULE: paramdecl_list --> paramdecl \n ");
@@ -1958,11 +1957,11 @@ yyreduce:
             insertChild((yyval.datanode), (yyvsp[0].datanode));
 
          }
-#line 1962 "y.tab.c" /* yacc.c:1646  */
+#line 1961 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 726 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 728 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {   
             #if DEBUGTAG 
                printf(" ~RULE: paramdecl_list --> paramdecl_list : paramdecl \n ");
@@ -1977,11 +1976,11 @@ yyreduce:
 
 
          }
-#line 1981 "y.tab.c" /* yacc.c:1646  */
+#line 1980 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 746 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 748 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG 
                printf(" ~RULE: paramdecl --> IDENTIFIER \n ");
@@ -1990,52 +1989,52 @@ yyreduce:
 
             //$<datanode>$ = $<datanode>1;
          }
-#line 1994 "y.tab.c" /* yacc.c:1646  */
+#line 1993 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 756 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 758 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG 
                printf(" ~RULE: paramdecl --> IDENTIFIER \n ");
                printf("IDENTIFIER name: %s \n ", (yyvsp[0].datanode->name));
             #endif
          }
-#line 2005 "y.tab.c" /* yacc.c:1646  */
+#line 2004 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 794 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 796 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE:  expression --> vardecl \n");
             #endif
          }
-#line 2015 "y.tab.c" /* yacc.c:1646  */
+#line 2014 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 801 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 803 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE:  expression --> funcall \n");
             #endif
          }
-#line 2025 "y.tab.c" /* yacc.c:1646  */
+#line 2024 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 810 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 812 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE:  expression --> IDENTIFIER \n");
             #endif
          }
-#line 2035 "y.tab.c" /* yacc.c:1646  */
+#line 2034 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 822 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 824 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE:  expression --> expression '+' expression \n");
@@ -2052,11 +2051,11 @@ yyreduce:
 
             (yyval.datanode) = node ;
          }
-#line 2056 "y.tab.c" /* yacc.c:1646  */
+#line 2055 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 864 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 866 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE:expression--> intexpr \n");    //DEBUG
@@ -2065,11 +2064,11 @@ yyreduce:
             (yyval.datanode) = (yyvsp[0].datanode);
 
          }
-#line 2069 "y.tab.c" /* yacc.c:1646  */
+#line 2068 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 874 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 876 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE:expression--> strexpr \n");    //DEBUG
@@ -2077,11 +2076,11 @@ yyreduce:
 
             (yyval.datanode) = (yyvsp[0].datanode);
          }
-#line 2081 "y.tab.c" /* yacc.c:1646  */
+#line 2080 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 883 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 885 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE:expression--> ioexpr \n");    //DEBUG
@@ -2090,22 +2089,22 @@ yyreduce:
             (yyval.datanode) = (yyvsp[0].datanode);
 
          }
-#line 2094 "y.tab.c" /* yacc.c:1646  */
+#line 2093 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 894 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 896 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE: expression--> boolexpr \n");    //DEBUG
             #endif
 
          }
-#line 2105 "y.tab.c" /* yacc.c:1646  */
+#line 2104 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 906 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 908 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: funcall -->  IDENTIFIER '(' ')' \n");   
@@ -2126,11 +2125,11 @@ yyreduce:
             insertChild(funcall, emptyParamList); //paramassign_list
             (yyval.datanode) = funcall;
          }
-#line 2130 "y.tab.c" /* yacc.c:1646  */
+#line 2129 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 927 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 929 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: funcall --> IDENTIFIER '(' paramassign_list ')'  \n");   
@@ -2162,11 +2161,11 @@ yyreduce:
             //evaluate();
 
          }
-#line 2166 "y.tab.c" /* yacc.c:1646  */
+#line 2165 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 968 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 970 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: paramassign_list --> paramassign \n");    //DEBUG
@@ -2179,32 +2178,32 @@ yyreduce:
             insertChild((yyval.datanode), (yyvsp[0].datanode));
 
          }
-#line 2183 "y.tab.c" /* yacc.c:1646  */
+#line 2182 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 981 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 983 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: paramassign_list --> paramassign_list ':' paramassign \n");    //DEBUG
             #endif
             insertChild((yyval.datanode), (yyvsp[0].datanode));
          }
-#line 2194 "y.tab.c" /* yacc.c:1646  */
+#line 2193 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 992 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 994 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: paramassign_list --> paramassign_list ':' paramassign \n");    //DEBUG
             #endif
          }
-#line 2204 "y.tab.c" /* yacc.c:1646  */
+#line 2203 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 1001 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1003 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG 
                printf(" ~RULE:  retstmt --> RETURN expression ';'\n");
@@ -2219,11 +2218,11 @@ yyreduce:
             insertChild(node,(yyvsp[-1].datanode));
             (yyval.datanode) = node;
          }
-#line 2223 "y.tab.c" /* yacc.c:1646  */
+#line 2222 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 1020 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1022 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE:vardecl --> VAR IDENTIFIER \n");    //DEBUG
@@ -2254,11 +2253,11 @@ yyreduce:
 
            // #endif
          }
-#line 2258 "y.tab.c" /* yacc.c:1646  */
+#line 2257 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 1056 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1058 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE: assignexpr --> IDENTIFIER '=' expression \n");    //DEBUG
@@ -2303,11 +2302,11 @@ yyreduce:
                   //$<datanode->children[0]->ival>$);
             //#endif
          }
-#line 2307 "y.tab.c" /* yacc.c:1646  */
+#line 2306 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 1150 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1152 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE:ioexpr --> PRINT '(' expression ')' \n");    //DEBUG
@@ -2331,11 +2330,11 @@ yyreduce:
             }
             */
          }
-#line 2335 "y.tab.c" /* yacc.c:1646  */
+#line 2334 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 1176 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1178 "fooChecker_debug.yacc" /* yacc.c:1646  */
     { 
             #if DEBUGTAG
                printf(" ~RULE:ioexpr --> PRINT '(' IDENTIFIER ')' \n");    //DEBUG
@@ -2369,11 +2368,11 @@ yyreduce:
 
             */
          }
-#line 2373 "y.tab.c" /* yacc.c:1646  */
+#line 2372 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 1215 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1217 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> '(' boolexpr ')' \n");    //DEBUG
@@ -2381,11 +2380,11 @@ yyreduce:
 
             (yyval.datanode) =  (yyvsp[-1].datanode);
          }
-#line 2385 "y.tab.c" /* yacc.c:1646  */
+#line 2384 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 1224 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1226 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> boolexpr AND boolexpr \n");    //DEBUG
@@ -2403,11 +2402,11 @@ yyreduce:
             (yyval.datanode) = node ;
 
          }
-#line 2407 "y.tab.c" /* yacc.c:1646  */
+#line 2406 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 1243 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1245 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> boolexpr OR boolexpr \n");    //DEBUG
@@ -2425,11 +2424,11 @@ yyreduce:
             (yyval.datanode) = node ;
 
          }
-#line 2429 "y.tab.c" /* yacc.c:1646  */
+#line 2428 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 1262 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1264 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> NOT boolexpr \n");    //DEBUG
@@ -2445,11 +2444,11 @@ yyreduce:
 
             (yyval.datanode) = node ;
          }
-#line 2449 "y.tab.c" /* yacc.c:1646  */
+#line 2448 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 1279 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1281 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> expression < expression\n");    //DEBUG
@@ -2468,11 +2467,11 @@ yyreduce:
 
 
          }
-#line 2472 "y.tab.c" /* yacc.c:1646  */
+#line 2471 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 1299 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1301 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> expression EVAL expression\n");    //DEBUG
@@ -2490,11 +2489,11 @@ yyreduce:
             (yyval.datanode) = node ;
 
          }
-#line 2494 "y.tab.c" /* yacc.c:1646  */
+#line 2493 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 1318 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1320 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> expression NEQ expression\n");    //DEBUG
@@ -2512,21 +2511,21 @@ yyreduce:
             (yyval.datanode) = node ;
 
          }
-#line 2516 "y.tab.c" /* yacc.c:1646  */
+#line 2515 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 1337 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1339 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: boolexpr --> BOOLEAN  \n");    //DEBUG
             #endif
          }
-#line 2526 "y.tab.c" /* yacc.c:1646  */
+#line 2525 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 1347 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1349 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE:strexpr--> STRING \n");    //DEBUG
@@ -2538,11 +2537,11 @@ yyreduce:
                printf("%s is a string \n",(yyvsp[0].datanode->str));
             #endif
          }
-#line 2542 "y.tab.c" /* yacc.c:1646  */
+#line 2541 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 1363 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1365 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> INTEGER \n");    //DEBUG
@@ -2555,11 +2554,11 @@ yyreduce:
                //printf("It is also an intexpr with address: %p\n",$<datanode>$);
             #endif
          }
-#line 2559 "y.tab.c" /* yacc.c:1646  */
+#line 2558 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 1378 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1380 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE:intexpr--> '-' intexpr  prec '*' \n");    //DEBUG
@@ -2573,67 +2572,11 @@ yyreduce:
                printf("negative %d, using unary negation \n",(yyvsp[0].datanode->ival));
             #endif
          }
-#line 2577 "y.tab.c" /* yacc.c:1646  */
+#line 2576 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 1393 "fooChecker_debug.yacc" /* yacc.c:1646  */
-    {
-            #if DEBUGTAG
-               printf(" ~RULE:intexpr--> intexpr + IDENTIFIER \n");    //DEBUG
-            #endif
-           
-
-            //create operator + node
-            struct DataNode *node = constructNode(2) ;
-            node->dtype = 5 ; //operator type
-            strcpy(node->name,"opPlus");
-   
-            //insert 2 operands as children
-            insertChild(node,(yyvsp[-2].datanode));      
-            insertChild(node,(yyvsp[0].datanode));      
-
-            (yyval.datanode) = node ;
-
-            //#if DEBUGTAG
-               //printf("%d + %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
-               //printf("The address is %p \n",op);
-               //printf("The address is %p \n",$<datanode>$);
-            //#endif
-         }
-#line 2605 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 64:
-#line 1418 "fooChecker_debug.yacc" /* yacc.c:1646  */
-    {
-            #if DEBUGTAG
-               printf(" ~RULE:intexpr--> intexpr + intexpr \n");    //DEBUG
-            #endif
-           
-
-            //create operator + node
-            struct DataNode *node = constructNode(2) ;
-            node->dtype = 5 ; //operator type
-            strcpy(node->name,"opPlus");
-   
-            //insert 2 operands as children
-            insertChild(node,(yyvsp[-2].datanode));      
-            insertChild(node,(yyvsp[0].datanode));      
-
-            (yyval.datanode) = node ;
-
-            //#if DEBUGTAG
-               //printf("%d + %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
-               //printf("The address is %p \n",op);
-               //printf("The address is %p \n",$<datanode>$);
-            //#endif
-         }
-#line 2633 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 65:
-#line 1443 "fooChecker_debug.yacc" /* yacc.c:1646  */
+#line 1395 "fooChecker_debug.yacc" /* yacc.c:1646  */
     {
             #if DEBUGTAG
                printf(" ~RULE: intexpr--> intexpr * intexpr \n");    //DEBUG
@@ -2644,11 +2587,11 @@ yyreduce:
                printf("%d * %d is %d \n",(yyvsp[-2].datanode->ival), (yyvsp[0].datanode->ival), (yyval.datanode->ival));
             #endif
          }
-#line 2648 "y.tab.c" /* yacc.c:1646  */
+#line 2591 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2652 "y.tab.c" /* yacc.c:1646  */
+#line 2595 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2876,7 +2819,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1455 "fooChecker_debug.yacc" /* yacc.c:1906  */
+#line 1407 "fooChecker_debug.yacc" /* yacc.c:1906  */
 
 
  /****** supporting C to carry out parsing ******/
@@ -2884,13 +2827,24 @@ yyreturn:
 
 int main()
 {
+   dummyNode = constructNode(1);//dummy node for errors
+   dummyNode->dtype=-1; //to prevent evaluation
+   strcpy(dummyNode->name,"dummyNode");
+   dummyNode->ival=dummyNode->fval=dummyNode->bval=0;
+
    varContainer = constructNode(2);       //variables
    programContainer = constructNode(4);   //general nodes
+   insertChild(programContainer,dummyNode);
+
    //printf("Beginning syntax checking:\n\n");
-   printf("Begin input, and may the foo be with you! \n\n");
+   printf("You may proceed with input...\n\n");
    int result = yyparse();
    //printf("\nSyntax checking complete\n\n");
-   printf("\nAll hail Lenz\n\n");
+   printf("\nMay the foo be with you!  \n\n");
+
+   freeNode(varContainer);
+   freeNode(programContainer);
+
    return result;
 }
 

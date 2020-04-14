@@ -17,19 +17,32 @@ struct DataNode* evaluate(struct DataNode *node, ...)
    // {
    //struct DataNode *child = node->children[i];
 
+   //
+   if(node->dtype == -1 ) {
+      return node;
+
+
    //vardecl
-   if(node->dtype == 0){
+   }else if(node->dtype == 0){
       
       //struct DataNode *var = findLocalVar(node->children[0]->name); //EVALUATE ?? FIXME
 
-         //printf("HERE! OK ! \n\n\n\n");
-      return findLocalVar(node->name);
+      //assuming inner scopes have full access to outer scopes
+      return findVar(node->name);
+
+
+      //return findLocalVar(node->name);
 
       //return node;
 
    }else if(node->dtype == 1){
-
       return node;
+
+
+      //check if being passed a var of this type or literal
+     // struct DataNode *variable = findVar(node->name);
+     // if (variable->dtype == -1) return node;  //a literal
+     // return variable ;                         //a variable
 
    }else if(node->dtype == 2){
 
@@ -48,21 +61,32 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //can only assign to var "accessible in the current scope"
 
 
+
+
+
+         
+         //DELETE ME ///////////////////////
+
          //struct DataNode *var = findLocalVar(node->children[0]->name); //EVALUATE ?? FIXME
 
          //printf("var name is : %s", var->name); 
          
             //printf("\n\n   ~SCOPE address before evaluating leftChild : %p\n", varContainer);
-
-         //evaluationg uninitialized variable [NECESSARY?!]
-         struct DataNode *leftChild = evaluate(node->children[0]); //var to assign to 
-
-            //printf("\n\n   ~SCOPE address AFTER evaluating leftChild : %p\n", varContainer);
+         ////////////////////////////////////:w
 
 
+
+
+         //result will hold value to be returned
+         struct DataNode *result = constructNode(1) ;
+           
          //Expression to evaluate. 
          //The result of which we assign to the leftChild
          struct DataNode *rightChild = evaluate(node->children[1]); 
+
+         //evaluating variable [NECESSARY?!]
+         struct DataNode *leftChild = evaluate(node->children[0]); //var to assign to 
+
 
          //int ldt = leftChild->dtype;
          int rdt = rightChild->dtype;
@@ -140,7 +164,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          */
          /////////////////////////////////////////////////////////////
       }
-
+      //node->dtype == 5
       //Addition + 
       if(strcmp(node->name,"opPlus") == 0){
          //First, evaluate both children recursively
@@ -153,7 +177,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          //NOT valid for bool
 
          
-
+         struct DataNode *result = constructNode(2);
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
          int ldt = leftChild->dtype;
@@ -161,25 +185,28 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
 
          if(ldt==1 && rdt==1){              //int
-            node->ival = leftChild->ival + rightChild->ival; 
-            node -> dtype = 1 ;
+            result->ival = leftChild->ival + rightChild->ival; 
+            result -> dtype = 1 ;
          }else if((ldt==1 || rdt==2) && (ldt==1 || rdt==2)){        //real
             //default value is 0, just add all the values
-            node->fval = leftChild->ival + leftChild->fval
+            result->fval = leftChild->ival + leftChild->fval
                            + rightChild->ival + rightChild->fval ;
-            node -> dtype = 2 ;
+            result -> dtype = 2 ;
          }else if(ldt==3 && rdt==3){        //string
             char str[4096];
             strcat(str, leftChild->str);
             strcat(str, rightChild->str);
             //strcat(leftChild->str, rightChild->str);
-            strcpy(node->str,str);
+            strcpy(result->str,str);
             node -> dtype = 3 ;
          }
 
          //BOOL FIXME
-          
-         return node ; // value returned to caller
+ 
+         result->parent = programContainer;
+         insertChild(programContainer, result);
+
+         return result ; // value returned to caller
 
 
          /*
@@ -205,20 +232,33 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       if(strcmp(node->name,"opAND") == 0){
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
+
+         //to delete at program end life
+         struct DataNode *result = constructNode(1);
+         result->parent = programContainer ;
+         insertChild(programContainer, result);
+
            
-         node->bval = leftChild->bval && rightChild->bval;   
-         node->dtype=4;
-         return node;
+         result->bval = leftChild->bval && rightChild->bval;   
+         result->dtype=4;
+         return result;
          
       }
 
       if(strcmp(node->name,"opOR") == 0){
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
+
+         //to delete at program end life
+         struct DataNode *result = constructNode(1);
+         result->parent = programContainer ;
+         insertChild(programContainer, result);
+
+
          
-         node->bval = leftChild->bval || rightChild->bval;   
-         node->dtype=4;
-         return node;
+         result->bval = leftChild->bval || rightChild->bval;   
+         result->dtype=4;
+         return result;
 
       }
 
@@ -226,10 +266,17 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
          //printf("\n\n\n\n HERE \n\n\n " ) ;
          struct DataNode *child = evaluate(node->children[0]);
+
+         //to delete at program end life
+         struct DataNode *result = constructNode(1);
+         result->parent = programContainer ;
+         insertChild(programContainer, result);
+
+
          
-         node->bval = !child->bval ;
-         node->dtype=4;
-         return node;
+         result->bval = !child->bval ;
+         result->dtype=4;
+         return result;
    
       }
       
@@ -240,78 +287,96 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       if(strcmp(node->name,"opLT") == 0){
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
+         struct DataNode *result = constructNode(1);
+
+         //to delete at program end life
+         result->parent = programContainer ;
+         insertChild(programContainer, result);
+
+
          
          //printf("WE GET HERE \n\n\n\n");
          int ldt = leftChild->dtype; 
          int rdt = rightChild->dtype; 
    
          if( (ldt == 1 ) && (rdt == 1) ) {
-            node->bval = leftChild->ival < rightChild->ival; 
-            node->dtype = 4 ;
-            return node;
+            result->bval = leftChild->ival < rightChild->ival; 
+            result->dtype = 4 ;
+            return result;
          }else if ( (ldt==1 && rdt==2) || (ldt==2 && rdt==1) 
                                                       || (ldt==2 && rdt==2) ){ 
-            node->bval = (leftChild->ival + leftChild->fval) < 
+            result->bval = (leftChild->ival + leftChild->fval) < 
                                           (leftChild->ival + rightChild->fval); 
-            node->dtype = 4 ;
-            return node;
+            result->dtype = 4 ;
+            return result;
 
          }else if (ldt == 3 && rdt == 3 )  {  
-            node->bval = (strcmp(leftChild->str, rightChild->str) ) < 0;
-            node->dtype = 4 ;
-            return node;
+            result->bval = (strcmp(leftChild->str, rightChild->str) ) < 0;
+            result->dtype = 4 ;
+            return result;
 
          }
       }
 
+      //node->dtype == 5 cont'd
       if(strcmp(node->name,"opEVAL") == 0){    // ==
 
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
-         
-         //printf("WE GET HERE \n\n\n\n");
+         struct DataNode *result = constructNode(1);
+
+         //to delete at program end life
+         result->parent = programContainer ;
+         insertChild(programContainer, result);
+         result->bval = false;
+         result->dtype = 4 ;
+
          int ldt = leftChild->dtype; 
          int rdt = rightChild->dtype; 
    
          if( (ldt == 1 ) && (rdt == 1) ) {
-            node->bval = leftChild->ival == rightChild->ival; 
-            node->dtype = 4 ;
-            return node;
+            result->bval = leftChild->ival == rightChild->ival; 
          }else if ( ldt==2 && rdt==2 ) { 
-            node->bval = leftChild->fval == rightChild->fval; 
-            node->dtype = 4 ;
-            return node;
+            result->bval = leftChild->fval == rightChild->fval; 
 
          }else if (ldt == 3 && rdt == 3 )  {  
-            node->bval = (strcmp(leftChild->str, rightChild->str) ) == 0;
-            node->dtype = 4 ;
-            return node;
+            result->bval = (strcmp(leftChild->str, rightChild->str) ) == 0;
+         }else if (ldt == 4 && rdt == 4 )  {  
+            result->bval = leftChild->fval == rightChild->fval; 
 
          }
+            return result;
+
       }
 
       if(strcmp(node->name,"opNEQ") == 0){
          struct DataNode *leftChild = evaluate(node->children[0]);
          struct DataNode *rightChild = evaluate(node->children[1]); 
+         struct DataNode *result = constructNode(1);
          
-         //printf("WE GET HERE \n\n\n\n");
+
+         //to delete at program end life
+         result->parent = programContainer ;
+         insertChild(programContainer, result);
+
+
          int ldt = leftChild->dtype; 
          int rdt = rightChild->dtype; 
    
          node -> bval = true;
          if( (ldt == 1 ) && (rdt == 1) ) {
-            node->bval = leftChild->ival != rightChild->ival; 
-            node->dtype = 4 ;
-            return node;
+            result->bval = leftChild->ival != rightChild->ival; 
+            result->dtype = 4 ;
+            return result;
          }else if ( ldt==2 && rdt==2 ) { 
-            node->bval = leftChild->fval != rightChild->fval; 
-            node->dtype = 4 ;
-            return node;
+            result->bval = leftChild->fval != rightChild->fval; 
+            result->dtype = 4 ;
+            return result;
 
          }else if (ldt == 3 && rdt == 3 )  {  
-            node->bval = (strcmp(leftChild->str, rightChild->str) ) != 0;
-            node->dtype = 4 ;
-            return node;
+            result->bval = (strcmp(leftChild->str, rightChild->str) ) != 0;
+            result->dtype = 4 ;
+            return result;
 
          }
 
@@ -380,7 +445,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
       struct DataNode *retVal = copyNode(localRetVal);        
       retVal->parent = programContainer;
-      insertChild(programContainer, retVal);
+      //insertChild(programContainer, retVal);
 
          
 
@@ -451,15 +516,32 @@ struct DataNode* evaluate(struct DataNode *node, ...)
       }else if(strcmp(node->name,"returnInstr") == 0){
          struct DataNode *localRetVal = evaluate(node->children[0]);         
          struct DataNode *retVal = copyNode(localRetVal);        
-         retVal->parent = programContainer;
+         retVal->parent = programContainer; //to be deleted at program end
          insertChild(programContainer, retVal);
+
+         
+         /*
+         ///DELETE ME /// 
+         printf("\n\n\n\n");
+         for(int i=0; i<varContainer->size; i++){
+            printf("COMING OUT: varContainer->children[%d]->name is: %s \nvarContainer->ival[%d] is: %d \n",
+                  i,  varContainer->children[i]->name, i, varContainer->children[i]->ival);
+          }
+         printf("\n\n\n\n");
+         /////////////////
+         */
+
+
+
+
+
 
          
          //destroy local scope
          struct DataNode *localScope = varContainer;
          varContainer = varContainer -> parent; 
 
-         //localScope->parent = NULL;
+         localScope->parent = NULL;
          freeNode(localScope);
          return retVal;
 
@@ -481,11 +563,34 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          for(int i=0;i<numParams;i++)
          {
             //printf("PARAMETERS HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                 \n\n\n")       //DELETE ME;
+          
+            //DELETE ME ///////////////
+            struct DataNode *parameter = evaluate(parameters->children[i]);
+            
+            //DELETE ME 
+            //printf("\n\nparam name is: %s \n\n ", parameter->name);
+            //printf("\n\nparam type is: %d \n\n ", parameter->dtype);
+            ///////////////////////////////////////////
+            
+            //
+            varContainer->children[i]->dtype = parameter->dtype;
+            varContainer->children[i]->ival = parameter->ival;
+            varContainer->children[i]->fval = parameter->fval;
+            strcpy(varContainer->children[i]->str, parameter->str);
+            varContainer->children[i]->bval = parameter->bval;
+            
+            ///////////////////////////////////
+            
+            /*
             varContainer->children[i]->dtype = parameters->children[i]->dtype;
             varContainer->children[i]->ival = parameters->children[i]->ival;
             varContainer->children[i]->fval = parameters->children[i]->fval;
             strcpy(varContainer->children[i]->str, parameters->children[i]->str);
             varContainer->children[i]->bval = parameters->children[i]->bval;
+            */
+
+
+
             //printf("VARCONTAINER->CHILDREN[%d];  With varname %s; value is now: %d \n",             //DELETE ME
             //   i, varContainer->children[i]->name, 
             //  varContainer->children[i]->ival);
@@ -493,7 +598,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             //FIXME
          }
 
-
+         va_end(paramList);  
       //node->dtype == 8
       //FUNCTION CALL 
       }else if(strcmp(node->name,"funCall") == 0){
@@ -528,12 +633,36 @@ struct DataNode* evaluate(struct DataNode *node, ...)
          #if FUNCDEBUG
             printf("\n\n   ~SCOPE CHG~ address GLOBAL scope is : %p\n", varContainer);
          #endif
+         
+         /*
+         ///DELETE ME /// 
+         printf("\n\n\n\n");
+         for(int i=0; i<varContainer->size; i++){
+            printf("COMING IN: varContainer->children[%d]->name is: %s \n varContainer->ival[%d] is: %d \n",
+                  i,  varContainer->children[i]->name, i, varContainer->children[i]->ival);
+         }
+         printf("\n\n\n\n");
+         /////////////////
+         */
 
          struct DataNode *localVarContainer = constructNode(2);
          //make current scope a parent of new local scope 
          localVarContainer->parent = varContainer;
          //make new local scope the new varContainer
          varContainer = localVarContainer;
+
+         
+         ///DELETE ME /// 
+         printf("\n\n\n\n");
+         for(int i=0; i<varContainer->size; i++){
+            printf("AT CREATION: varContainer->ival[%d] is: %d \n",i, varContainer->children[i]->ival);
+         }
+         printf("\n\n\n\n");
+         /////////////////
+        
+
+
+
 
          #if FUNCDEBUG
             printf("            ...address of new LOCAL scope is : %p\n", varContainer);
@@ -649,6 +778,26 @@ struct DataNode* findVar(char* varName)
    ////////////////
 
    struct DataNode *localVarContainer = varContainer;
+
+   while(localVarContainer != NULL) 
+   {
+      for(int i=0; i<localVarContainer->size; i++)
+      {
+         //if the var exists
+         if(strcmp(localVarContainer->children[i]->name,varName) == 0)
+         {
+            return localVarContainer->children[i];
+         }
+      }
+      //not found in local scope, look in next greater scope
+      localVarContainer = localVarContainer->parent;
+   }
+
+   //var not found
+   printf("Oops: VAR %s doesn't exist in this scope!\n", varName);
+   return dummyNode;
+
+   /*
    do{
       for(int i=0; i<localVarContainer->size; i++)
       {
@@ -682,13 +831,18 @@ struct DataNode* findVar(char* varName)
 
    //here: var is NOT found
    //THERE SHOULD BE AN ERROR UP HERE IF VAR NOT FOUND FIXME: add error msg
+   */
+
+   /*
    //DELETE ME ////////FIXME
    struct DataNode *deleteMe = constructNode(0);
    strcpy(deleteMe->name,"deleteMe");
-   deleteMe->ival=0;
+   deleteMe->ival=deleteMe->fval=deleteMe->bval=0;
+   strcpy(deleteMe->str,"\0");
    printf("Oops: VAR %s doesn't exist in this scope!\n", varName);
    return deleteMe;
    ///////^^^^DELETE ME^^^^ ////////
+   */
 
 }
 
@@ -703,6 +857,10 @@ struct DataNode* findLocalVar(char* varName)
          return varContainer->children[i];
       }
    }
+   //not found in local scope
+   return dummyNode;
+
+   /*
    //FIXME DELETE ME////////
    struct DataNode *deleteMe = constructNode(0);
    strcpy(deleteMe->name,"deleteMe");
@@ -712,8 +870,9 @@ struct DataNode* findLocalVar(char* varName)
    ////////////////
    //FIXME : here var is NOT found
    //THERE SHOULD BE AN ERROR UP HERE IF VAR NOT FOUND FIXME: add error msg
+   */
 }
-
+   
 
 
 /*

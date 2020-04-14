@@ -15,6 +15,7 @@ struct DataNode *copyNode (struct DataNode *node)
    copy->fval = node->fval;
    strcpy(copy->str, node->str);
    copy->bval = node->bval;
+   copy->dtype = node->dtype;
    return copy;
 }
 

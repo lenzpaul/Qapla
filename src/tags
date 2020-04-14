@@ -52,6 +52,7 @@ expression	fooChecker.yacc	792
 findLocalVar	dataStructures/functions.c	/^struct DataNode* findLocalVar(char* varName)$/
 findVar	dataStructures/functions.c	/^struct DataNode* findVar(char* varName)$/
 freeNode	dataStructures/Nodes.c	/^void freeNode(struct DataNode *node) {$/
+funCall	dataStructures/functions.c	547
 func	fooChecker.yacc	528
 func	fooChecker.yacc	623
 funcall	fooChecker.yacc	912
