@@ -9,15 +9,15 @@
 
 [ ] While loop...
 
-[ ] Input/Output operations
-
+[x] Input/Output operations
+   [x] Add error checking on scanf
 [x] Selection: If/else
 
 [x] AND NOT OR
 
 [x] implement operators : < == and <> 
 
-[ ] add opTimes for intexpr * intexpr
+[x] add opTimes for intexpr * intexpr
 
 
 

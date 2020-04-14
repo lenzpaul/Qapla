@@ -55,6 +55,7 @@ int yyerror(char* s);
  /* for the token types that have an associated value, identify its type */
 %token<struct DataNode> INTEGER REAL IDENTIFIER STRING BOOLEAN PRINT VAR MOD 
 %token<struct DataNode> FUNC EVAL RETURN IF ELSEIF ELSE WHILE AND OR NOT NEQ
+%token<struct DataNode> READI READR READS
 /* %type<struct DataNode>  */
 
 
@@ -761,7 +762,7 @@ paramdecl:
                printf("IDENTIFIER name: %s \n ", $<datanode->name>1);
             #endif
          }
-/*
+
       | REAL    
          { 
             #if DEBUGTAG 
@@ -788,7 +789,7 @@ paramdecl:
             #endif
          }
       ;
-*/
+
 
 
 expression:
@@ -881,6 +882,14 @@ expression:
             $<datanode>$ = $<datanode>1;
          }
                
+      | realexpr 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> realexpr \n");    //DEBUG
+            #endif
+
+         }
+
       | ioexpr /* instruction node */
          { 
             #if DEBUGTAG
@@ -1357,8 +1366,120 @@ strexpr:
                printf("%s is a string \n",$<datanode->str>1);
             #endif
          }
+
+      | READS '(' ')'
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:strexpr--> READS \n");    //DEBUG
+            #endif
+
+            $<datanode->dtype>$ = 3;
+            bool valid = scanf ("%s",$<datanode->str>1);
+            if(!valid) 
+            {
+               printf("Invalid string value. Terminating\n"); //ERROR
+               return 0;
+            }
+            
+         }
   
       ;
+
+
+
+
+realexpr: 
+        REAL
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:realexpr--> REAL \n");    //DEBUG
+            #endif
+            
+
+            #if DEBUGTAG
+               printf("%f is a real \n",$<datanode->fval>1);
+               //printf("It is also an intexpr with address: %p\n",$<datanode>$);
+            #endif
+         }
+
+
+      | '-' realexpr    %prec '*' 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: realexpr--> '-' realexpr  prec '*' \n");    //DEBUG
+            #endif
+            
+            $<datanode->dtype>$ = 2;
+            $<datanode->fval>$ = - $<datanode->fval>2;
+
+
+            #if DEBUGTAG
+               printf("negative %f, using unary negation \n",$<datanode->fval>2);
+            #endif
+         }
+
+      | realexpr '-' realexpr
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: realexpr--> realexpr * realexpr \n");    //DEBUG
+            #endif
+            $<datanode->dtype>$ = 2;
+            $<datanode->fval>$ = $<datanode->fval>1 - $<datanode->fval>3;
+            #if DEBUGTAG
+               printf("%f - %f is %f \n",$<datanode->fval>1, $<datanode->fval>3, $<datanode->fval>$);
+            #endif
+         }
+
+      | realexpr '*' realexpr
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: realexpr--> realexpr * realexpr \n");    //DEBUG
+            #endif
+            $<datanode->dtype>$ = 2;
+            $<datanode->fval>$ = $<datanode->fval>1 * $<datanode->fval>3;
+            #if DEBUGTAG
+               printf("%f * %f is %f \n",$<datanode->fval>1, $<datanode->fval>3, $<datanode->fval>$);
+            #endif
+         }
+
+
+      | realexpr '/' realexpr
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: realexpr--> realexpr / realexpr \n");    //DEBUG
+            #endif
+            $<datanode->dtype>$ = 2;
+            $<datanode->fval>$ = $<datanode->fval>1 / $<datanode->fval>3;
+            #if DEBUGTAG
+               printf("%f / %f is %f \n",$<datanode->fval>1, $<datanode->fval>3, $<datanode->fval>$);
+            #endif
+         }
+
+      | READR '(' ')' 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: realexpr--> READR '(' ')'  \n");    //DEBUG
+            #endif
+
+            $<datanode->dtype>$ = 2;
+            bool valid = scanf ("%lf",&$<datanode->fval>1);
+            if(!valid) 
+            {
+               printf("Invalid real value. Terminating\n"); //ERROR
+               return 0;
+            }
+            #if DEBUGTAG
+               printf("%f is a real number \n",$<datanode->fval>1);
+            #endif
+         }
+
+      ;
+
+
+
+
+
+
 
 intexpr: 
         INTEGER
@@ -1423,6 +1544,24 @@ intexpr:
             #endif
             $<datanode->dtype>$ = 1;
             $<datanode->ival>$ = $<datanode->ival>1 / $<datanode->ival>3;
+            #if DEBUGTAG
+               printf("%d * %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
+            #endif
+         }
+
+      | READI '(' ')' 
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: intexpr--> readi '(' ')'  \n");    //DEBUG
+            #endif
+
+            $<datanode->dtype>$ = 1;
+            bool valid = scanf ("%d",&$<datanode->ival>1);
+            if(!valid) 
+            {
+               printf("Invalid integer value. Terminating\n"); //ERROR
+               return 0;
+            }
             #if DEBUGTAG
                printf("%d * %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
             #endif

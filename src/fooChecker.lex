@@ -37,6 +37,46 @@ const int MaxLen = 128;
  /****** Rules for tokens ******/
 "exit"     { return 0; }
 
+"readi"    { 
+   yylval.datanode = constructNode(0);
+
+   yylval.datanode->ival = 0;
+   yylval.datanode->fval = 0;
+
+   yylval.datanode->str[0] = '\0';
+   yylval.datanode->bval = false;
+   yylval.datanode->name[0] = '\0';
+   yylval.datanode->dtype = 1;
+
+   return (READI); 
+   }
+
+
+
+"readr"   { 
+   yylval.datanode = constructNode(1);
+   yylval.datanode->fval = 0.0;
+
+   yylval.datanode->str[0] = '\0';
+   yylval.datanode->ival = 0;      
+   yylval.datanode->bval = false;
+   yylval.datanode->name[0] = '\0';
+   yylval.datanode->dtype = 2;
+   return (READR); 
+   } 
+
+"reads"      { 
+
+   yylval.datanode = constructNode(1);
+
+   yylval.datanode->str[0] = '\0';
+   yylval.datanode->ival = 0;
+   yylval.datanode->fval = 0;
+   yylval.datanode->bval = false;
+   yylval.datanode->name[0] = '\0';
+   yylval.datanode->dtype = 0;
+   return (READS); 
+   } 
 
 "AND"      { return (AND); } 
 
@@ -173,10 +213,11 @@ const int MaxLen = 128;
   *    for the identifier
   *    and return REAL as the type */
  ({Neg})?({Num})+\.({Num})+ { 
+   yylval.datanode = constructNode(1);
    yylval.datanode->fval = atof(yytext); 
 
    yylval.datanode->str[0] = '\0';
-   yylval.datanode->ival = 0;         //FIXME 
+   yylval.datanode->ival = 0;      
    yylval.datanode->bval = false;
    yylval.datanode->name[0] = '\0';
    yylval.datanode->dtype = 2;

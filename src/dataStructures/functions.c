@@ -37,7 +37,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
    //real
    }else if(node->dtype == 2){
-      return node
+      return node;
    //string
    }else if(node->dtype == 3){
 
