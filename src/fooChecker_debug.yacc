@@ -1389,6 +1389,31 @@ intexpr:
             #endif
          }
 
+      | intexpr '+' IDENTIFIER
+         {
+            #if DEBUGTAG
+               printf(" ~RULE:intexpr--> intexpr + IDENTIFIER \n");    //DEBUG
+            #endif
+           
+
+            //create operator + node
+            struct DataNode *node = constructNode(2) ;
+            node->dtype = 5 ; //operator type
+            strcpy(node->name,"opPlus");
+   
+            //insert 2 operands as children
+            insertChild(node,$<datanode>1);      
+            insertChild(node,$<datanode>3);      
+
+            $<datanode>$ = node ;
+
+            //#if DEBUGTAG
+               //printf("%d + %d is %d \n",$<datanode->ival>1, $<datanode->ival>3, $<datanode->ival>$);
+               //printf("The address is %p \n",op);
+               //printf("The address is %p \n",$<datanode>$);
+            //#endif
+         }
+
       | intexpr '+' intexpr
          {
             #if DEBUGTAG

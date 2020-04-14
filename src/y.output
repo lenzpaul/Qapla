@@ -113,8 +113,9 @@ Grammar
 
    60 intexpr: INTEGER
    61        | '-' intexpr
-   62        | intexpr '+' intexpr
-   63        | intexpr '*' intexpr
+   62        | intexpr '+' IDENTIFIER
+   63        | intexpr '+' intexpr
+   64        | intexpr '*' intexpr
 
 
 Terminals, with rules where they appear
@@ -122,8 +123,8 @@ Terminals, with rules where they appear
 $end (0) 0
 '(' (40) 20 23 27 28 41 42 49 50 51
 ')' (41) 20 23 27 28 41 42 49 50 51
-'*' (42) 63
-'+' (43) 36 62
+'*' (42) 64
+'+' (43) 36 62 63
 '-' (45) 61
 '/' (47)
 ':' (58) 30 44
@@ -136,7 +137,7 @@ $end (0) 0
 error (256)
 INTEGER (258) 32 60
 REAL (259)
-IDENTIFIER (260) 27 28 31 35 41 42 47 48 50
+IDENTIFIER (260) 27 28 31 35 41 42 47 48 50 62
 STRING (261) 59
 BOOLEAN (262) 58
 PRINT (263) 49 50
@@ -215,7 +216,7 @@ boolexpr (61)
 strexpr (62)
     on left: 59, on right: 38
 intexpr (63)
-    on left: 60 61 62 63, on right: 37 61 62 63
+    on left: 60 61 62 63 64, on right: 37 61 62 63 64
 
 
 State 0
@@ -592,8 +593,9 @@ State 28
 State 29
 
    37 expression: intexpr .
-   62 intexpr: intexpr . '+' intexpr
-   63        | intexpr . '*' intexpr
+   62 intexpr: intexpr . '+' IDENTIFIER
+   63        | intexpr . '+' intexpr
+   64        | intexpr . '*' intexpr
 
     '+'  shift, and go to state 58
     '*'  shift, and go to state 59
@@ -767,8 +769,9 @@ State 38
 State 39
 
    61 intexpr: '-' intexpr .
-   62        | intexpr . '+' intexpr
-   63        | intexpr . '*' intexpr
+   62        | intexpr . '+' IDENTIFIER
+   63        | intexpr . '+' intexpr
+   64        | intexpr . '*' intexpr
 
     $default  reduce using rule 61 (intexpr)
 
@@ -1012,22 +1015,24 @@ State 57
 
 State 58
 
-   62 intexpr: intexpr '+' . intexpr
+   62 intexpr: intexpr '+' . IDENTIFIER
+   63        | intexpr '+' . intexpr
 
-    INTEGER  shift, and go to state 1
-    '-'      shift, and go to state 10
+    INTEGER     shift, and go to state 1
+    IDENTIFIER  shift, and go to state 80
+    '-'         shift, and go to state 10
 
-    intexpr  go to state 80
+    intexpr  go to state 81
 
 
 State 59
 
-   63 intexpr: intexpr '*' . intexpr
+   64 intexpr: intexpr '*' . intexpr
 
     INTEGER  shift, and go to state 1
     '-'      shift, and go to state 10
 
-    intexpr  go to state 81
+    intexpr  go to state 82
 
 
 State 60
@@ -1074,8 +1079,8 @@ State 63
    42 funcall: IDENTIFIER '(' paramassign_list . ')'
    44 paramassign_list: paramassign_list . ':' paramassign
 
-    ')'  shift, and go to state 82
-    ':'  shift, and go to state 83
+    ')'  shift, and go to state 83
+    ':'  shift, and go to state 84
 
 
 State 64
@@ -1093,7 +1098,7 @@ State 65
    50 ioexpr: PRINT '(' IDENTIFIER . ')'
 
     '('  shift, and go to state 31
-    ')'  shift, and go to state 84
+    ')'  shift, and go to state 85
 
     ')'       [reduce using rule 35 (expression)]
     $default  reduce using rule 35 (expression)
@@ -1110,7 +1115,7 @@ State 66
     EVAL  shift, and go to state 50
     NEQ   shift, and go to state 51
     '+'   shift, and go to state 52
-    ')'   shift, and go to state 85
+    ')'   shift, and go to state 86
     '<'   shift, and go to state 54
 
 
@@ -1119,12 +1124,12 @@ State 67
    27 fundecl: FUNC IDENTIFIER '(' . ')' '{' funbody '}'
    28        | FUNC IDENTIFIER '(' . paramdecl_list ')' '{' funbody '}'
 
-    INTEGER     shift, and go to state 86
-    IDENTIFIER  shift, and go to state 87
-    ')'         shift, and go to state 88
+    INTEGER     shift, and go to state 87
+    IDENTIFIER  shift, and go to state 88
+    ')'         shift, and go to state 89
 
-    paramdecl_list  go to state 89
-    paramdecl       go to state 90
+    paramdecl_list  go to state 90
+    paramdecl       go to state 91
 
 
 State 68
@@ -1136,7 +1141,7 @@ State 68
 
     AND  shift, and go to state 56
     OR   shift, and go to state 57
-    ')'  shift, and go to state 91
+    ')'  shift, and go to state 92
 
     $default  reduce using rule 40 (expression)
 
@@ -1166,7 +1171,7 @@ State 70
     funcall     go to state 23
     vardecl     go to state 24
     ioexpr      go to state 26
-    boolexpr    go to state 92
+    boolexpr    go to state 93
     strexpr     go to state 28
     intexpr     go to state 29
 
@@ -1186,8 +1191,8 @@ State 71
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
 
-    statements   go to state 93
-    statement    go to state 94
+    statements   go to state 94
+    statement    go to state 95
     selection    go to state 18
     ifcomponent  go to state 19
     expression   go to state 22
@@ -1346,32 +1351,41 @@ State 79
 
 State 80
 
-   62 intexpr: intexpr . '+' intexpr
-   62        | intexpr '+' intexpr .
-   63        | intexpr . '*' intexpr
-
-    '*'  shift, and go to state 59
+   62 intexpr: intexpr '+' IDENTIFIER .
 
     $default  reduce using rule 62 (intexpr)
 
 
 State 81
 
-   62 intexpr: intexpr . '+' intexpr
-   63        | intexpr . '*' intexpr
-   63        | intexpr '*' intexpr .
+   62 intexpr: intexpr . '+' IDENTIFIER
+   63        | intexpr . '+' intexpr
+   63        | intexpr '+' intexpr .
+   64        | intexpr . '*' intexpr
+
+    '*'  shift, and go to state 59
 
     $default  reduce using rule 63 (intexpr)
 
 
 State 82
 
+   62 intexpr: intexpr . '+' IDENTIFIER
+   63        | intexpr . '+' intexpr
+   64        | intexpr . '*' intexpr
+   64        | intexpr '*' intexpr .
+
+    $default  reduce using rule 64 (intexpr)
+
+
+State 83
+
    42 funcall: IDENTIFIER '(' paramassign_list ')' .
 
     $default  reduce using rule 42 (funcall)
 
 
-State 83
+State 84
 
    44 paramassign_list: paramassign_list ':' . paramassign
 
@@ -1387,7 +1401,7 @@ State 83
 
     expression   go to state 62
     funcall      go to state 23
-    paramassign  go to state 95
+    paramassign  go to state 96
     vardecl      go to state 24
     ioexpr       go to state 26
     boolexpr     go to state 27
@@ -1395,65 +1409,65 @@ State 83
     intexpr      go to state 29
 
 
-State 84
+State 85
 
    50 ioexpr: PRINT '(' IDENTIFIER ')' .
 
     $default  reduce using rule 50 (ioexpr)
 
 
-State 85
+State 86
 
    49 ioexpr: PRINT '(' expression ')' .
 
     $default  reduce using rule 49 (ioexpr)
 
 
-State 86
+State 87
 
    32 paramdecl: INTEGER .
 
     $default  reduce using rule 32 (paramdecl)
 
 
-State 87
+State 88
 
    31 paramdecl: IDENTIFIER .
 
     $default  reduce using rule 31 (paramdecl)
 
 
-State 88
+State 89
 
    27 fundecl: FUNC IDENTIFIER '(' ')' . '{' funbody '}'
 
-    '{'  shift, and go to state 96
+    '{'  shift, and go to state 97
 
 
-State 89
+State 90
 
    28 fundecl: FUNC IDENTIFIER '(' paramdecl_list . ')' '{' funbody '}'
    30 paramdecl_list: paramdecl_list . ':' paramdecl
 
-    ')'  shift, and go to state 97
-    ':'  shift, and go to state 98
+    ')'  shift, and go to state 98
+    ':'  shift, and go to state 99
 
 
-State 90
+State 91
 
    29 paramdecl_list: paramdecl .
 
     $default  reduce using rule 29 (paramdecl_list)
 
 
-State 91
+State 92
 
    20 ifcomponent: IF '(' boolexpr ')' . '{' statements '}'
 
-    '{'  shift, and go to state 99
+    '{'  shift, and go to state 100
 
 
-State 92
+State 93
 
    23 elseifcomponent: ELSEIF '(' boolexpr . ')' '{' statements '}'
    40 expression: boolexpr .
@@ -1462,12 +1476,12 @@ State 92
 
     AND  shift, and go to state 56
     OR   shift, and go to state 57
-    ')'  shift, and go to state 100
+    ')'  shift, and go to state 101
 
     $default  reduce using rule 40 (expression)
 
 
-State 93
+State 94
 
    12 statements: statements . statement
    24 elsecomponent: ELSE '{' statements . '}'
@@ -1482,9 +1496,9 @@ State 93
     NOT         shift, and go to state 9
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
-    '}'         shift, and go to state 101
+    '}'         shift, and go to state 102
 
-    statement    go to state 102
+    statement    go to state 103
     selection    go to state 18
     ifcomponent  go to state 19
     expression   go to state 22
@@ -1497,21 +1511,21 @@ State 93
     intexpr      go to state 29
 
 
-State 94
+State 95
 
    11 statements: statement .
 
     $default  reduce using rule 11 (statements)
 
 
-State 95
+State 96
 
    44 paramassign_list: paramassign_list ':' paramassign .
 
     $default  reduce using rule 44 (paramassign_list)
 
 
-State 96
+State 97
 
    27 fundecl: FUNC IDENTIFIER '(' ')' '{' . funbody '}'
 
@@ -1521,20 +1535,20 @@ State 96
     BOOLEAN     shift, and go to state 4
     PRINT       shift, and go to state 5
     VAR         shift, and go to state 6
-    RETURN      shift, and go to state 103
+    RETURN      shift, and go to state 104
     IF          shift, and go to state 8
     NOT         shift, and go to state 9
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
 
-    funbody      go to state 104
-    statements   go to state 105
-    statement    go to state 94
+    funbody      go to state 105
+    statements   go to state 106
+    statement    go to state 95
     selection    go to state 18
     ifcomponent  go to state 19
     expression   go to state 22
     funcall      go to state 23
-    retstmt      go to state 106
+    retstmt      go to state 107
     vardecl      go to state 24
     assignexpr   go to state 25
     ioexpr       go to state 26
@@ -1543,24 +1557,24 @@ State 96
     intexpr      go to state 29
 
 
-State 97
+State 98
 
    28 fundecl: FUNC IDENTIFIER '(' paramdecl_list ')' . '{' funbody '}'
 
-    '{'  shift, and go to state 107
-
-
-State 98
-
-   30 paramdecl_list: paramdecl_list ':' . paramdecl
-
-    INTEGER     shift, and go to state 86
-    IDENTIFIER  shift, and go to state 87
-
-    paramdecl  go to state 108
+    '{'  shift, and go to state 108
 
 
 State 99
+
+   30 paramdecl_list: paramdecl_list ':' . paramdecl
+
+    INTEGER     shift, and go to state 87
+    IDENTIFIER  shift, and go to state 88
+
+    paramdecl  go to state 109
+
+
+State 100
 
    20 ifcomponent: IF '(' boolexpr ')' '{' . statements '}'
 
@@ -1575,8 +1589,8 @@ State 99
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
 
-    statements   go to state 109
-    statement    go to state 94
+    statements   go to state 110
+    statement    go to state 95
     selection    go to state 18
     ifcomponent  go to state 19
     expression   go to state 22
@@ -1589,28 +1603,28 @@ State 99
     intexpr      go to state 29
 
 
-State 100
+State 101
 
    23 elseifcomponent: ELSEIF '(' boolexpr ')' . '{' statements '}'
 
-    '{'  shift, and go to state 110
+    '{'  shift, and go to state 111
 
 
-State 101
+State 102
 
    24 elsecomponent: ELSE '{' statements '}' .
 
     $default  reduce using rule 24 (elsecomponent)
 
 
-State 102
+State 103
 
    12 statements: statements statement .
 
     $default  reduce using rule 12 (statements)
 
 
-State 103
+State 104
 
    46 retstmt: RETURN . expression ';'
 
@@ -1624,7 +1638,7 @@ State 103
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
 
-    expression  go to state 111
+    expression  go to state 112
     funcall     go to state 23
     vardecl     go to state 24
     ioexpr      go to state 26
@@ -1633,14 +1647,14 @@ State 103
     intexpr     go to state 29
 
 
-State 104
+State 105
 
    27 fundecl: FUNC IDENTIFIER '(' ')' '{' funbody . '}'
 
-    '}'  shift, and go to state 112
+    '}'  shift, and go to state 113
 
 
-State 105
+State 106
 
     9 funbody: statements . retstmt
    12 statements: statements . statement
@@ -1651,18 +1665,18 @@ State 105
     BOOLEAN     shift, and go to state 4
     PRINT       shift, and go to state 5
     VAR         shift, and go to state 6
-    RETURN      shift, and go to state 103
+    RETURN      shift, and go to state 104
     IF          shift, and go to state 8
     NOT         shift, and go to state 9
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
 
-    statement    go to state 102
+    statement    go to state 103
     selection    go to state 18
     ifcomponent  go to state 19
     expression   go to state 22
     funcall      go to state 23
-    retstmt      go to state 113
+    retstmt      go to state 114
     vardecl      go to state 24
     assignexpr   go to state 25
     ioexpr       go to state 26
@@ -1671,14 +1685,14 @@ State 105
     intexpr      go to state 29
 
 
-State 106
+State 107
 
    10 funbody: retstmt .
 
     $default  reduce using rule 10 (funbody)
 
 
-State 107
+State 108
 
    28 fundecl: FUNC IDENTIFIER '(' paramdecl_list ')' '{' . funbody '}'
 
@@ -1688,20 +1702,20 @@ State 107
     BOOLEAN     shift, and go to state 4
     PRINT       shift, and go to state 5
     VAR         shift, and go to state 6
-    RETURN      shift, and go to state 103
+    RETURN      shift, and go to state 104
     IF          shift, and go to state 8
     NOT         shift, and go to state 9
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
 
-    funbody      go to state 114
-    statements   go to state 105
-    statement    go to state 94
+    funbody      go to state 115
+    statements   go to state 106
+    statement    go to state 95
     selection    go to state 18
     ifcomponent  go to state 19
     expression   go to state 22
     funcall      go to state 23
-    retstmt      go to state 106
+    retstmt      go to state 107
     vardecl      go to state 24
     assignexpr   go to state 25
     ioexpr       go to state 26
@@ -1710,14 +1724,14 @@ State 107
     intexpr      go to state 29
 
 
-State 108
+State 109
 
    30 paramdecl_list: paramdecl_list ':' paramdecl .
 
     $default  reduce using rule 30 (paramdecl_list)
 
 
-State 109
+State 110
 
    12 statements: statements . statement
    20 ifcomponent: IF '(' boolexpr ')' '{' statements . '}'
@@ -1732,38 +1746,9 @@ State 109
     NOT         shift, and go to state 9
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
-    '}'         shift, and go to state 115
+    '}'         shift, and go to state 116
 
-    statement    go to state 102
-    selection    go to state 18
-    ifcomponent  go to state 19
-    expression   go to state 22
-    funcall      go to state 23
-    vardecl      go to state 24
-    assignexpr   go to state 25
-    ioexpr       go to state 26
-    boolexpr     go to state 27
-    strexpr      go to state 28
-    intexpr      go to state 29
-
-
-State 110
-
-   23 elseifcomponent: ELSEIF '(' boolexpr ')' '{' . statements '}'
-
-    INTEGER     shift, and go to state 1
-    IDENTIFIER  shift, and go to state 2
-    STRING      shift, and go to state 3
-    BOOLEAN     shift, and go to state 4
-    PRINT       shift, and go to state 5
-    VAR         shift, and go to state 6
-    IF          shift, and go to state 8
-    NOT         shift, and go to state 9
-    '-'         shift, and go to state 10
-    '('         shift, and go to state 11
-
-    statements   go to state 116
-    statement    go to state 94
+    statement    go to state 103
     selection    go to state 18
     ifcomponent  go to state 19
     expression   go to state 22
@@ -1778,6 +1763,35 @@ State 110
 
 State 111
 
+   23 elseifcomponent: ELSEIF '(' boolexpr ')' '{' . statements '}'
+
+    INTEGER     shift, and go to state 1
+    IDENTIFIER  shift, and go to state 2
+    STRING      shift, and go to state 3
+    BOOLEAN     shift, and go to state 4
+    PRINT       shift, and go to state 5
+    VAR         shift, and go to state 6
+    IF          shift, and go to state 8
+    NOT         shift, and go to state 9
+    '-'         shift, and go to state 10
+    '('         shift, and go to state 11
+
+    statements   go to state 117
+    statement    go to state 95
+    selection    go to state 18
+    ifcomponent  go to state 19
+    expression   go to state 22
+    funcall      go to state 23
+    vardecl      go to state 24
+    assignexpr   go to state 25
+    ioexpr       go to state 26
+    boolexpr     go to state 27
+    strexpr      go to state 28
+    intexpr      go to state 29
+
+
+State 112
+
    36 expression: expression . '+' expression
    46 retstmt: RETURN expression . ';'
    55 boolexpr: expression . '<' expression
@@ -1787,39 +1801,39 @@ State 111
     EVAL  shift, and go to state 50
     NEQ   shift, and go to state 51
     '+'   shift, and go to state 52
-    ';'   shift, and go to state 117
+    ';'   shift, and go to state 118
     '<'   shift, and go to state 54
 
 
-State 112
+State 113
 
    27 fundecl: FUNC IDENTIFIER '(' ')' '{' funbody '}' .
 
     $default  reduce using rule 27 (fundecl)
 
 
-State 113
+State 114
 
     9 funbody: statements retstmt .
 
     $default  reduce using rule 9 (funbody)
 
 
-State 114
+State 115
 
    28 fundecl: FUNC IDENTIFIER '(' paramdecl_list ')' '{' funbody . '}'
 
-    '}'  shift, and go to state 118
+    '}'  shift, and go to state 119
 
 
-State 115
+State 116
 
    20 ifcomponent: IF '(' boolexpr ')' '{' statements '}' .
 
     $default  reduce using rule 20 (ifcomponent)
 
 
-State 116
+State 117
 
    12 statements: statements . statement
    23 elseifcomponent: ELSEIF '(' boolexpr ')' '{' statements . '}'
@@ -1834,9 +1848,9 @@ State 116
     NOT         shift, and go to state 9
     '-'         shift, and go to state 10
     '('         shift, and go to state 11
-    '}'         shift, and go to state 119
+    '}'         shift, and go to state 120
 
-    statement    go to state 102
+    statement    go to state 103
     selection    go to state 18
     ifcomponent  go to state 19
     expression   go to state 22
@@ -1849,21 +1863,21 @@ State 116
     intexpr      go to state 29
 
 
-State 117
+State 118
 
    46 retstmt: RETURN expression ';' .
 
     $default  reduce using rule 46 (retstmt)
 
 
-State 118
+State 119
 
    28 fundecl: FUNC IDENTIFIER '(' paramdecl_list ')' '{' funbody '}' .
 
     $default  reduce using rule 28 (fundecl)
 
 
-State 119
+State 120
 
    23 elseifcomponent: ELSEIF '(' boolexpr ')' '{' statements '}' .
 
