@@ -1,3 +1,0 @@
-strx = "hello" + " world"
-stry = "another"
-strz = strx + stry
