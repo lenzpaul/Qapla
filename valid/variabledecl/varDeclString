@@ -1,0 +1,5 @@
+VAR x ;
+
+x = "Hello welcome to my video " ;
+
+print ( x ) ;

@@ -1,0 +1,1 @@
+FUNC p ( z ) { return 3 ; } VAR x ; x = p ( 8 ) ; print ( x ) ; 

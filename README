@@ -4,7 +4,7 @@ README: CSCI 330 Project 2020
 Currently the repository contains this README,
    a makefile to build fooChecker and fooCheckerd,
    a sample/starter fooChecker.lex and fooChecker.yacc,
-   a sample input file valid/t0 that passes the initial fooChecker,
+   | sample input file valid/t0 that passes the initial fooChecker,
    a sample input file invalid/e0 that fails on the initial fooChecker
 
 To build fooChecker simply run the command 'make',
@@ -23,3 +23,36 @@ A careful description of what you did/did not get working for
 your fooChecker should be inserted here.
 ---
 
+
+==============================================================================
+Lenz Thierry Paul
+
+
+Working features 
+   - comments
+   - assignment statements
+   - variables
+   - I/O : typechecked. reads, readi, readr, print
+   - string expressions
+      -  including syntax, literals, escape sequences for " and \,
+         comparison operators, concatenation
+   - arithmetic expressions : + - * / , correct precedence and associativity,
+      typechecking  
+   - boolean expressions
+      - syntax, literals T and F, the comparison operators, 
+         compound operators (AND OR NOT), typechecking
+   - selection 
+      - syntax, the use of if, else-if, else, the boolean test 
+          expressions, local block scope
+   - function handling 
+      - syntax, function definitions and calls, local variables/scope, 
+         proper handling of parameters and return values
+
+
+Non working features 
+   - string expressions
+      - substring operators
+   - arithmetic expressions
+      -  MOD, and ^ 
+   - iteration 
+      - while loops are not implemented 

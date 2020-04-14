@@ -1,11 +1,3 @@
-VAR a ;
-VAR b ;
-VAR c ;
-VAR d ;
-VAR e ;
-VAR f ;
-VAR g ;
-VAR h ;
-VAR i ;
-VAR j ;
-VAR k ;
+
+VAR somevar ;
+

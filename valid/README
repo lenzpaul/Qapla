@@ -6,3 +6,10 @@ file is specifically meant to demonstrate.
 ---
 
 
+File f1.foo contains a set of function definitions and calls
+  - a function with no parameters
+  - a function with 1 parameter
+  - a function with two parameters
+  - a function call passing a literal value
+  - a function call passing a variable
+  - a function call passing an expression

@@ -1,0 +1,1 @@
+FUNC p ( a : b : c ) { VAR x ; VAR y ; VAR z ;  x = 3 ; }

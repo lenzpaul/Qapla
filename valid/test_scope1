@@ -1,0 +1,1 @@
+FUNC foo ( x : y ) { if ( x == T ) { print ( " x" ) ; } else-if ( y == T ) { print ( "y" ) ; } return 3 ; }

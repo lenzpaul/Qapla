@@ -1,0 +1,1 @@
+FUNC test(x) { x = x + 1 ; print ( "function called " ) ; return x ; } VAR a ; a = test ( 2 ) ; print ( a ) ; a = test ( a ) ; print ( a ) ; a = test ( a ) ; print ( a ) ; a = test ( a ) ; print ( a ) ;  a = test ( a ) ; print ( a ) ; a = test ( a ) ; print ( a ) ;  a = test ( a ) ; print ( a ) ; a = test ( a ) ; print ( a ) ;

@@ -1,0 +1,1 @@
+FUNC lt ( x : y ) { if ( x < y ) { print ( "Less then!") ; } else { print ( "NOT less then!" ) ; } return 0 ; } print ( lt ( 7 : 4 ) ) ;
