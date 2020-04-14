@@ -1,0 +1,83 @@
+TODO:
+   Need a statments node
+
+
+
+
+
+
+______________________________
+Functions:
+- On declaration: [in Grammar?]
+   - BEFORE inserting 'statements' as children node....
+      - Create a 'local' varContainer instruction node
+      - Then, for every parameter (loop), insertChild a declareVar node statement
+         instruction node
+      - Then, after that loop, create 1 parameters node which is empty
+         at this point (children 1 for growing possibility)
+      -THEN insert statements 1 by one as children, following this
+         'housekeeping' part
+      - When the return statement is met (should be last node?), return 1 node
+         with the value to be returned
+
+- On evaluation of the function (funcall):
+   - The evaluate(function) MUST be called with exactly 1 optional argument.
+      ie: evaluate(f, argumentList)
+
+   - That optional parameter is a 'parameter' node that holds ALL of the 
+      parameters that are to be used for this specific function call
+
+   - Every node in the function gets evaluated 1 by one 
+      (loop on size of the function node)
+   
+   - The first housekeeping nodes are 
+      - 1 varContainer creation (local var scope)
+      -"declareVar" statements
+      - followed by 1 "parameter" node 
+
+   - When the parameter node gets evaluated (ie: argumentList) ...
+
+       - The evaluate() MUST also be called w the optional parameter node 
+            that was provided to f 
+            ie: evaluate(parameterNode, argList) 
+
+       - The evaluate(parameterNode, argList) uses positional argument 
+         to assign every varContainer a value 
+         (current varContainer is the local one just created).
+         e.g: 
+            varContainer contains [x,y,z]
+            argList contains [4,5,6]
+
+            then.. x=4, y=5, z=6
+
+
+
+
+
+       - Basically the evaluate uses varContainer[0] = parameter[0] 
+            (THis is the same parameter node passed to the function, then passed 
+               to the parameter node)
+
+            eg: 
+               fundecl f(x,y,z){statements}
+                  - creates a var called f of type 6 for function
+                  - create the following instructions to be evaluated later
+                     - create a local varContainer
+                     - decalre var x, y, and z in varContainer (3 statements)
+                     - create a parameter node (no data but 1 child)
+
+               funcall f(3,4,5)
+                  - creates a node funcall (to be evaluated higher in grammar)
+                  - child 1 of that node is f
+                  - child 2 of that node is a node that holds all parameter
+
+                  - when funcall gets evaluated...
+                     - it calls: evaluate(f,parameters)
+                     - when f gets evaluated:
+                        -it evaluates its instructions :
+                           - creates the local varContainer
+                           - declareVars 
+                           - evaluates parameter: evaluate(parameterNode, parameters)
+                              - when parameter gets evaluated
+                                  - assigns every parameters[i] to varContainer[i] <= which is the local one                   
+                 - ... then proceed with the evaluation of f's other statements...

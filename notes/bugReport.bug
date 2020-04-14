@@ -1,0 +1,138 @@
+   =====================================================================================
+
+   Fri 10 Apr 2020 09:00:37 PM PDT
+[ ] BUG - : x cannot be evaluated as a boolean in current context, inside the function
+   FUNC foo ( x : y ) { if ( x ) { print ( " x" ) ; } else-if ( y ) { print ( "y" ) ; } return 3 ; }
+
+
+
+   =====================================================================================
+[ ] BUG - : Function cannot have empty return 
+   =====================================================================================
+[ ] BUG : Boolean Scope Bug in fun call w/ if/else
+   *********************************
+   Causes segfault
+
+   *********************************
+
+   FUNC foo ( x : y ) { 
+      if ( x == T ) { print ( " x" ) ; } 
+      else-if ( y == T ) { print ( "y" ) ; } 
+      return 3 ; 
+   }
+
+   *** ONE LINE VERSION *** 
+   FUNC foo ( x : y ) { if ( x == T ) { print ( " x" ); } else-if ( y == T ) { print ( "y" ) ; } return 3;}    foo ( T : F ) ;
+
+   Wed Apr  8 17:34:00 PDT 2020
+   ==================================================================================
+[ ] BUG: f(x:y) does not return error when called with no param f() 
+   ***//print (x) here didnt work (ie should return error due to no param)****
+   FUNC test ( x : y ) {
+
+      x = x + 5 ;
+
+      y = "Hello! ";
+
+      VAR z ;
+
+      z = "This is my programming language!";
+
+      print ( x ) ;
+
+      return y + z ;
+
+   }
+
+   print ( test () ) ;
+   Hello! This is my programming language!
+
+   =====================================================================================
+[x] BUG! : Local scope is not looking in parent scope for varNames
+   ******************************************************
+   FIX!!!: 
+         opPlus dtype was changing hence changing its evaluation for future
+         function call. It was being treated as an integer. 
+         And its state was saved in the function definition.
+         THANK YOU GDB watchpoints / checkpoints.
+   *************************************************
+   - Local scope is not looking in parent scope for varNames
+   - If var is not found locally, no effect
+
+
+   [x] update: 
+      x = x + 1  calls on a grammar rule that doesnt exist
+                 IDENTIFIER (type 0) + intexpr
+   *******************************************************************
+   [x]  Update: 
+   The issue is in function, dtype 6 of functions.c
+   It's returning the actual object hence exposing it to be modified.
+   No call should be able to modify the function definition....
+      Probably funCall should be adapted as well. 
+   Use copies. (Create a copyNode() function? ) 
+
+
+      ************************************************
+
+      FUNC test(x) {
+         x = x + 1 ;
+         print ( "Yup" ) ;
+         return x ;
+      }
+
+   VAR a ;
+   a = test ( 2 ) ;   
+   print ( a ) ;
+   3
+   a = test ( a ) ;    <-- *********  NOT LOOKING FOR A IN PARENT SCOPE ******** 
+   Oops: VAR x doesn't exist in this scope!
+   Yup
+   Oops: VAR x doesn't exist in this scope!
+   print ( a ) ;
+   3
+   
+   *****
+   one line version:
+   *****
+   FUNC test(x) { x = x + 1 ; print ( "Yup" ) ; return x ; } VAR a ; a = test ( 2 ) ;   print ( a ) ; a = test ( a ) ; print ( a ) ;
+
+
+   ==================================================================================
+[x] BUG intexpr + IDENTIFIER does not get eval ****  
+   VAR a; a = 2 ; VAR b; b = 7 ; print ( 3 + a ) ;
+   **************
+   other example
+   *************
+[x] BUG int + func 
+   FUNC sum ( x : y ) { VAR result ; result = x + y ; return result ; }
+   print ( 3  + sum ( 12 : 10 ) ) ;  //syntax error??
+[x] BUG 2 
+   ******************************************************************************
+   FIXED by adding dtype -1 to info_statements label
+   ie: does not evaluate (default is 0, looks for var name)
+   *****************************************************************************
+   FUNC lt ( x : y ) {
+
+      if ( x < y ) { print ( "Less then!") ; }
+
+      else { print ( "NOT less then!" ) ; }
+
+      return 42 ;
+
+   }
+
+   print ( lt ( 7 : 4 ) ) ;
+   Oops: VAR info_statements doesn't exist in this scope!
+   NOT less then!
+   42
+
+   =====================================================================================
+
+   Mon Mar 23 21:27:18 PDT 2020
+   -------------------------------------------------------------------------------
+[x] [BUG] STRING Datatype: cannot fix escaped char. Will leave the \ in the string for now.....
+   =====================================================================================
+
+   Fri 10 Apr 2020 09:00:37 PM PDT
+[ ] BUG - : x cannot be evaluated as a boolean in current context, inside the function
+   FUNC foo ( x : y ) { if ( x ) { print ( " x" ) ; } else-if ( y ) { print ( "y" ) ; } return 3 ; }
