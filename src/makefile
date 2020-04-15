@@ -30,11 +30,7 @@ fooChecker_debug.yacc: fooChecker.yacc dataStructures/functions.c
 	cp dataStructures/functions.c dataStructures/functions_debug.c
 	sed -i 's/#define DEBUGTAG 0/#define DEBUGTAG 1/gI' fooChecker_debug.yacc
 	sed -i 's/#define FUNCDEBUG 0/#define FUNCDEBUG 1/gI' dataStructures/functions_debug.c
-	
-#DELETE ME #######################
-files: 
-	gcc dataStructures/Nodes.c dataStructures/functions.c 
-#####################################
+
 
 .PHONY: clean
 clean: ;
