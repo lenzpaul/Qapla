@@ -19,63 +19,8 @@
 
 [x] add opTimes for intexpr * intexpr
 
-
-
 [ ] Make a list of unusable keywords; ie: cannot use 'print' outside of the specific print context
-
-
-[x] FIX BUG 1 : print ( x + y ) //strings
-
 
 [ ] FUNC p ( w ) {  } <-- doesnt work (syntax error) 
       - Just need to add grammar rule for no statements (fundecl) 
-
-________________________________________________________
-
-BUG 1 :
-==============================================
-VAR x ;
-
-VAR y ;
-
-x = "hello " ;
-
-y = "Welcome to my video" ;
-
-print ( x + y ) ;
-
-
-print ( x ) ;
-hello Welcome to my video
-
-print ( y ) ;
-Welcome to my video
-
-print ( x ) ;
-hello Welcome to my video
-========================================
-
-
-
-
-Tue Apr  7 22:21:51 PDT 2020
-
-
-
-NOTE: removed   ~RULE~:statements --> /*empty*/  .. honestly not sure if that broke anything
-
-NOTE: Review this
-                struct DataNode *emptyParamList = constructNode(0);
-                insertChild(funcall, emptyParamList); //paramassign_list
-
-
-
-
-FUNC p ( a : b : c ) { VAR x ; VAR y ; VAR z ;  z = 3 ; print ( z ) ; }  <-- print z gets evaluated BEFORE funcall!
-p ( 9 : 8 : 7 ) ;
-print ( c ) ;
-
-FUNC p ( a : b : c ) { VAR x ; VAR y ; VAR z ;  z = 3 ; }   <-- WORKS ! 
-p ( 9 : 8 : 7 ) ;
-print ( c ) ;
 
