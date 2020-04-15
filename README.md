@@ -1,4 +1,4 @@
-## datalore  
+## Qapla'
 
 A first stab at creating a programming language interpreter, using lexical analyze LEX, YACC parser and C.  
 ______________________________
