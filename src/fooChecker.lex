@@ -66,15 +66,6 @@ const int MaxLen = 128;
    } 
 
 "reads"      { 
-
-   yylval.datanode = constructNode(1);
-
-   yylval.datanode->str[0] = '\0';
-   yylval.datanode->ival = 0;
-   yylval.datanode->fval = 0;
-   yylval.datanode->bval = false;
-   yylval.datanode->name[0] = '\0';
-   yylval.datanode->dtype = 0;
    return (READS); 
    } 
 

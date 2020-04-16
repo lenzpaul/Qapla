@@ -816,6 +816,23 @@ expression:
             #endif
          }
 
+
+
+      | readexpr 
+         {
+            //READS, READI and READR instruction container
+            #if DEBUGTAG
+               printf(" ~RULE:expression--> readexpr \n");    //DEBUG
+            #endif
+
+            //create read instruction. Container for scanf type
+            struct DataNode *node = constructNode(1) ;
+            node->dtype = 8 ; //instruction type
+            strcpy(node->name,"readStr");
+            $<datanode>$=node;
+         }
+
+
       /*
          expression + expression covers the different types case. 
          ID + ID case; int + ID ; ID + int; int + float ; 
@@ -862,6 +879,8 @@ expression:
       | IDENTIFIER MOD
       | IDENTIFIER EVAL
       */
+
+
 
       | intexpr 
          { 
@@ -910,6 +929,20 @@ expression:
          }
 
       ;
+
+
+readexpr:  
+        READS '(' ')'
+         {
+            #if DEBUGTAG
+               printf(" ~RULE: readexpr --> READS \n");    //DEBUG
+            #endif
+
+            
+            //$<datanode->dtype>$ = 3; //string
+         }
+      ;
+
 
 /* expression <- funcall */
 funcall: /* $$ should be the return value */
@@ -1367,22 +1400,6 @@ strexpr:
             #endif
          }
 
-      | READS '(' ')'
-         {
-            #if DEBUGTAG
-               printf(" ~RULE:strexpr--> READS \n");    //DEBUG
-            #endif
-
-            $<datanode->dtype>$ = 3;
-            bool valid = scanf ("%s",$<datanode->str>1);
-            if(!valid) 
-            {
-               printf("Invalid string value. Terminating\n"); //ERROR
-               return 0;
-            }
-            
-         }
-  
       ;
 
 

@@ -120,6 +120,7 @@ struct DataNode* evaluate(struct DataNode *node, ...)
             result -> dtype = 2 ;
          }else if(ldt==3 && rdt==3){        //string
             char str[4096];
+            str[0] = '\0';
             strcat(str, leftChild->str);
             strcat(str, rightChild->str);
             strcpy(result->str,str);
@@ -349,12 +350,12 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
          if( (ldt == 1 ) && (rdt == 1) ) {
             result->bval = leftChild->ival == rightChild->ival; 
-         }else if ( ldt==2 && rdt==2 ) { 
+         }else if ( (ldt==2) && (rdt==2 ) ) { 
             result->bval = leftChild->fval == rightChild->fval; 
 
-         }else if (ldt == 3 && rdt == 3 )  {  
-            result->bval = (strcmp(leftChild->str, rightChild->str) ) == 0;
-         }else if (ldt == 4 && rdt == 4 )  {  
+         }else if ((ldt == 3) && (rdt == 3 ))  {  
+            result->bval = (strcmp(leftChild->str, rightChild->str)  == 0 );
+         }else if ((ldt == 4) && (rdt == 4 ))  {  
             result->bval = leftChild->fval == rightChild->fval; 
 
          }
@@ -600,19 +601,41 @@ struct DataNode* evaluate(struct DataNode *node, ...)
 
          struct DataNode *child = evaluate(node->children[0]); 
          if(child->dtype == 1){              //int
-            printf("%d\n", child->ival);  
+            printf("%d ", child->ival);  
          }else if(child->dtype == 2){        //real
-            printf("%f\n", child->fval);    
+            printf("%f ", child->fval);    
          }else if(child->dtype == 3){        //string
-            printf("%s\n", child->str);    
+            printf("%s ", child->str);    
          }else if(child->dtype == 4){        //bool
             (child->bval) ? 
-               printf("true\n") : printf("false\n");
+               printf("true ") : printf("false ");
          }
          return child;
 
          //node->dtype == 8
+         //READS
+         
+      }else if(strcmp(node->name,"readStr") == 0){
+
+         //input will be the node that contains the string inputed
+         struct DataNode *inputNode = constructNode(0); 
+         inputNode->str[0] = '\0';
+
+         bool valid = scanf ("%s",inputNode->str);
+         if(!valid) 
+         {
+            printf("Invalid string value. Terminating\n"); //ERROR
+            return 0;
+         } 
+
+         inputNode->dtype = 3; //string
+         return inputNode;
+
+
+
+         //node->dtype == 8
          //SELECTION IF ELSE
+         
       }else if(strcmp(node->name,"selectBlock") == 0){   
          //select block is an array of 
          //ifBlock, elseIfBlock(s) or elseBlock
@@ -700,7 +723,7 @@ struct DataNode* findVar(char* varName)
    }
 
    //var not found
-   printf("Oops: VAR %s doesn't exist in this scope!\n", varName);
+   printf("Oops: variable \"%s\" doesn't exist in this scope!\n", varName);
    return dummyNode;
 
 }

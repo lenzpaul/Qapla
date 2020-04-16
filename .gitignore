@@ -5,3 +5,8 @@
 core
 *.core
 a.out
+*.swp
+*.swo
+
+notes/TODO
+scripts/
