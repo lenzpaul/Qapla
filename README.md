@@ -11,7 +11,7 @@ Check out a quick demo [here](https://youtu.be/WjKr9tP_h-o)
 INSTALLATION
 --------------------
 - run `makefile`, located in `src/` 
-- execute program by running `./fooChecker` 
+- execute program by running `./src/fooChecker` 
 - the grammar is detailed in `src/y.output` (auto generated) 
 - To exit the interpreter, type: `exit`
 
