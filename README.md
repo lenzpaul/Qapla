@@ -6,6 +6,8 @@ ______________________________
 ### Program description:  
 This is an interactive interpreter for the fooish language.
 
+Check out a quick demo [here](https://youtu.be/WjKr9tP_h-o) 
+
 INSTALLATION
 --------------------
 - run `makefile`, located in `src/` 
