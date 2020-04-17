@@ -5,6 +5,10 @@ A first stab at creating a programming language interpreter, using lexical analy
 *April 16: Already 18 clones in 1 day, wow thanks for the love! Please fork and/or leave a star!*
 ______________________________
 
+![Alt Text](https://github.com/bringbackthedog/Qapla/blob/master/foo-gif.gif)
+
+
+
 ### Program description:  
 This is an interactive interpreter for the fooish language.
 
