@@ -1,6 +1,8 @@
 ## Qapla'
 
 A first stab at creating a programming language interpreter, using lexical analyze LEX, YACC parser and C.  
+
+*April 16: Already 18 clones in 1 day, wow thanks for the love! Please fork and/or leave a star!*
 ______________________________
 
 ### Program description:  
