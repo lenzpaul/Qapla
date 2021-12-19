@@ -1,6 +1,6 @@
 ## Qapla'
 
-A first stab at creating a programming language interpreter, using lexical analyze LEX, YACC parser and C.  
+A first stab at creating a programming language interpreter, using lexical analyzer LEX, YACC parser and C.  
 _____________________________
 
 ![Foo demo gif](https://github.com/bringbackthedog/Qapla/blob/master/foodemo.gif)
